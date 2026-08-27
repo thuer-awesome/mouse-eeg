@@ -1,0 +1,40 @@
+schema_version: 1
+task: morphology_pg36
+taxonomy_version: pooled_global_v1_constrained_cross_mouse
+label_prefix: PG
+classes: 36
+assignment_unit: event_x_valid_channel
+model_input: one_valid_channel
+sequence_length: 21
+sampling_rate_hz: 250
+window_seconds: 4.0
+normalization: per_window_median_mad
+split: clinical_event_grouped_70_15_15
+models:
+  - eegwavenet_sc
+  - physio_tf
+  - physio_stats
+  - eegnetv4
+  - eegconformer
+primary_denominator: all_eligible_held_out_test_windows
+primary_test_windows: 32583
+event_balanced_cap_per_event: 8
+event_balanced_is_sensitivity_only: true
+training:
+  models:
+    - eegwavenet_sc
+    - physio_tf
+    - physio_stats
+    - eegnetv4
+    - eegconformer
+  epochs: 10
+  batch_size: 64
+  max_per_event: 8
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  early_stopping_patience: 3
+  learning_rate_patience: 1
+  num_workers: 0
+  seed: 20260823
+  device: auto
+  output_subdir: 05_classification_pooled

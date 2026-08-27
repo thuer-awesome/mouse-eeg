@@ -1,0 +1,21 @@
+{
+  "n": 32583,
+  "accuracy": 0.5222048307399564,
+  "balanced_accuracy": 0.5816588593886473,
+  "macro_f1": 0.43408722698505847,
+  "weighted_f1": 0.5758616433051472,
+  "macro_auprc": 0.49745032904304015,
+  "macro_auroc": 0.9732820495416517,
+  "model": "physio_tf",
+  "device": "cuda",
+  "split": "test_all_eligible_windows",
+  "best_epoch": 8,
+  "label_path": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\02_morphology_taxonomy\\all_mice_old_plus_new\\strict_all_channel_v1\\04_label_freeze_pooled\\pooled_channel_window_labels.parquet",
+  "label_prefix": "PG",
+  "event_accuracy": 0.6838662790697675,
+  "event_balanced_accuracy": 0.6764580810730032,
+  "event_macro_f1": 0.6474701416670062,
+  "event_weighted_f1": 0.6764404270760799,
+  "event_macro_auprc": 0.7220156458858412,
+  "event_macro_auroc": 0.9864355876056918
+}

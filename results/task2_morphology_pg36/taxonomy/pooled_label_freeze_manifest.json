@@ -1,0 +1,38 @@
+{
+  "taxonomy_version": "pooled_global_v1_constrained_cross_mouse",
+  "label_prefix": "PGxx",
+  "fit_scope": "within-mouse pooled GMM prototypes fitted on training events",
+  "assignment_scope": "event x valid channel; every event inherits its pooled mouse cluster",
+  "merge_model": "constrained complete-linkage agglomeration in robust prototype space",
+  "selected_distance_threshold": 0.9,
+  "candidate_distance_thresholds": [
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0,
+    1.1,
+    1.2
+  ],
+  "same_mouse_merge_allowed": false,
+  "same_mouse_merge_violations": 0,
+  "n_animals": 7,
+  "n_event_channel": 9144,
+  "n_windows": 194530,
+  "n_pooled_prototypes": 40,
+  "n_global_categories": 36,
+  "n_shared_categories": 3,
+  "n_animal_specific_categories": 33,
+  "train_event_count": 6393,
+  "val_event_count": 1375,
+  "test_event_count": 1376,
+  "event_distance_low_confidence_quantile": 0.995,
+  "event_distance_low_confidence_threshold": 6.813312285231302,
+  "source_files": {
+    "pooled_mouse_prototypes": "03_cross_mouse/pooled_mouse_prototypes.parquet",
+    "pooled_mouse_event_assignments": "03_cross_mouse/pooled_mouse_event_assignments.parquet",
+    "channel_event_features": "01_tables/channel_event_features.parquet",
+    "source_window_labels": "04_label_freeze/frozen_channel_window_labels.parquet"
+  },
+  "category_semantics": "exploratory pooled morphology category; not a clinically validated seizure subtype"
+}

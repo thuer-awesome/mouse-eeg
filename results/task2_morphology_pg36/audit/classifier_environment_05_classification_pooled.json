@@ -1,0 +1,20 @@
+{
+  "torch": "2.8.0+cu128",
+  "cuda": true,
+  "device": "cuda",
+  "braindecode_import_error": null,
+  "models_requested": [
+    "eegwavenet_sc",
+    "physio_tf",
+    "physio_stats",
+    "eegnetv4",
+    "eegconformer"
+  ],
+  "classes": 36,
+  "sequence_length": 21,
+  "normalization": "per-window median/MAD",
+  "weights_pretrained": false,
+  "label_path": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\02_morphology_taxonomy\\all_mice_old_plus_new\\strict_all_channel_v1\\04_label_freeze_pooled\\pooled_channel_window_labels.parquet",
+  "label_prefix": "PG",
+  "output_subdir": "05_classification_pooled"
+}

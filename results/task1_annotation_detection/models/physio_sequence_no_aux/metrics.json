@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "checkpoint_selected_on": "validation_macro_animal_auprc",
+  "best_epoch": 10,
+  "best_validation_macro_animal_auprc": 0.5883107512064202,
+  "accuracy_is_selection_metric": false,
+  "val": {
+    "pooled": {
+      "n_windows": 180797,
+      "positive_windows": 24099,
+      "tp": 19713,
+      "tn": 132060,
+      "fp": 24638,
+      "fn": 4386,
+      "accuracy": 0.8394663628268169,
+      "sensitivity": 0.8180007469189593,
+      "specificity": 0.8427676166894281,
+      "f1": 0.5759824689554419,
+      "balanced_accuracy": 0.8303841818041937,
+      "mcc": 0.5219733938397968,
+      "auroc": 0.8886669286599255,
+      "auprc": 0.5571505108011114
+    },
+    "macro_animal_auprc": 0.5883107512064202,
+    "macro_animal_auroc": 0.8935721734734635,
+    "per_animal": {
+      "E07": {
+        "windows": 7867,
+        "positives": 708,
+        "positive_fraction": 0.08999618660226262,
+        "auprc": 0.7532625972839588,
+        "auroc": 0.9454230895802604
+      },
+      "E50": {
+        "windows": 64274,
+        "positives": 10938,
+        "positive_fraction": 0.17017767682110962,
+        "auprc": 0.546572249622627,
+        "auroc": 0.8984954122425531
+      },
+      "E76": {
+        "windows": 37392,
+        "positives": 1721,
+        "positive_fraction": 0.046025887890457855,
+        "auprc": 0.428071470968504,
+        "auroc": 0.8830063128900374
+      },
+      "E77": {
+        "windows": 6737,
+        "positives": 1583,
+        "positive_fraction": 0.23497105536588986,
+        "auprc": 0.7899089267160844,
+        "auroc": 0.8879707779911266
+      },
+      "E79": {
+        "windows": 26563,
+        "positives": 1034,
+        "positive_fraction": 0.038926326092685315,
+        "auprc": 0.4126296300921049,
+        "auroc": 0.9535756279144899
+      },
+      "E81": {
+        "windows": 16921,
+        "positives": 2630,
+        "positive_fraction": 0.15542816618403169,
+        "auprc": 0.4584023018366549,
+        "auroc": 0.7895491937944937
+      },
+      "E82": {
+        "windows": 21043,
+        "positives": 5485,
+        "positive_fraction": 0.260656750463337,
+        "auprc": 0.729328081925007,
+        "auroc": 0.8969847999012839
+      }
+    },
+    "per_animal_channel": {
+      "E07:CH8": {
+        "windows": 7867,
+        "positives": 708,
+        "positive_fraction": 0.08999618660226262,
+        "auprc": 0.7532625972839588,
+        "auroc": 0.9454230895802604
+      },
+      "E50:CH7": {
+        "windows": 33270,
+        "positives": 10129,
+        "positive_fraction": 0.3044484520589119,
+        "auprc": 0.8650839484680246,
+        "auroc": 0.9494640886165969
+      },
+      "E50:CH8": {
+        "windows": 31004,
+        "positives": 809,
+        "positive_fraction": 0.026093407302283576,
+        "auprc": 0.08744518597464578,
+        "auroc": 0.8572870081593662
+      },
+      "E76:CH7": {
+        "windows": 16767,
+        "positives": 1424,
+        "positive_fraction": 0.0849287290511123,
+        "auprc": 0.5607451708505466,
+        "auroc": 0.8615573648488826
+      },
+      "E76:CH8": {
+        "windows": 20625,
+        "positives": 297,
+        "positive_fraction": 0.0144,
+        "auprc": 0.49430888242057214,
+        "auroc": 0.933293150579652
+      },
+      "E77:CH8": {
+        "windows": 6737,
+        "positives": 1583,
+        "positive_fraction": 0.23497105536588986,
+        "auprc": 0.7899089267160844,
+        "auroc": 0.8879707779911266
+      },
+      "E79:CH7": {
+        "windows": 13349,
+        "positives": 0,
+        "positive_fraction": 0.0,
+        "auprc": null,
+        "auroc": null
+      },
+      "E79:CH8": {
+        "windows": 13214,
+        "positives": 1034,
+        "positive_fraction": 0.07825034054790374,
+        "auprc": 0.4728509045504598,
+        "auroc": 0.9418925260359595
+      },
+      "E81:CH7": {
+        "windows": 8409,
+        "positives": 898,
+        "positive_fraction": 0.10679034367939112,
+        "auprc": 0.558907037631762,
+        "auroc": 0.8966404581372708
+      },
+      "E81:CH8": {
+        "windows": 8512,
+        "positives": 1732,
+        "positive_fraction": 0.20347744360902256,
+        "auprc": 0.43840921995782434,
+        "auroc": 0.6747065050038491
+      },
+      "E82:CH7": {
+        "windows": 9467,
+        "positives": 0,
+        "positive_fraction": 0.0,
+        "auprc": null,
+        "auroc": null
+      },
+      "E82:CH8": {
+        "windows": 11576,
+        "positives": 5485,
+        "positive_fraction": 0.4738251554941258,
+        "auprc": 0.8078870180949222,
+        "auroc": 0.857407936482043
+      }
+    }
+  },
+  "test": {
+    "pooled": {
+      "n_windows": 179403,
+      "positive_windows": 22566,
+      "tp": 18653,
+      "tn": 130823,
+      "fp": 26014,
+      "fn": 3913,
+      "accuracy": 0.8331856211991996,
+      "sensitivity": 0.8265975361162812,
+      "specificity": 0.834133527165146,
+      "f1": 0.5548763256139099,
+      "balanced_accuracy": 0.8303655316407136,
+      "mcc": 0.5066885178717898,
+      "auroc": 0.8940046554949393,
+      "auprc": 0.5360908722545545
+    },
+    "macro_animal_auprc": 0.5375152906032502,
+    "macro_animal_auroc": 0.8847839232980291,
+    "per_animal": {
+      "E07": {
+        "windows": 7904,
+        "positives": 714,
+        "positive_fraction": 0.09033400809716599,
+        "auprc": 0.5141209405271665,
+        "auroc": 0.864541769419868
+      },
+      "E50": {
+        "windows": 63999,
+        "positives": 10661,
+        "positive_fraction": 0.16658072782387226,
+        "auprc": 0.5612585110973163,
+        "auroc": 0.9072151908849426
+      },
+      "E76": {
+        "windows": 36714,
+        "positives": 1540,
+        "positive_fraction": 0.04194585171869042,
+        "auprc": 0.4174177585368605,
+        "auroc": 0.9035354017393309
+      },
+      "E77": {
+        "windows": 6114,
+        "positives": 1017,
+        "positive_fraction": 0.1663395485770363,
+        "auprc": 0.8308146155769818,
+        "auroc": 0.9657226019740148
+      },
+      "E79": {
+        "windows": 26510,
+        "positives": 1211,
+        "positive_fraction": 0.04568087514145605,
+        "auprc": 0.442771458057282,
+        "auroc": 0.9101246368413135
+      },
+      "E81": {
+        "windows": 16447,
+        "positives": 1771,
+        "positive_fraction": 0.10767921201434912,
+        "auprc": 0.2712963738634913,
+        "auroc": 0.7490418293948458
+      },
+      "E82": {
+        "windows": 21715,
+        "positives": 5652,
+        "positive_fraction": 0.26028091181211144,
+        "auprc": 0.7249273765636534,
+        "auroc": 0.8933060328318886
+      }
+    },
+    "per_animal_channel": {
+      "E07:CH8": {
+        "windows": 7904,
+        "positives": 714,
+        "positive_fraction": 0.09033400809716599,
+        "auprc": 0.5141209405271665,
+        "auroc": 0.864541769419868
+      },
+      "E50:CH7": {
+        "windows": 32766,
+        "positives": 9752,
+        "positive_fraction": 0.297625587499237,
+        "auprc": 0.8842399703697346,
+        "auroc": 0.9605885538124848
+      },
+      "E50:CH8": {
+        "windows": 31233,
+        "positives": 909,
+        "positive_fraction": 0.02910383248487177,
+        "auprc": 0.08656474579080979,
+        "auroc": 0.8058175227890815
+      },
+      "E76:CH7": {
+        "windows": 16296,
+        "positives": 1204,
+        "positive_fraction": 0.07388316151202749,
+        "auprc": 0.5113491086835564,
+        "auroc": 0.8729123061832058
+      },
+      "E76:CH8": {
+        "windows": 20418,
+        "positives": 336,
+        "positive_fraction": 0.016456068175139584,
+        "auprc": 0.3872745223619602,
+        "auroc": 0.9435346330046808
+      },
+      "E77:CH8": {
+        "windows": 6114,
+        "positives": 1017,
+        "positive_fraction": 0.1663395485770363,
+        "auprc": 0.8308146155769818,
+        "auroc": 0.9657226019740148
+      },
+      "E79:CH7": {
+        "windows": 13242,
+        "positives": 0,
+        "positive_fraction": 0.0,
+        "auprc": null,
+        "auroc": null
+      },
+      "E79:CH8": {
+        "windows": 13268,
+        "positives": 1211,
+        "positive_fraction": 0.09127223394633704,
+        "auprc": 0.4733143134795833,
+        "auroc": 0.8925225602281265
+      },
+      "E81:CH7": {
+        "windows": 8054,
+        "positives": 178,
+        "positive_fraction": 0.022100819468587038,
+        "auprc": 0.19454285859561746,
+        "auroc": 0.8578215143716368
+      },
+      "E81:CH8": {
+        "windows": 8393,
+        "positives": 1593,
+        "positive_fraction": 0.18980102466340998,
+        "auprc": 0.29175546211811004,
+        "auroc": 0.5854125124626122
+      },
+      "E82:CH7": {
+        "windows": 9928,
+        "positives": 0,
+        "positive_fraction": 0.0,
+        "auprc": null,
+        "auroc": null
+      },
+      "E82:CH8": {
+        "windows": 11787,
+        "positives": 5652,
+        "positive_fraction": 0.47951132603715957,
+        "auprc": 0.8185804370214198,
+        "auroc": 0.8592887473460722
+      }
+    }
+  }
+}

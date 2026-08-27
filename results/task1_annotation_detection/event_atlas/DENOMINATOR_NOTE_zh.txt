@@ -1,0 +1,3 @@
+临床图集分母：957 个测试通道事件。
+正式 interval-aware 指标分母：953 个完整可观测事件。
+4 个形式审计排除事件保留在 true_event_assessments 和 excluded_events 中，并作为零覆盖审计记录，不从图集分母中删除。

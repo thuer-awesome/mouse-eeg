@@ -1,0 +1,14 @@
+{
+  "root": "E:\\自动睡眠分析\\epilepsy_eeg_research\\results\\task2_morphology_pg36",
+  "taxonomy_classes": 36,
+  "models": [
+    "eegconformer",
+    "eegnetv4",
+    "eegwavenet_sc",
+    "physio_stats",
+    "physio_tf"
+  ],
+  "primary_test_windows": 32583,
+  "ok": true,
+  "errors": []
+}

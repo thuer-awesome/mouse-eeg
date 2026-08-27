@@ -1,0 +1,18 @@
+{
+  "figure": "figure_0_event_level_split_audit",
+  "event_rows": 9144,
+  "window_rows": 194530,
+  "split_counts_events": {
+    "train": 6393,
+    "test": 1376,
+    "val": 1375
+  },
+  "split_counts_windows": {
+    "train": 130216,
+    "test": 32583,
+    "val": 31731
+  },
+  "cross_split_overlapping_event_pairs": 0,
+  "context_scope": "same event and same channel",
+  "figure_dir": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\02_morphology_taxonomy\\all_mice_old_plus_new\\strict_all_channel_v1\\06_figures\\paper_ready_classifier_pooled\\figure_0_data_split_audit"
+}

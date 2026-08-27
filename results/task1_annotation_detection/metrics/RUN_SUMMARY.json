@@ -1,0 +1,15 @@
+{
+  "models": [
+    "eegwavenet_sc",
+    "physio_sequence_no_aux",
+    "physio_sequence_stats"
+  ],
+  "canonical_decoder": {
+    "eegwavenet_sc": "events_baseline",
+    "physio_sequence_no_aux": "events_baseline",
+    "physio_sequence_stats": "events_baseline"
+  },
+  "baseline_decoder": "events_baseline",
+  "training_started": true,
+  "metrics_source": "validation-fitted decoder; held-out test never used for selection"
+}

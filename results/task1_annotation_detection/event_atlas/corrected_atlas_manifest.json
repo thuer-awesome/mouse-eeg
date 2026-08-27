@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "decoder_kind": "interval_aware_full_window_union",
+  "corrected_root": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new",
+  "protocol_dir": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\03_combined_old_plus_new\\protocol",
+  "output_dir": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\clinical_event_atlas",
+  "models": [
+    "eegwavenet_sc",
+    "physio_sequence_no_aux",
+    "physio_sequence_stats"
+  ],
+  "layout_reference": "mouse_sleep.epilepsy.event_coverage_atlas historical clinical atlas",
+  "window_support_seconds": 4.0,
+  "boundary_uncertainty_seconds": 2.0,
+  "clinical_atlas_denominator": 957,
+  "formal_metric_denominator": 953,
+  "formal_gate_exclusions": 4,
+  "legacy_atlas_untouched": true,
+  "external_candidates_are_review_only": true
+}

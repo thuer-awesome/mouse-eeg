@@ -1,0 +1,36 @@
+{
+  "events_input_rows": 9144,
+  "events_output_rows": 9144,
+  "windows_input_rows": 194530,
+  "windows_output_rows": 194530,
+  "event_keys_unique": true,
+  "window_rows_all_mapped": true,
+  "split_counts_events_input": {
+    "test": 1376,
+    "train": 6393,
+    "val": 1375
+  },
+  "split_counts_events_output": {
+    "test": 1376,
+    "train": 6393,
+    "val": 1375
+  },
+  "split_counts_windows_input": {
+    "test": 32583,
+    "train": 130216,
+    "val": 31731
+  },
+  "split_counts_windows_output": {
+    "test": 32583,
+    "train": 130216,
+    "val": 31731
+  },
+  "split_conserved_events": true,
+  "split_conserved_windows": true,
+  "pg_labels_contiguous": true,
+  "same_mouse_merge_violations": 0,
+  "e77_ch7_event_rows": 0,
+  "e77_ch7_window_rows": 0,
+  "low_confidence_event_rows": 43,
+  "source_taxonomy_untouched": true
+}

@@ -1,0 +1,22 @@
+﻿model,model_label,category,category_label,count
+eegwavenet_sc,EEGWaveNet-SC,full_coverage_ge_0p9,Full detection: coverage >= 0.90,607
+eegwavenet_sc,EEGWaveNet-SC,partial_coverage_0p5_to_0p9,Partial detection: 0.50 <= coverage < 0.90,127
+eegwavenet_sc,EEGWaveNet-SC,low_overlap_gt_0_to_0p5,Low overlap: 0 < coverage < 0.50,31
+eegwavenet_sc,EEGWaveNet-SC,missed_coverage_0,Complete miss: coverage = 0,192
+eegwavenet_sc,EEGWaveNet-SC,missed_ge_30s,Long complete miss: duration >= 30 s,21
+eegwavenet_sc,EEGWaveNet-SC,boundary_shift_gt_2s,Boundary shift: |onset or offset error| > 2 s,145
+eegwavenet_sc,EEGWaveNet-SC,label_external_prediction,Prediction with zero overlap to every manual label,1685
+physio_sequence_no_aux,Physio-Sequence,full_coverage_ge_0p9,Full detection: coverage >= 0.90,813
+physio_sequence_no_aux,Physio-Sequence,partial_coverage_0p5_to_0p9,Partial detection: 0.50 <= coverage < 0.90,68
+physio_sequence_no_aux,Physio-Sequence,low_overlap_gt_0_to_0p5,Low overlap: 0 < coverage < 0.50,14
+physio_sequence_no_aux,Physio-Sequence,missed_coverage_0,Complete miss: coverage = 0,62
+physio_sequence_no_aux,Physio-Sequence,missed_ge_30s,Long complete miss: duration >= 30 s,6
+physio_sequence_no_aux,Physio-Sequence,boundary_shift_gt_2s,Boundary shift: |onset or offset error| > 2 s,117
+physio_sequence_no_aux,Physio-Sequence,label_external_prediction,Prediction with zero overlap to every manual label,2933
+physio_sequence_stats,Physio-Sequence + statistics,full_coverage_ge_0p9,Full detection: coverage >= 0.90,805
+physio_sequence_stats,Physio-Sequence + statistics,partial_coverage_0p5_to_0p9,Partial detection: 0.50 <= coverage < 0.90,70
+physio_sequence_stats,Physio-Sequence + statistics,low_overlap_gt_0_to_0p5,Low overlap: 0 < coverage < 0.50,22
+physio_sequence_stats,Physio-Sequence + statistics,missed_coverage_0,Complete miss: coverage = 0,60
+physio_sequence_stats,Physio-Sequence + statistics,missed_ge_30s,Long complete miss: duration >= 30 s,8
+physio_sequence_stats,Physio-Sequence + statistics,boundary_shift_gt_2s,Boundary shift: |onset or offset error| > 2 s,136
+physio_sequence_stats,Physio-Sequence + statistics,label_external_prediction,Prediction with zero overlap to every manual label,2484

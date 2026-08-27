@@ -1,0 +1,48 @@
+{
+  "split_unit": "clinical_event",
+  "assignment": "deterministic per-animal randomization, mixed animals in train/val/test",
+  "target_ratio": {
+    "train": 0.70,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "source_event_counts": {
+    "train": 4357,
+    "val": 934,
+    "test": 934,
+    "total": 6225
+  },
+  "eligible_event_channel_counts": {
+    "train": 6393,
+    "val": 1375,
+    "test": 1376,
+    "total": 9144
+  },
+  "eligible_window_counts": {
+    "train": 130216,
+    "val": 31731,
+    "test": 32583,
+    "total": 194530
+  },
+  "test_category_support": {
+    "classes_present": 45,
+    "minimum_windows": 11,
+    "maximum_windows": 9004,
+    "note": "All frozen categories occur in test, but support is highly imbalanced."
+  },
+  "complete_window_threshold": 0.99,
+  "events_without_complete_window": 1381,
+  "overlap_audit": {
+    "unit": "deduplicated animal_id + session_id + event_id intervals",
+    "eligible_unique_events_checked": 4844,
+    "cross_split_overlapping_event_pairs": 0,
+    "additional_raw_window_purge": 0,
+    "note": "All retained windows are contained in non-overlapping clinical events; no extra purge was required for this snapshot. Re-run this audit after adding data."
+  },
+  "context": {
+    "sequence_length_epochs": 21,
+    "context_scope": "same event and same channel only",
+    "out_of_event_padding": "zero",
+    "cross_split_context_borrowing": false
+  }
+}

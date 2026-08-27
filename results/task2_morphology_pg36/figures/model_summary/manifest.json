@@ -1,0 +1,21 @@
+{
+  "renderer": "render_paper_ready_classifier.py",
+  "models": [
+    "eegwavenet_sc",
+    "physio_tf",
+    "physio_stats",
+    "eegnetv4",
+    "eegconformer"
+  ],
+  "classes": 36,
+  "label_prefix": "PG",
+  "formal_denominator": "all complete held-out test windows",
+  "checkpoint_selection": "validation Macro-F1",
+  "primary_metrics_figure": [
+    "balanced_accuracy",
+    "macro_f1",
+    "macro_auprc"
+  ],
+  "best_macro_f1_model": "physio_stats",
+  "source_table": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\02_morphology_taxonomy\\all_mice_old_plus_new\\strict_all_channel_v1\\05_classification_pooled\\all_window_model_comparison.csv"
+}

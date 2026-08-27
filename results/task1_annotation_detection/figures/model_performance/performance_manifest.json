@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "purpose": "canonical Task-1 performance figures beside corrected event decoding",
+  "model_run_root": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new",
+  "corrected_decoder_root": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new",
+  "window_classification": {
+    "semantic_level": "held-out 4-s window classification after corrected decoder",
+    "decoder_dependency": "corrected interval-aware full-window union",
+    "probability_source": "decoded_tracks.parquet::split_safe_probability",
+    "state_source": "decoded_tracks.parquet::decoded_mask",
+    "outputs": [
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_1_window_classification_confusion.png",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_1_window_classification_confusion.pdf",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_1_window_classification_confusion.svg",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_1_window_classification_confusion.tiff"
+    ],
+    "metrics": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\source_data\\corrected_window_metrics.csv",
+    "confusion": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\source_data\\corrected_confusion_matrices.csv"
+  },
+  "baseline_window_reference": {
+    "semantic_level": "held-out 4-s window classification",
+    "version": "canonical events_baseline reference",
+    "decoder_dependency": "none",
+    "source_stem": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\deep_learning_metrics\\figure_3_deep_learning_metrics",
+    "source_sha256": {
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\deep_learning_metrics\\figure_3_deep_learning_metrics.png": "3a7f2ef9ab51ea2ee9ee0bf11c948f98e73f2b3502f0952d563f79b9b89a3900",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\deep_learning_metrics\\figure_3_deep_learning_metrics.pdf": "941eaecd8aeb4431ee0cfa4a76badab5b887e6ad7330610e71fc96fda0695115",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\deep_learning_metrics\\figure_3_deep_learning_metrics.svg": "e2a9a1489068b7a203145cea0ea28ea00f42198718213b31e7d5a418509958d3",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\deep_learning_metrics\\window_metrics.csv": "0abe58d4a772af57a9d5cd8681f58214376c0ece3fd153df6d60a7194f05a0b1",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\deep_learning_metrics\\confusion_matrices.csv": "7bfff3f2ad201f033f8b91081bbd1bf9111ce4c0a608d97bbf1c7c7e8e85c459",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\deep_learning_metrics\\calibration_bins.csv": "c87703726dbd1543ee77648d75aeca7b79a37ed19c66e702bc8682d0201ccc99",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\deep_learning_metrics\\per_animal_window_metrics.csv": "602102f0143bece04be3008b61b469855746beffd5934f2bb99e37ca3eada9c8"
+    },
+    "outputs": [
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_0_baseline_window_classification_confusion.png",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_0_baseline_window_classification_confusion.pdf",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_0_baseline_window_classification_confusion.svg",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_0_baseline_window_classification_confusion.tiff"
+    ]
+  },
+  "corrected_event_detection": {
+    "semantic_level": "held-out continuous event detection",
+    "decoder_dependency": "corrected interval-aware full-window union",
+    "formal_manual_event_denominator": 953,
+    "visual_atlas_denominator": 957,
+    "outputs": [
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_2_corrected_event_detection_audit.png",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_2_corrected_event_detection_audit.pdf",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_2_corrected_event_detection_audit.svg",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_2_corrected_event_detection_audit.tiff"
+    ]
+  },
+  "training_diagnostics": {
+    "semantic_level": "model optimization history",
+    "decoder_dependency": "none",
+    "source_stem": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\legacy_style_deep_learning\\figure_s1_training_diagnostics",
+    "source_sha256": {
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\legacy_style_deep_learning\\figure_s1_training_diagnostics.png": "d2cf80c31a6eea243fce427487e7d71feb5a0c0b50e557a27f993c8a25453995",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\legacy_style_deep_learning\\figure_s1_training_diagnostics.pdf": "0a192bb2a00c375794c8aae3f3f6c73ef5126a16c309ed1b0ea7109f0ebfa443",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\legacy_style_deep_learning\\figure_s1_training_diagnostics.svg": "de81fb1513e75980a63dd36359be8f43541a5017b596a3f7085f3a681d6e5336",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\figures\\legacy_style_deep_learning\\figure_s1_training_diagnostics.tiff": "73dfce62f25502b0519928613d41d28aec38f9962dd21e6b25a5855e7b2eafb2",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\eegwavenet_sc\\history.csv": "8aac17846a3c1a4405646226ab943bd9df518815d337e517584b7ba91cec9ea7",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\physio_sequence_no_aux\\history.csv": "048dde7249ed1c02b6a1cbc2b695d6d5eee03a12b2d5b32a34261729c71d9094",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\04_model_runs\\combined_old_plus_new\\physio_sequence_stats\\history.csv": "8c03f611cabacff33b998212cede88c3ca8de605c8bcf575aebd51e5a4f4ff5a"
+    },
+    "outputs": [
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_s1_training_diagnostics_frozen_models.png",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_s1_training_diagnostics_frozen_models.pdf",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_s1_training_diagnostics_frozen_models.svg",
+      "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\06_decoder_audit_v2\\corrected_combined_old_plus_new\\figures\\model_performance\\figure_s1_training_diagnostics_frozen_models.tiff"
+    ]
+  },
+  "critical_semantics": {
+    "window_confusion_matrix": "valid TN/FP/FN/TP using corrected interval-aware decoded_mask on supervised 4-s windows",
+    "window_pr_roc": "corrected split_safe_probability; decoder-independent ranking",
+    "event_detection": "TP/FP/FN interval matching; TN intentionally undefined",
+    "model_retrained_by_this_renderer": false
+  }
+}

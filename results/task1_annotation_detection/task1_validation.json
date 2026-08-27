@@ -1,0 +1,10 @@
+{
+  "root": "E:\\自动睡眠分析\\epilepsy_eeg_research\\results\\task1_annotation_detection",
+  "models": [
+    "eegwavenet_sc",
+    "physio_sequence_no_aux",
+    "physio_sequence_stats"
+  ],
+  "ok": true,
+  "errors": []
+}

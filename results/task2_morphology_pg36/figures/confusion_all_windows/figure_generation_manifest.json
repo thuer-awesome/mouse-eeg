@@ -1,0 +1,15 @@
+{
+  "classes": 36,
+  "label_prefix": "PG",
+  "prediction_source_by_model": {
+    "eegconformer": "full_window",
+    "eegnetv4": "full_window",
+    "eegwavenet_sc": "full_window",
+    "physio_stats": "full_window",
+    "physio_tf": "full_window"
+  },
+  "formal_denominator": "all eligible held-out test windows",
+  "sensitivity_fallback": "event x channel capped at 8 windows",
+  "class_dir": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\02_morphology_taxonomy\\all_mice_old_plus_new\\strict_all_channel_v1\\05_classification_pooled",
+  "label_path": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\02_morphology_taxonomy\\all_mice_old_plus_new\\strict_all_channel_v1\\04_label_freeze_pooled\\pooled_channel_window_labels.parquet"
+}

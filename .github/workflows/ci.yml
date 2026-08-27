@@ -1,0 +1,26 @@
+name: research-repository-checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install audit dependencies
+        run: python -m pip install -e ".[parquet,viz,dev]"
+      - name: Compile source and scripts
+        run: python -m compileall -q src scripts
+      - name: Run unit and release-invariant tests
+        run: python -m pytest -q
+      - name: Check tracked text
+        shell: bash
+        run: git diff --check

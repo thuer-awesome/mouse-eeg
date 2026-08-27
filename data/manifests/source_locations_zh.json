@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "task1_protocol": "E:/自动睡眠分析/sleep_staging/output/epilepsy_program_20260821/01_annotation_detection/03_combined_old_plus_new/protocol",
+  "task1_model_runs": "E:/自动睡眠分析/sleep_staging/output/epilepsy_program_20260821/01_annotation_detection/04_model_runs/combined_old_plus_new",
+  "task1_corrected_decoder": "E:/自动睡眠分析/sleep_staging/output/epilepsy_program_20260821/01_annotation_detection/06_decoder_audit_v2/corrected_combined_old_plus_new",
+  "task2_canonical": "E:/自动睡眠分析/sleep_staging/output/epilepsy_program_20260821/02_morphology_taxonomy/all_mice_old_plus_new/strict_all_channel_v1",
+  "raw_data_policy": "Raw recordings and sensitive labels remain outside Git; use a data-access manifest and SHA256.",
+  "absolute_calibration": "unconfirmed; amplitudes are relative baseline or a.u."
+}

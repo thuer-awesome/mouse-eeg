@@ -1,0 +1,13 @@
+model,true_label,predicted_label,count
+eegwavenet_sc,0,0,132254
+eegwavenet_sc,0,1,24583
+eegwavenet_sc,1,0,6937
+eegwavenet_sc,1,1,15629
+physio_sequence_no_aux,0,0,130823
+physio_sequence_no_aux,0,1,26014
+physio_sequence_no_aux,1,0,3913
+physio_sequence_no_aux,1,1,18653
+physio_sequence_stats,0,0,134189
+physio_sequence_stats,0,1,22648
+physio_sequence_stats,1,0,5021
+physio_sequence_stats,1,1,17545

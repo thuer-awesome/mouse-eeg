@@ -1,0 +1,92 @@
+schema_version: 1
+task: annotation_detection
+sequence_length: 21
+preprocessing:
+  target_rate_hz: 250
+  window_seconds: 4.0
+  stride_seconds: 1.0
+  filter:
+    highpass_hz: 0.5
+    lowpass_hz: 70.0
+    notch_hz: 50.0
+    notch_quality_factor: 30.0
+    bandpass_order: 4
+normalization:
+  method: per_channel_median_mad
+  clip: 20.0
+channels:
+  accepted: [CH7, CH8]
+  excluded_animal_channels: [[E07, CH7], [E77, CH7]]
+protocol:
+  animals: [E07, E50, E76, E77, E79, E81, E82]
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+  sequence_length: 21
+  positive_overlap_fraction: 0.50
+  event_context_margin_seconds: 12.0
+  background_block_seconds: 300.0
+  normalization_clip: 20.0
+  random_seed: 20260814
+  purge_cross_split_windows: true
+  excluded_animal_channels: [[E07, CH7], [E77, CH7]]
+  filter:
+    highpass_hz: 0.5
+    lowpass_hz: 70.0
+    notch_hz: 50.0
+    notch_quality_factor: 30.0
+    bandpass_order: 4
+models:
+  - eegwavenet_sc
+  - physio_sequence_no_aux
+  - physio_sequence_stats
+model_overrides:
+  eegwavenet_sc:
+    batch_size: 1024
+    sampling_mode: all_windows
+  physio_sequence_no_aux:
+    batch_size: 256
+    samples_per_epoch: 262144
+    sampling_mode: weighted_smoke
+  physio_sequence_stats:
+    batch_size: 256
+    samples_per_epoch: 262144
+    sampling_mode: weighted_smoke
+    auxiliary_statistics_weight: 0.15
+decoder:
+  kind: interval_aware_full_window_union
+  primary_match_iou: 0.30
+  high_threshold: 0.70
+  low_threshold: 0.10
+  median_width_windows: 3
+  persistence_k: 2
+  persistence_n: 3
+  max_gap_seconds: 0.0
+  min_event_seconds: 3.0
+  boundary_search_seconds: 0.0
+  selection_split: val
+  test_used_for_selection: false
+training:
+  split: event_grouped_mixed_70_15_15_with_raw_window_purge
+  models:
+    - eegwavenet_sc
+    - physio_sequence_no_aux
+    - physio_sequence_stats
+  epochs_max: 12
+  epochs: 12
+  batch_size: 256
+  eegwavenet_batch_size: 1024
+  physio_samples_per_epoch: 262144
+  class_weight_mode: hierarchical_event_region
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  early_stopping_patience: 4
+  learning_rate_patience: 2
+  learning_rate_factor: 0.5
+  gradient_clip_norm: 1.0
+  normalization_clip: 20.0
+  mixed_precision: true
+  seed: 20260822
+  device: auto
+  num_workers: 0
+  validation_metric: animal_macro_auprc

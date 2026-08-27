@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "protocol": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\01_annotation_detection\\03_combined_old_plus_new\\protocol",
+  "inputs": {
+    "full_index": "df9d8f2ebe9a396f7caf70c9391725d0d396e46814a23aca262e6f7d7a6c0928",
+    "centers": "42271aefa7d38880f3fa1544b112662e5b563ccbc63cac5c4f4f66b1da5059e0",
+    "baseline": "3ca1a59202fb37ac2d8066967c985ab58471d0a9f69d5887b5a700a98ccdac63",
+    "protocol_audit": "abf3dbe51437feb4168f9662d29aecd105fdec00768f61f4ca699fc998ec8740"
+  },
+  "config": {
+    "model_name": "physio_sequence_no_aux",
+    "model_kwargs": {},
+    "epochs": 12,
+    "batch_size": 256,
+    "samples_per_epoch": 262144,
+    "sampling_mode": "weighted_smoke",
+    "class_weight_mode": "hierarchical_event_region",
+    "learning_rate": 0.0003,
+    "weight_decay": 0.0001,
+    "auxiliary_statistics_weight": 0.0,
+    "early_stopping_patience": 4,
+    "learning_rate_patience": 2,
+    "learning_rate_factor": 0.5,
+    "gradient_clip_norm": 1.0,
+    "seed": 20260822,
+    "device": "auto",
+    "mixed_precision": true,
+    "num_workers": 0,
+    "normalization_clip": 20.0,
+    "maximum_evaluation_windows": null
+  },
+  "signature_sha256": "cff6ed1c022bc1751b3e4e923665384286cd6d2ffebf0a7ef266acadf1f37b1d",
+  "device": "cuda",
+  "mixed_precision_effective": true,
+  "parameters": 176338,
+  "training_sampler": "weighted_smoke",
+  "class_weight_mode": "hierarchical_event_region",
+  "train_windows_per_epoch": 262144,
+  "dataset_windows": {
+    "train": 927208,
+    "val": 180797,
+    "test": 179403
+  },
+  "prediction_sha256": "d668813050ab95376f5b9ec1c6a8a7249d37be26aa6e780c047b0fbac230c751"
+}

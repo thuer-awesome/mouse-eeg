@@ -1,0 +1,26 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+.DS_Store
+
+# Raw recordings and generated caches are never committed by default.
+data/raw/
+data/cache/
+*.npy
+*.npz
+*.edf
+*.bdf
+*.fif
+
+# Local run scratch space; final audited artifacts live under results/.
+work/
+tmp/
+*.lock
+_staging_*/

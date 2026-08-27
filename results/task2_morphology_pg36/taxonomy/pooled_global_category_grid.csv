@@ -1,0 +1,8 @@
+﻿distance_threshold,n_pooled_prototypes,n_cross_mouse_edges,n_global_categories,n_shared_categories,min_train_event_support,median_train_event_support,max_train_event_support,same_mouse_merge_allowed,linkage,selection_rule,selected
+0.6,40,1,39,1,12,73.0,911,False,complete,pre-registered conservative threshold; constrained complete-linkage agglomeration,False
+0.7,40,2,38,2,12,69.5,911,False,complete,pre-registered conservative threshold; constrained complete-linkage agglomeration,False
+0.8,40,4,37,2,12,66.0,1001,False,complete,pre-registered conservative threshold; constrained complete-linkage agglomeration,False
+0.9,40,8,36,3,12,73.5,1001,False,complete,pre-registered conservative threshold; constrained complete-linkage agglomeration,True
+1.0,40,12,35,4,12,74.0,1001,False,complete,pre-registered conservative threshold; constrained complete-linkage agglomeration,False
+1.1,40,26,32,7,12,88.0,1001,False,complete,pre-registered conservative threshold; constrained complete-linkage agglomeration,False
+1.2,40,37,29,9,12,98.0,1001,False,complete,pre-registered conservative threshold; constrained complete-linkage agglomeration,False

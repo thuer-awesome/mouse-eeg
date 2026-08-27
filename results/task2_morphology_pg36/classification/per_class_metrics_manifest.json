@@ -1,0 +1,17 @@
+{
+  "output_subdir": "05_classification_pooled",
+  "label_prefix": "PG",
+  "models": [
+    "eegconformer",
+    "eegnetv4",
+    "eegwavenet_sc",
+    "physio_stats",
+    "physio_tf"
+  ],
+  "source": "all_window_test_predictions.parquet",
+  "tables": [
+    "per_class_metrics_all_windows.csv",
+    "per_class_metrics_all_models.csv",
+    "per_animal_channel_metrics_compact.csv"
+  ]
+}

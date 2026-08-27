@@ -1,0 +1,82 @@
+{
+  "source_rows": 114219,
+  "source_events": 6225,
+  "unfolded_complete_channel_windows": 194530,
+  "event_channel_observations": 9144,
+  "animals": [
+    "E07",
+    "E50",
+    "E76",
+    "E77",
+    "E79",
+    "E81",
+    "E82"
+  ],
+  "valid_channels": [
+    "CH7",
+    "CH8"
+  ],
+  "excluded_e77_ch7": true,
+  "complete_window_threshold": 0.99,
+  "events_without_complete_window": 1381,
+  "event_split_counts": {
+    "source_events": {
+      "train": 4357,
+      "val": 934,
+      "test": 934
+    },
+    "eligible_event_channel": {
+      "train": 6393,
+      "val": 1375,
+      "test": 1376
+    },
+    "eligible_windows": {
+      "train": 130216,
+      "val": 31731,
+      "test": 32583
+    }
+  },
+  "cross_split_overlapping_event_pairs": 0,
+  "local_prototypes": 55,
+  "global_categories": 45,
+  "mouse_specific_categories": [
+    "G04",
+    "G12",
+    "G26"
+  ],
+  "low_confidence_event_channel_rows": 44,
+  "low_confidence_window_rows": 349,
+  "test_category_support": {
+    "classes_present": 45,
+    "minimum_windows": 11,
+    "maximum_windows": 9004
+  },
+  "feature_columns": [
+    "log_robust_amplitude",
+    "log_rms",
+    "log_line_length",
+    "hjorth_mobility",
+    "hjorth_complexity",
+    "peak_frequency_hz",
+    "spectral_entropy",
+    "relative_delta",
+    "relative_theta",
+    "relative_beta",
+    "relative_low_gamma_clean",
+    "relative_high_gamma",
+    "baseline_z__log_robust_amplitude",
+    "baseline_z__log_rms",
+    "baseline_z__log_line_length",
+    "baseline_z__hjorth_mobility",
+    "baseline_z__hjorth_complexity",
+    "baseline_z__peak_frequency_hz",
+    "baseline_z__spectral_entropy",
+    "baseline_z__relative_delta",
+    "baseline_z__relative_theta",
+    "baseline_z__relative_beta",
+    "baseline_z__relative_low_gamma_clean",
+    "baseline_z__relative_high_gamma"
+  ],
+  "new_batch_included": true,
+  "historical_binary_outputs_modified": false
+}
