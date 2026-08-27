@@ -62,3 +62,4 @@ The formal results are frozen snapshots from the audited source project. Their e
 
 See [docs/WORKFLOW_zh.md](docs/WORKFLOW_zh.md), [docs/TASK1_ANNOTATION_DETECTION_zh.md](docs/TASK1_ANNOTATION_DETECTION_zh.md), [docs/TASK2_MORPHOLOGY_PG36_zh.md](docs/TASK2_MORPHOLOGY_PG36_zh.md), and [docs/API_zh.md](docs/API_zh.md).
 Configuration and environment details are in [docs/CONFIGURATION_zh.md](docs/CONFIGURATION_zh.md).
+Release artifacts are indexed in [RESULTS_INDEX_zh.md](RESULTS_INDEX_zh.md); contribution and CI conventions are in [CONTRIBUTING.md](CONTRIBUTING.md).

@@ -21,3 +21,5 @@ python -m pip install -e ".[all,dev]"
 命令行入口：`epilepsy-eeg prepare`、`build-task1-protocol`、`annotate`、`train-task1`、`render-task1`、`materialize-task1`、`materialize-task2`、`pg36-report`、`train-pg36`、`render-pg36` 和 `audit`。每条命令都支持 `--help`；默认参数与 `configs/` 中的 YAML 对齐，显式命令行参数覆盖 YAML。`prepare` 负责预处理缓存，`build-task1-protocol` 负责事件级划分和跨 split purge。
 
 完整流程说明见 `docs/`，尤其是 `docs/CONFIGURATION_zh.md`。任务一的 corrected decoder 与任务二 PG36 分类严格分开，不能用其中一条线的结果替代另一条线。
+
+正式结果索引在 `RESULTS_INDEX_zh.md`，仓库贡献和复现实验检查见 `CONTRIBUTING.md`、`RELEASE_CHECKLIST_zh.md`。
