@@ -1,4 +1,4 @@
-# Epilepsy EEG Research
+# mouse-eeg: Epilepsy EEG Research
 
 This repository is the cleaned, reproducible release of the mouse epilepsy EEG study. It contains two deliberately separate workflows:
 
