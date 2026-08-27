@@ -153,6 +153,7 @@ def run_single_channel_training(
     # This preserves the exact 21-window context while avoiding three copies
     # of the multi-million-row frame during pooled training.
     context_frame = pd.read_parquet(paths["full_index"])
+    samples_per_window, sample_rate_hz = _infer_protocol_dimensions(context_frame)
     context_frame = context_frame.sort_values(
         ["continuity_id", "continuity_position"], kind="stable"
     ).reset_index(drop=True)
@@ -219,8 +220,8 @@ def run_single_channel_training(
     model = build_single_channel_model(
         config.model_name,
         classes=2,
-        samples_per_window=1000,
-        sample_rate_hz=250.0,
+        samples_per_window=samples_per_window,
+        sample_rate_hz=sample_rate_hz,
         sequence_length=config.sequence_length,
         **dict(config.model_kwargs),
     ).to(device)
@@ -389,6 +390,8 @@ def run_single_channel_training(
             "model_name": config.model_name,
             "model_kwargs": dict(config.model_kwargs),
             "sequence_length": config.sequence_length,
+            "samples_per_window": int(samples_per_window),
+            "sample_rate_hz": float(sample_rate_hz),
             "state_dict": best_state,
             "auxiliary_statistics_weight": config.auxiliary_statistics_weight,
         },
@@ -402,6 +405,8 @@ def run_single_channel_training(
         **signature,
         "signature_sha256": signature_hash,
         "device": str(device),
+        "samples_per_window": int(samples_per_window),
+        "sample_rate_hz": float(sample_rate_hz),
         "mixed_precision_effective": amp_enabled,
         "parameters": int(sum(parameter.numel() for parameter in model.parameters())),
         "training_sampler": config.sampling_mode,
@@ -430,6 +435,53 @@ def run_single_channel_training(
         encoding="utf-8",
     )
     return output
+
+
+def _infer_protocol_dimensions(frame: pd.DataFrame) -> tuple[int, float]:
+    """Resolve the model input shape from the prepared protocol metadata.
+
+    The original release used 250 Hz x 4 s (1000 samples), but the raw
+    adapter exposes these values as configurable preprocessing parameters.
+    Training must therefore consume the actual protocol shape instead of
+    silently assuming the historical constants.  Mixed shapes cannot be
+    batched by the shared dataset and are rejected with a useful message.
+    """
+
+    required = {"sampling_rate_hz", "window_seconds"}
+    missing = required - set(frame.columns)
+    if missing:
+        raise ValueError(
+            "protocol full_index is missing input-shape columns: "
+            + ", ".join(sorted(missing))
+        )
+    rates = pd.to_numeric(frame["sampling_rate_hz"], errors="coerce").dropna().to_numpy(float)
+    durations = pd.to_numeric(frame["window_seconds"], errors="coerce").dropna().to_numpy(float)
+    if rates.size == 0 or durations.size == 0:
+        raise ValueError("protocol has no finite sampling_rate_hz/window_seconds")
+    rate_values = np.unique(np.round(rates, 6))
+    # Align arrays explicitly after dropping NaNs; malformed rows are rejected
+    # rather than producing a misleading shape from unrelated positions.
+    paired = pd.DataFrame(
+        {
+            "rate": pd.to_numeric(frame["sampling_rate_hz"], errors="coerce"),
+            "duration": pd.to_numeric(frame["window_seconds"], errors="coerce"),
+        }
+    ).dropna()
+    paired["samples"] = np.rint(paired["rate"] * paired["duration"]).astype(np.int64)
+    sample_values = np.unique(paired["samples"].to_numpy(np.int64))
+    if len(rate_values) != 1 or len(sample_values) != 1:
+        raise ValueError(
+            "protocol contains mixed sampling rates/window lengths; "
+            f"rates={rate_values.tolist()}, samples={sample_values.tolist()}"
+        )
+    samples = int(sample_values[0])
+    rate = float(rate_values[0])
+    if samples < 128:
+        raise ValueError(
+            f"model window has only {samples} samples; at least 128 are required "
+            "for the STFT/temporal encoders"
+        )
+    return samples, rate
 
 
 def _hierarchical_sample_weights(frame: pd.DataFrame) -> np.ndarray:

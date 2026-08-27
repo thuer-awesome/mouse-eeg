@@ -193,6 +193,34 @@ def split_label_frame(labels: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame,
     return parts  # type: ignore[return-value]
 
 
+def infer_input_shape(labels: pd.DataFrame) -> tuple[int, float]:
+    """Infer the common cached waveform shape instead of assuming 1000/250."""
+
+    if "sampling_rate_hz" not in labels.columns:
+        raise ValueError("PG36 labels are missing sampling_rate_hz")
+    rates = pd.to_numeric(labels["sampling_rate_hz"], errors="coerce").dropna().unique()
+    if len(rates) != 1:
+        raise ValueError(f"PG36 labels contain mixed sampling rates: {rates.tolist()}")
+    caches = labels["cache_dir"].dropna().astype(str).unique()
+    if not len(caches):
+        raise ValueError("PG36 labels contain no cache_dir values")
+    sample_counts: set[int] = set()
+    for cache in caches:
+        signal_path = Path(cache) / "signals.npy"
+        if not signal_path.is_file():
+            raise FileNotFoundError(signal_path)
+        shape = np.load(signal_path, mmap_mode="r").shape
+        if len(shape) != 3 or shape[1] < 1:
+            raise ValueError(f"invalid signals.npy shape for {cache}: {shape}")
+        sample_counts.add(int(shape[2]))
+    if len(sample_counts) != 1:
+        raise ValueError(f"PG36 caches contain mixed sample counts: {sorted(sample_counts)}")
+    samples = int(next(iter(sample_counts)))
+    if samples < 128:
+        raise ValueError(f"PG36 window has only {samples} samples; at least 128 are required")
+    return samples, float(rates[0])
+
+
 def metrics(y: np.ndarray, p: np.ndarray, classes: int, label_prefix: str = "G") -> tuple[dict[str,float], pd.DataFrame, pd.DataFrame]:
     pred = p.argmax(1); cm = confusion_matrix(y, pred, labels=np.arange(classes));
     result = {"n":int(len(y)),"accuracy":float(accuracy_score(y,pred)),"balanced_accuracy":float(balanced_accuracy_score(y,pred)),"macro_f1":float(f1_score(y,pred,average="macro",zero_division=0)),"weighted_f1":float(f1_score(y,pred,average="weighted",zero_division=0))}
@@ -208,7 +236,7 @@ def metrics(y: np.ndarray, p: np.ndarray, classes: int, label_prefix: str = "G")
     return result,pd.DataFrame(per),pd.DataFrame(cm,index=labels,columns=labels)
 
 
-def run_one(name: str, train_df: pd.DataFrame, val_df: pd.DataFrame, test_df: pd.DataFrame, context_df: pd.DataFrame, out: Path, classes: int, samples: int, seq_len: int, epochs: int, batch_size: int, seed: int, max_per_event: int, device: torch.device, output_subdir: str = "05_classification", label_prefix: str = "G", learning_rate: float = 3e-4, weight_decay: float = 1e-4, early_stopping_patience: int = 3, learning_rate_patience: int = 1, num_workers: int = 0) -> dict[str, Any]:
+def run_one(name: str, train_df: pd.DataFrame, val_df: pd.DataFrame, test_df: pd.DataFrame, context_df: pd.DataFrame, out: Path, classes: int, samples: int, seq_len: int, epochs: int, batch_size: int, seed: int, max_per_event: int, device: torch.device, output_subdir: str = "05_classification", label_prefix: str = "G", learning_rate: float = 3e-4, weight_decay: float = 1e-4, early_stopping_patience: int = 3, learning_rate_patience: int = 1, num_workers: int = 0, sample_rate_hz: float = 250.0) -> dict[str, Any]:
     seed_all(seed); model, needs_seq, log_model = build_model(name, classes, samples, seq_len); model.to(device)
     train_rows=select_rows(train_df,"train",max_per_event,seed); val_rows=select_rows(val_df,"val",max_per_event,seed); test_rows=select_rows(test_df,"test",max_per_event,seed)
     # Include all eligible rows in context lookup, but no label from another event.
@@ -239,32 +267,35 @@ def run_one(name: str, train_df: pd.DataFrame, val_df: pd.DataFrame, test_df: pd
         if stale>=patience: break
     if best_state is not None: model.load_state_dict(best_state)
     _,test_m,y,p=epoch(test_loader,False); _,per,cm=metrics(y,p,classes,label_prefix)
-    model_out=out/output_subdir/name; model_out.mkdir(parents=True,exist_ok=True); pd.DataFrame(hist).to_csv(model_out/"history.csv",index=False); per.to_csv(model_out/"per_class_metrics.csv",index=False); cm.to_csv(model_out/"confusion_matrix.csv"); pd.DataFrame({"y_true":y,"y_pred":p.argmax(1),**{f"prob_{label_prefix}{i+1:02d}":p[:,i] for i in range(classes)}}).to_parquet(model_out/"test_predictions.parquet",index=False); torch.save({"model":name,"classes":classes,"label_prefix":label_prefix,"output_subdir":output_subdir,"state_dict":model.state_dict(),"best_epoch":best_epoch,"seed":seed},model_out/"best_model.pt"); (model_out/"metrics.json").write_text(json.dumps({**test_m,"best_epoch":best_epoch,"train_rows":len(train_rows),"val_rows":len(val_rows),"test_rows":len(test_rows),"class_counts_train":counts.tolist(),"label_prefix":label_prefix,"output_subdir":output_subdir,"learning_rate":learning_rate,"weight_decay":weight_decay,"early_stopping_patience":early_stopping_patience,"learning_rate_patience":learning_rate_patience,"num_workers":num_workers},ensure_ascii=False,indent=2),encoding="utf-8")
+    model_out=out/output_subdir/name; model_out.mkdir(parents=True,exist_ok=True); pd.DataFrame(hist).to_csv(model_out/"history.csv",index=False); per.to_csv(model_out/"per_class_metrics.csv",index=False); cm.to_csv(model_out/"confusion_matrix.csv"); pd.DataFrame({"y_true":y,"y_pred":p.argmax(1),**{f"prob_{label_prefix}{i+1:02d}":p[:,i] for i in range(classes)}}).to_parquet(model_out/"test_predictions.parquet",index=False); torch.save({"model":name,"classes":classes,"label_prefix":label_prefix,"output_subdir":output_subdir,"state_dict":model.state_dict(),"best_epoch":best_epoch,"seed":seed,"samples_per_window":int(samples),"sample_rate_hz":float(sample_rate_hz),"sequence_length":int(seq_len)},model_out/"best_model.pt"); (model_out/"metrics.json").write_text(json.dumps({**test_m,"best_epoch":best_epoch,"train_rows":len(train_rows),"val_rows":len(val_rows),"test_rows":len(test_rows),"class_counts_train":counts.tolist(),"label_prefix":label_prefix,"output_subdir":output_subdir,"learning_rate":learning_rate,"weight_decay":weight_decay,"early_stopping_patience":early_stopping_patience,"learning_rate_patience":learning_rate_patience,"num_workers":num_workers,"samples_per_window":int(samples),"sample_rate_hz":float(sample_rate_hz),"sequence_length":int(seq_len)},ensure_ascii=False,indent=2),encoding="utf-8")
     # Compact diagnostic figure: learning curves + normalized confusion matrix.
     h=pd.DataFrame(hist); fig,ax=plt.subplots(1,2,figsize=(183/25.4,65/25.4),constrained_layout=True); ax[0].plot(h.epoch,h.train_loss,"o-",label="train",color="#0072B2"); ax[0].plot(h.epoch,h.val_loss,"o-",label="validation",color="#D55E00"); ax[0].set_xlabel("Epoch"); ax[0].set_ylabel("NLL + auxiliary loss"); ax[0].legend(frameon=False); ax[0].set_title("Training diagnostic",loc="left",fontweight="bold"); norm=cm.div(cm.sum(axis=1).replace(0,1),axis=0); im=ax[1].imshow(norm.to_numpy(),vmin=0,vmax=1,cmap="Blues"); ax[1].set_xticks(range(classes),norm.columns); ax[1].set_yticks(range(classes),norm.index); ax[1].set_xlabel("Predicted"); ax[1].set_ylabel("True"); ax[1].set_title(f"Test confusion\nmacro-F1 {test_m['macro_f1']:.3f}",loc="left",fontweight="bold"); fig.colorbar(im,ax=ax[1],fraction=.05,pad=.04,label="row fraction"); save_fig(fig,model_out/"figure_model_diagnostics")
     return {"model":name,**test_m,"best_epoch":best_epoch,"train_rows":len(train_rows),"val_rows":len(val_rows),"test_rows":len(test_rows)}
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=DEFAULT_OUT); ap.add_argument("--label-path",type=Path,default=None,help="frozen channel-window label parquet"); ap.add_argument("--output-subdir",default="05_classification",help="classification result directory under --out"); ap.add_argument("--label-prefix",default=None,help="category prefix used in reports, e.g. PG"); ap.add_argument("--epochs",type=int,default=10); ap.add_argument("--batch-size",type=int,default=64); ap.add_argument("--max-per-event",type=int,default=8); ap.add_argument("--seed",type=int,default=20260823); ap.add_argument("--models",nargs="+",default=["eegwavenet_sc","physio_tf","physio_stats","eegnetv4","eegconformer"]); ap.add_argument("--device",default="auto"); ap.add_argument("--learning-rate",type=float,default=3e-4); ap.add_argument("--weight-decay",type=float,default=1e-4); ap.add_argument("--early-stopping-patience",type=int,default=3); ap.add_argument("--learning-rate-patience",type=int,default=1); ap.add_argument("--num-workers",type=int,default=0); args=ap.parse_args(argv)
+    ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=DEFAULT_OUT); ap.add_argument("--label-path",type=Path,default=None,help="frozen channel-window label parquet"); ap.add_argument("--output-subdir",default="05_classification",help="classification result directory under --out"); ap.add_argument("--label-prefix",default=None,help="category prefix used in reports, e.g. PG"); ap.add_argument("--epochs",type=int,default=10); ap.add_argument("--batch-size",type=int,default=64); ap.add_argument("--max-per-event",type=int,default=8); ap.add_argument("--seed",type=int,default=20260823); ap.add_argument("--models",nargs="+",default=["eegwavenet_sc","physio_tf","physio_stats","eegnetv4","eegconformer"]); ap.add_argument("--device",default="auto"); ap.add_argument("--learning-rate",type=float,default=3e-4); ap.add_argument("--weight-decay",type=float,default=1e-4); ap.add_argument("--early-stopping-patience",type=int,default=3); ap.add_argument("--learning-rate-patience",type=int,default=1); ap.add_argument("--num-workers",type=int,default=0); ap.add_argument("--fail-on-error",action="store_true",help="任何模型失败时返回非零，而不是只写 FAILED.txt"); ap.add_argument("--allow-non36",action="store_true",help="仅调试用：允许类别数不是 36"); args=ap.parse_args(argv)
     out=args.out.resolve(); seed_all(args.seed); device=torch.device("cuda" if args.device=="auto" and torch.cuda.is_available() else ("cpu" if args.device=="auto" else args.device));
     label_path = (args.label_path.resolve() if args.label_path is not None else out/"04_label_freeze"/"frozen_channel_window_labels.parquet")
     labels=pd.read_parquet(label_path); labels=labels.loc[labels.global_category.notna()].copy(); labels["global_category"]=labels.global_category.astype(int); classes=int(labels.global_category.max()+1)
-    if classes != 36:
+    if classes != 36 and not args.allow_non36:
         raise ValueError(f"PG36 training requires exactly 36 global categories; found {classes}")
     if "global_label" in labels.columns:
         labels_text = labels["global_label"].astype(str)
         if not labels_text.str.fullmatch(r"PG(?:0[1-9]|[12][0-9]|3[0-6])").all():
             raise ValueError("PG36 label table contains labels outside PG01-PG36")
     context=labels.copy();
+    samples_per_window, sample_rate_hz = infer_input_shape(labels)
     train_labels, val_labels, test_labels = split_label_frame(labels)
     inferred_prefix = "PG" if labels.get("global_label", pd.Series(dtype=str)).astype(str).str.startswith("PG").any() else "G"
     label_prefix = args.label_prefix or inferred_prefix
     summaries=[]
     for name in args.models:
-        try: summaries.append(run_one(name,train_labels,val_labels,test_labels,context, out,classes,1000,21,args.epochs,args.batch_size,args.seed,max(1,args.max_per_event),device,args.output_subdir,label_prefix,args.learning_rate,args.weight_decay,args.early_stopping_patience,args.learning_rate_patience,args.num_workers))
+        try: summaries.append(run_one(name,train_labels,val_labels,test_labels,context, out,classes,samples_per_window,21,args.epochs,args.batch_size,args.seed,max(1,args.max_per_event),device,args.output_subdir,label_prefix,args.learning_rate,args.weight_decay,args.early_stopping_patience,args.learning_rate_patience,args.num_workers,sample_rate_hz))
         except Exception as exc:
             model_out=out/args.output_subdir/name; model_out.mkdir(parents=True,exist_ok=True); (model_out/"FAILED.txt").write_text(repr(exc),encoding="utf-8"); print(f"[{name}] FAILED: {exc!r}",flush=True)
+            if args.fail_on_error:
+                raise
     summary=pd.DataFrame(summaries); summary.to_csv(out/args.output_subdir/"model_comparison.csv",index=False,encoding="utf-8-sig")
     if not summary.empty:
         fig,ax=plt.subplots(figsize=(183/25.4,70/25.4),constrained_layout=True); x=np.arange(len(summary)); w=.18; metrics_to_plot=[("macro_f1","Macro-F1","#0072B2"),("macro_auprc","Macro-AUPRC","#D55E00"),("balanced_accuracy","Balanced accuracy","#009E73")];
@@ -274,7 +305,7 @@ def main(argv: list[str] | None = None) -> int:
     # run note so a future retraining cannot silently replace the audited
     # denominator/label documentation.
     (out/"07_reports"/"CLASSIFIER_TASK2_REPORT_AUTO.md").write_text("# 冻结形态类别分类器自动摘要\n\n分类标签：`04_label_freeze/frozen_channel_window_labels.parquet`；模型："+", ".join(args.models)+f"；类别数：{classes}；序列上下文：21 epoch。\n事件平衡敏感性结果写入 `05_classification/model_comparison.csv`；全窗口主结果由 `evaluate_strict_classifiers_all_windows.py` 写入 `05_classification/all_window_model_comparison.csv`。\n",encoding="utf-8")
-    _json(out/"08_audit"/f"classifier_environment_{args.output_subdir}.json",{"torch":torch.__version__,"cuda":torch.cuda.is_available(),"device":str(device),"braindecode_import_error":_BRAINECODE_IMPORT_ERROR,"models_requested":args.models,"classes":classes,"sequence_length":21,"normalization":"per-window median/MAD","weights_pretrained":False,"label_path":str(label_path),"label_prefix":label_prefix,"output_subdir":args.output_subdir,"split_counts":{"train":int(len(train_labels)),"val":int(len(val_labels)),"test":int(len(test_labels))},"learning_rate":args.learning_rate,"weight_decay":args.weight_decay,"early_stopping_patience":args.early_stopping_patience,"learning_rate_patience":args.learning_rate_patience,"num_workers":args.num_workers})
+    _json(out/"08_audit"/f"classifier_environment_{args.output_subdir}.json",{"torch":torch.__version__,"cuda":torch.cuda.is_available(),"device":str(device),"braindecode_import_error":_BRAINECODE_IMPORT_ERROR,"models_requested":args.models,"classes":classes,"sequence_length":21,"samples_per_window":int(samples_per_window),"sample_rate_hz":float(sample_rate_hz),"normalization":"per-window median/MAD","weights_pretrained":False,"label_path":str(label_path),"label_prefix":label_prefix,"output_subdir":args.output_subdir,"split_counts":{"train":int(len(train_labels)),"val":int(len(val_labels)),"test":int(len(test_labels))},"learning_rate":args.learning_rate,"weight_decay":args.weight_decay,"early_stopping_patience":args.early_stopping_patience,"learning_rate_patience":args.learning_rate_patience,"num_workers":args.num_workers})
     print(summary.to_string(index=False) if not summary.empty else "No model completed",flush=True); return 0
 
 

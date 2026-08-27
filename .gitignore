@@ -7,6 +7,9 @@ __pycache__/
 venv/
 dist/
 build/
+.build_check/
+.build_check2/
+.build_check3/
 *.egg-info/
 .DS_Store
 

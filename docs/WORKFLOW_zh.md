@@ -1,8 +1,10 @@
 # 完整流程
 
+> **可复现入口**：需要从原始数据重新得到训练日志、权重、预测、指标和图时，使用 `epilepsy-eeg run-task1` 或 `epilepsy-eeg run-pg36`。这两个命令默认执行全链路和从头训练；`annotate` 只用于已有权重的离线回放。实现清单见 `docs/MODELS_zh.md`，运行契约见 `docs/REPRODUCIBILITY_zh.md`。
+
 ## 1. 数据与通道
 
-输入是原始 Parquet/CSV/NPY/NPZ 或可选 EDF/BDF/FIF。正式研究只接受 CH7、CH8；坏道按动物-通道配置屏蔽（当前 E07/CH7、E77/CH7）。ADC 到微伏的绝对标定尚未确认，所有幅值图和统计量以相对基线或 a.u. 表示。
+输入是原始 Parquet/CSV/NPY/NPZ 或可选 EDF/BDF/FIF；临床标签可以是单个 CSV/Parquet，也可以是包含多张标签表的目录。正式研究只接受 CH7、CH8；坏道按动物-通道配置屏蔽（当前 E07/CH7、E77/CH7）。ADC 到微伏的绝对标定尚未确认，所有幅值图和统计量以相对基线或 a.u. 表示。
 
 ## 2. 预处理
 

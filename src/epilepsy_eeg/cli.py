@@ -1,4 +1,4 @@
-"""Command line interface for the two frozen epilepsy EEG workflows."""
+"""Command line interface for the two reproducible epilepsy EEG workflows."""
 
 from __future__ import annotations
 
@@ -180,6 +180,103 @@ def _parser() -> argparse.ArgumentParser:
     train2.add_argument("--seed", type=int)
     train2.add_argument("--device")
     train2.add_argument("--output-subdir")
+    train2.add_argument("--fail-on-error", action="store_true", help="任一模型失败时返回非零")
+    train2.add_argument("--allow-non36", action="store_true", help="仅调试用：允许类别数不是 36")
+
+    run1 = sub.add_parser(
+        "run-task1",
+        help="任务一完整流水线：原始数据 -> 预处理/协议 -> 训练 -> 解码 -> 指标与临床图",
+    )
+    run1.add_argument("--input", type=_path, required=True)
+    run1.add_argument("--labels", type=_path, required=True)
+    run1.add_argument("--output", type=_path, required=True)
+    run1.add_argument("--config", type=_path)
+    run1.add_argument("--models", nargs="+", choices=MODEL_ORDER_TASK1)
+    run1.add_argument("--animals", nargs="+")
+    run1.add_argument("--sampling-rate", type=float)
+    run1.add_argument("--target-rate", type=float)
+    run1.add_argument("--window-seconds", type=float)
+    run1.add_argument("--stride-seconds", type=float)
+    run1.add_argument("--highpass-hz", type=float, help="离线零相位带通下限")
+    run1.add_argument("--lowpass-hz", type=float, help="离线零相位带通上限")
+    run1.add_argument("--notch-hz", type=float, help="陷波频率")
+    run1.add_argument("--notch-quality-factor", type=float, help="陷波 Q 值")
+    run1.add_argument("--bandpass-order", type=int, help="Butterworth 带通阶数")
+    run1.add_argument("--labels-time-base", choices=("absolute_ms", "relative_ms"), default="absolute_ms")
+    run1.add_argument("--ch7-column", help="表格中 CH7 的实际列名")
+    run1.add_argument("--ch8-column", help="表格中 CH8 的实际列名")
+    run1.add_argument("--device")
+    run1.add_argument("--epochs", type=int)
+    run1.add_argument("--batch-size", type=int)
+    run1.add_argument("--eegwavenet-batch-size", type=int)
+    run1.add_argument("--physio-samples-per-epoch", type=int)
+    run1.add_argument("--sampling-mode", choices=("all_windows", "weighted_smoke"))
+    run1.add_argument("--class-weight-mode", choices=("none", "balanced", "balanced_mouse_sqrt", "hierarchical_event_region"))
+    run1.add_argument("--learning-rate", type=float)
+    run1.add_argument("--weight-decay", type=float)
+    run1.add_argument("--early-stopping-patience", type=int)
+    run1.add_argument("--learning-rate-patience", type=int)
+    run1.add_argument("--learning-rate-factor", type=float)
+    run1.add_argument("--gradient-clip-norm", type=float)
+    run1.add_argument("--normalization-clip", type=float)
+    run1.add_argument("--maximum-evaluation-windows", type=int)
+    run1.add_argument("--mixed-precision", action=argparse.BooleanOptionalAction, default=None)
+    run1.add_argument("--num-workers", type=int)
+    run1.add_argument("--seed", type=int)
+    run1.add_argument("--primary-iou", type=float)
+    run1.add_argument("--minimum-sensitivity", type=float)
+    run1.add_argument("--minimum-precision", type=float)
+    run1.add_argument("--maximum-fp-per-hour", type=float)
+    run1.add_argument("--skip-training", action="store_true", help="只在已有本次 run 的权重时跳过训练")
+    run1.add_argument("--skip-render", action="store_true")
+    run1.add_argument("--smoke", action="store_true", help="单 epoch/小评估，用于接口验证，不是正式结果")
+    run1.add_argument("--allow-existing", action="store_true")
+    run1.add_argument("--no-input-hash", action="store_true")
+    run1.add_argument("--dry-run", action="store_true")
+
+    run2 = sub.add_parser(
+        "run-pg36",
+        help="任务二完整流水线：原始数据 -> 形态特征/PG36 -> 五模型 -> 全窗指标与图",
+    )
+    run2.add_argument("--input", type=_path, help="raw EEG；与 --taxonomy-root 二选一")
+    run2.add_argument("--labels", type=_path, help="raw 模式的临床事件标签")
+    run2.add_argument("--taxonomy-root", type=_path, help="已有冻结 taxonomy；不重新提取原始形态特征")
+    run2.add_argument("--output", type=_path, required=True)
+    run2.add_argument("--config", type=_path)
+    run2.add_argument("--models", nargs="+", choices=MODEL_ORDER_TASK2)
+    run2.add_argument("--animals", nargs="+")
+    run2.add_argument("--sampling-rate", type=float)
+    run2.add_argument("--target-rate", type=float)
+    run2.add_argument("--window-seconds", type=float)
+    run2.add_argument("--stride-seconds", type=float)
+    run2.add_argument("--highpass-hz", type=float, help="离线零相位带通下限")
+    run2.add_argument("--lowpass-hz", type=float, help="离线零相位带通上限")
+    run2.add_argument("--notch-hz", type=float, help="陷波频率")
+    run2.add_argument("--notch-quality-factor", type=float, help="陷波 Q 值")
+    run2.add_argument("--bandpass-order", type=int, help="Butterworth 带通阶数")
+    run2.add_argument("--labels-time-base", choices=("absolute_ms", "relative_ms"), default="absolute_ms")
+    run2.add_argument("--ch7-column", help="表格中 CH7 的实际列名")
+    run2.add_argument("--ch8-column", help="表格中 CH8 的实际列名")
+    run2.add_argument("--device")
+    run2.add_argument("--epochs", type=int)
+    run2.add_argument("--batch-size", type=int)
+    run2.add_argument("--max-per-event", type=int)
+    run2.add_argument("--learning-rate", type=float)
+    run2.add_argument("--weight-decay", type=float)
+    run2.add_argument("--early-stopping-patience", type=int)
+    run2.add_argument("--learning-rate-patience", type=int)
+    run2.add_argument("--num-workers", type=int)
+    run2.add_argument("--seed", type=int)
+    run2.add_argument("--threshold", type=float)
+    run2.add_argument("--expected-classes", type=int, default=36)
+    run2.add_argument("--allow-non36", action="store_true", help="仅调试用：允许冻结类别数不是 36")
+    run2.add_argument("--baseline-samples-per-stream", type=int, default=256)
+    run2.add_argument("--skip-training", action="store_true")
+    run2.add_argument("--skip-render", action="store_true")
+    run2.add_argument("--smoke", action="store_true", help="单 epoch，用于接口验证，不是正式结果")
+    run2.add_argument("--allow-existing", action="store_true")
+    run2.add_argument("--no-input-hash", action="store_true")
+    run2.add_argument("--dry-run", action="store_true")
 
     audit = sub.add_parser("audit", help="核对 release 的冻结标签、模型和主分母")
     audit.add_argument("--task1-root", type=_path)
@@ -272,6 +369,10 @@ def _run_train_pg36(args: argparse.Namespace) -> int:
     learning_rate_patience = int(_pick(args.learning_rate_patience, values, "learning_rate_patience", 1))
     num_workers = int(_pick(args.num_workers, values, "num_workers", 0))
     command = [sys.executable, str(script), "--out", str(args.out), "--label-path", str(args.label_path), "--models", *model_names, "--epochs", str(epochs), "--batch-size", str(batch_size), "--max-per-event", str(max_per_event), "--seed", str(seed), "--device", device, "--output-subdir", output_subdir, "--learning-rate", str(learning_rate), "--weight-decay", str(weight_decay), "--early-stopping-patience", str(early_stopping_patience), "--learning-rate-patience", str(learning_rate_patience), "--num-workers", str(num_workers)]
+    if args.fail_on_error:
+        command.append("--fail-on-error")
+    if args.allow_non36:
+        command.append("--allow-non36")
     subprocess.run(command, check=True)
     return 0
 
@@ -406,6 +507,97 @@ def main(argv: list[str] | None = None) -> int:
         materialize_pg36(args.source_root, output, include_tiff=args.include_tiff, include_predictions=not args.without_predictions, allow_existing=args.allow_existing); validate_pg36(output); return 0
     if args.command == "train-pg36":
         return _run_train_pg36(args)
+    if args.command == "run-task1":
+        from .pipeline import run_task1_pipeline
+
+        run_task1_pipeline(
+                input_path=args.input,
+                labels_path=args.labels,
+                output_root=args.output,
+                config_path=args.config,
+                models=tuple(args.models or MODEL_ORDER_TASK1),
+                animals=args.animals,
+                sampling_rate_hz=args.sampling_rate,
+                target_rate_hz=args.target_rate,
+                window_seconds=args.window_seconds,
+                stride_seconds=args.stride_seconds,
+                labels_time_base=args.labels_time_base,
+                ch7_column=args.ch7_column,
+                ch8_column=args.ch8_column,
+                device=args.device,
+                epochs=args.epochs,
+                batch_size=args.batch_size,
+                eegwavenet_batch_size=args.eegwavenet_batch_size,
+                physio_samples_per_epoch=args.physio_samples_per_epoch,
+                sampling_mode=args.sampling_mode,
+                class_weight_mode=args.class_weight_mode,
+                learning_rate=args.learning_rate,
+                weight_decay=args.weight_decay,
+                early_stopping_patience=args.early_stopping_patience,
+                learning_rate_patience=args.learning_rate_patience,
+                learning_rate_factor=args.learning_rate_factor,
+                gradient_clip_norm=args.gradient_clip_norm,
+                normalization_clip=args.normalization_clip,
+                maximum_evaluation_windows=args.maximum_evaluation_windows,
+                mixed_precision=args.mixed_precision,
+                num_workers=args.num_workers,
+                seed=args.seed,
+                filter_overrides=_filter_overrides(args),
+                primary_iou=args.primary_iou,
+                minimum_sensitivity=args.minimum_sensitivity,
+                minimum_precision=args.minimum_precision,
+                maximum_fp_per_hour=args.maximum_fp_per_hour,
+                skip_training=args.skip_training,
+                skip_render=args.skip_render,
+                smoke=args.smoke,
+                allow_existing=args.allow_existing,
+                hash_inputs=not args.no_input_hash,
+                command=sys.argv,
+                dry_run=args.dry_run,
+        )
+        return 0
+    if args.command == "run-pg36":
+        from .pipeline import run_pg36_pipeline
+
+        run_pg36_pipeline(
+            output_root=args.output,
+            input_path=args.input,
+            labels_path=args.labels,
+            taxonomy_root=args.taxonomy_root,
+            config_path=args.config,
+            models=tuple(args.models or MODEL_ORDER_TASK2),
+            animals=args.animals,
+            sampling_rate_hz=args.sampling_rate,
+            target_rate_hz=args.target_rate,
+            window_seconds=args.window_seconds,
+            stride_seconds=args.stride_seconds,
+            labels_time_base=args.labels_time_base,
+            ch7_column=args.ch7_column,
+            ch8_column=args.ch8_column,
+            filter_overrides=_filter_overrides(args),
+            device=args.device,
+            epochs=args.epochs,
+            batch_size=args.batch_size,
+            max_per_event=args.max_per_event,
+            learning_rate=args.learning_rate,
+            weight_decay=args.weight_decay,
+            early_stopping_patience=args.early_stopping_patience,
+            learning_rate_patience=args.learning_rate_patience,
+            num_workers=args.num_workers,
+            seed=args.seed,
+            threshold=args.threshold,
+            expected_classes=args.expected_classes,
+            allow_non36=args.allow_non36,
+            baseline_samples_per_stream=args.baseline_samples_per_stream,
+            skip_training=args.skip_training,
+            skip_render=args.skip_render,
+            smoke=args.smoke,
+            allow_existing=args.allow_existing,
+            hash_inputs=not args.no_input_hash,
+            command=sys.argv,
+            dry_run=args.dry_run,
+        )
+        return 0
     if args.command == "render-pg36":
         return _run_render_pg36(args)
     if args.command == "audit":

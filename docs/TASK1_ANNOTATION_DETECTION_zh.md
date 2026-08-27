@@ -16,6 +16,18 @@
 
 ## 训练与解码
 
+### 从原始数据完整重跑
+
+```powershell
+epilepsy-eeg run-task1 `
+  --input <raw-file-or-directory> `
+  --labels <label-file-or-directory> `
+  --output <new-run> `
+  --config configs/annotation_detection_final.yaml
+```
+
+该入口默认从仓库源码重新构造并训练三个模型，终端日志同步保存到 `<new-run>/logs/`；权重、训练历史、预测、指标、混淆矩阵和论文图都写入新的 run 目录，不读取 `results/` 冻结权重。
+
 ```powershell
 epilepsy-eeg train-task1 --protocol-dir <protocol> --output-root <run> --models eegwavenet_sc physio_sequence_no_aux physio_sequence_stats --epochs 20 --early-stopping-patience 4
 epilepsy-eeg annotate --protocol-dir <protocol> --checkpoint-root <run> --decoder-root <corrected> --output <review>

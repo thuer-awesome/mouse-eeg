@@ -18,6 +18,18 @@
 
 ## 训练命令
 
+### 从原始数据完整重跑
+
+```powershell
+epilepsy-eeg run-pg36 `
+  --input <raw-file-or-directory> `
+  --labels <label-file-or-directory> `
+  --output <new-run> `
+  --config configs/morphology_pg36_final.yaml
+```
+
+该入口会从原始数据重新提取独立通道特征、逐鼠聚类、冻结 PG36，并由仓库源码初始化和训练五个模型；训练日志同步写入 `<new-run>/logs/`，checkpoint、全窗口预测、指标、混淆矩阵和图写入 `<new-run>`。`--taxonomy-root` 仅用于已有冻结 taxonomy 的重训，并且仍需要标签表中引用的原始过滤缓存可访问。
+
 ```powershell
 epilepsy-eeg train-pg36 --out <taxonomy-root> --label-path <taxonomy-root>\taxonomy\pooled_channel_window_labels.parquet --output-subdir 05_classification_pooled --epochs 10
 epilepsy-eeg render-pg36 --taxonomy-root <taxonomy-root> --output <figures>

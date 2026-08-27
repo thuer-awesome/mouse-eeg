@@ -80,14 +80,21 @@ def run_continuous_single_channel_inference(
                 )
         return formal_predictions_path
 
+    frame = pd.read_parquet(full_index_path)
+    frame = frame.loc[frame["channel_valid"]].copy()
     checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
     model_name = str(checkpoint["model_name"])
     sequence_length = int(checkpoint["sequence_length"])
+    samples_per_window, sample_rate_hz = _infer_protocol_dimensions(
+        frame,
+        checkpoint_samples=checkpoint.get("samples_per_window"),
+        checkpoint_rate=checkpoint.get("sample_rate_hz"),
+    )
     model = build_single_channel_model(
         model_name,
         classes=2,
-        samples_per_window=1000,
-        sample_rate_hz=250.0,
+        samples_per_window=samples_per_window,
+        sample_rate_hz=sample_rate_hz,
         sequence_length=sequence_length,
         **dict(checkpoint.get("model_kwargs", {})),
     )
@@ -95,8 +102,6 @@ def run_continuous_single_channel_inference(
     torch_device = _resolve_device(device)
     model = model.to(torch_device).eval()
     amp_enabled = bool(mixed_precision and torch_device.type == "cuda")
-    frame = pd.read_parquet(full_index_path)
-    frame = frame.loc[frame["channel_valid"]].copy()
     frame = frame.sort_values(
         ["animal_id", "session_id", "channel_name", "start_time_ms"], kind="stable"
     ).reset_index(drop=True)
@@ -203,6 +208,8 @@ def run_continuous_single_channel_inference(
         **signature,
         "signature_sha256": signature_hash,
         "model_name": model_name,
+        "samples_per_window": int(samples_per_window),
+        "sample_rate_hz": float(sample_rate_hz),
         "device": str(torch_device),
         "mixed_precision_effective": amp_enabled,
         "all_valid_candidate_trace": {
@@ -1312,6 +1319,70 @@ def _resolve_device(value: str) -> torch.device:
     if device.type == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA was requested but is unavailable")
     return device
+
+
+def _infer_protocol_dimensions(
+    frame: pd.DataFrame,
+    *,
+    checkpoint_samples: Any = None,
+    checkpoint_rate: Any = None,
+) -> tuple[int, float]:
+    """Resolve and validate the waveform shape used by a checkpoint.
+
+    Older checkpoints do not carry explicit dimensions, so the prepared
+    protocol remains the source of truth.  New checkpoints record both values
+    and are rejected if they do not match the supplied protocol; silently
+    constructing a model with a different shape would invalidate inference.
+    """
+
+    required = {"sampling_rate_hz", "window_seconds"}
+    missing = required - set(frame.columns)
+    if missing:
+        raise ValueError(
+            "protocol full_index is missing input-shape columns: "
+            + ", ".join(sorted(missing))
+        )
+    pairs = pd.DataFrame(
+        {
+            "rate": pd.to_numeric(frame["sampling_rate_hz"], errors="coerce"),
+            "duration": pd.to_numeric(frame["window_seconds"], errors="coerce"),
+        }
+    ).dropna()
+    if pairs.empty:
+        raise ValueError("protocol has no finite sampling_rate_hz/window_seconds")
+    pairs["samples"] = np.rint(pairs["rate"] * pairs["duration"]).astype(np.int64)
+    rates = np.unique(np.round(pairs["rate"].to_numpy(float), 6))
+    samples = np.unique(pairs["samples"].to_numpy(np.int64))
+    if len(rates) != 1 or len(samples) != 1:
+        raise ValueError(
+            "protocol contains mixed sampling rates/window lengths; "
+            f"rates={rates.tolist()}, samples={samples.tolist()}"
+        )
+    resolved_samples = int(samples[0])
+    resolved_rate = float(rates[0])
+    if resolved_samples < 128:
+        raise ValueError(f"model window has only {resolved_samples} samples; at least 128 are required")
+    if checkpoint_samples is not None and int(checkpoint_samples) != resolved_samples:
+        raise ValueError(
+            "checkpoint/protocol sample mismatch: "
+            f"checkpoint={checkpoint_samples}, protocol={resolved_samples}"
+        )
+    if checkpoint_samples is None and resolved_samples != 1000:
+        raise ValueError(
+            "legacy checkpoint does not record samples_per_window and cannot be "
+            f"verified for a {resolved_samples}-sample protocol; retrain with the current trainer"
+        )
+    if checkpoint_rate is not None and not np.isclose(float(checkpoint_rate), resolved_rate, rtol=0, atol=1e-4):
+        raise ValueError(
+            "checkpoint/protocol sampling-rate mismatch: "
+            f"checkpoint={checkpoint_rate}, protocol={resolved_rate}"
+        )
+    if checkpoint_rate is None and not np.isclose(resolved_rate, 250.0, rtol=0, atol=1e-4):
+        raise ValueError(
+            "legacy checkpoint does not record sample_rate_hz and cannot be "
+            f"verified for a {resolved_rate:g}-Hz protocol; retrain with the current trainer"
+        )
+    return resolved_samples, resolved_rate
 
 
 def _sha256(path: Path) -> str:

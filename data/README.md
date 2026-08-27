@@ -4,4 +4,6 @@
 
 `prepare` 输出的 `protocol/channel_events.parquet` 是逐通道复核表，`protocol/event_components.parquet` 是同一临床事件跨通道共享 ID 的训练协议输入。未经 `build-task1-protocol` 审计的推理缓存不能直接作为监督训练集。
 
+想从本地原始数据完整重跑（而不是只复核 `results/` 冻结快照）时，使用 `epilepsy-eeg run-task1` 或 `epilepsy-eeg run-pg36`，把原始数据目录和标签目录通过 `--input`/`--labels` 传入。标签目录中的 CSV/Parquet 会按稳定顺序合并；原始数据仍不会被复制到仓库。
+
 最终结果的原始来源路径记录在 `data/manifests/source_locations_zh.json`；这些绝对路径只用于本地追溯，换机器时应由数据管理员更新。

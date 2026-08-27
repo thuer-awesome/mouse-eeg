@@ -37,6 +37,8 @@ For a CPU-only audit, `pip install -e ".[parquet,viz,dev]"` is sufficient. CUDA 
 epilepsy-eeg prepare           raw EEG -> filtered cache + offline protocol
 epilepsy-eeg build-task1-protocol  cache + event components -> purged train/val/test protocol
 epilepsy-eeg annotate          raw/protocol input -> channel predictions + PDF atlas
+epilepsy-eeg run-task1         raw EEG -> train -> decode -> metrics/figures (full run)
+epilepsy-eeg run-pg36          raw EEG -> taxonomy -> train -> metrics/figures (full run)
 epilepsy-eeg train-task1       configurable binary training
 epilepsy-eeg render-task1      corrected event atlas rendering
 epilepsy-eeg materialize-task1 copy the frozen Task-1 release
@@ -47,7 +49,13 @@ epilepsy-eeg render-pg36       regenerate the PG36 figure package
 epilepsy-eeg audit              validate both release roots
 ```
 
-Run `epilepsy-eeg <command> --help` for every parameter. The YAML files in `configs/` are the documented defaults; command-line values override them.
+`run-task1` and `run-pg36` are the full raw-to-result workflows: they initialize
+models from the checked-in source, train them, mirror terminal logs into
+`logs/`, and render predictions, metrics, confusion matrices, and paper figures
+in a new run directory. They do not require a pre-existing checkpoint. Use
+`annotate` only for offline replay with an existing checkpoint. Run
+`epilepsy-eeg <command> --help` for every parameter. The YAML files in
+`configs/` are the documented defaults; command-line values override them.
 
 `configs/annotation_detection_final.yaml` controls preprocessing, protocol
 purge, decoder and three-model training. `configs/morphology_pg36_final.yaml`
@@ -62,4 +70,7 @@ The formal results are frozen snapshots from the audited source project. Their e
 
 See [docs/WORKFLOW_zh.md](docs/WORKFLOW_zh.md), [docs/TASK1_ANNOTATION_DETECTION_zh.md](docs/TASK1_ANNOTATION_DETECTION_zh.md), [docs/TASK2_MORPHOLOGY_PG36_zh.md](docs/TASK2_MORPHOLOGY_PG36_zh.md), and [docs/API_zh.md](docs/API_zh.md).
 Configuration and environment details are in [docs/CONFIGURATION_zh.md](docs/CONFIGURATION_zh.md).
+The complete raw-to-result contract and the distinction between source code
+and frozen weights are documented in [docs/REPRODUCIBILITY_zh.md](docs/REPRODUCIBILITY_zh.md)
+and [docs/MODELS_zh.md](docs/MODELS_zh.md).
 Release artifacts are indexed in [RESULTS_INDEX_zh.md](RESULTS_INDEX_zh.md); contribution and CI conventions are in [CONTRIBUTING.md](CONTRIBUTING.md).

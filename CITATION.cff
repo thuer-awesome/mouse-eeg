@@ -6,7 +6,7 @@ authors:
   - family-names: "Research team"
     given-names: "Mouse EEG"
     affiliation: "Local laboratory"
-version: 0.1.0
-date-released: 2026-08-27
+version: 0.1.1
+date-released: 2026-08-28
 license: MIT
 repository-code: "https://github.com/thuer-awesome/mouse-eeg"

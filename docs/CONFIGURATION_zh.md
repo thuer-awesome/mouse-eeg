@@ -52,7 +52,31 @@ epilepsy-eeg prepare `
   --config configs/annotation_detection_final.yaml
 ```
 
-`prepare` 的可覆盖参数包括目标采样率、4 秒窗口、1 秒步长、0.5–70 Hz 带通、50 Hz 陷波、通道列名、动物/记录名和标签时间基准。它会做有限值、饱和轨、平坦通道和 CH7/CH8 基本 QC；E07/CH7 与 E77/CH7 的正式屏蔽仍由协议配置控制。
+`prepare` 的可覆盖参数包括目标采样率、窗口/步长、0.5–70 Hz 带通、50 Hz 陷波、通道列名、动物/记录名和标签时间基准。任务一和 PG36 训练会从缓存元数据推导实际采样点数与采样率，并拒绝混合形状；不再在训练/推理阶段偷偷写死 `1000/250 Hz`。它会做有限值、饱和轨、平坦通道和 CH7/CH8 基本 QC；E07/CH7 与 E77/CH7 的正式屏蔽仍由协议配置控制。
+
+标签参数既可以指向单个 CSV/Parquet，也可以指向包含多张标签表的目录；目录内文件会按稳定路径排序合并，再按动物和记录过滤。
+
+### 一条命令完整从头重跑
+
+需要让终端输出训练日志并在最后生成全部结果时，使用顶层编排器，而不是只调用 `annotate`：
+
+```powershell
+epilepsy-eeg run-task1 `
+  --input <raw-file-or-directory> `
+  --labels <label-file-or-directory> `
+  --output runs/task1_retrain_YYYYMMDD `
+  --config configs/annotation_detection_final.yaml
+
+epilepsy-eeg run-pg36 `
+  --input <raw-file-or-directory> `
+  --labels <label-file-or-directory> `
+  --output runs/pg36_retrain_YYYYMMDD `
+  --config configs/morphology_pg36_final.yaml
+```
+
+默认会从源码构造模型并训练；`logs/` 中的日志与终端同步，权重/历史/预测/指标在 `models/` 或 `05_classification_pooled/`，性能图和临床 PDF 在 `figures/`/`06_figures/`。这两个命令不读取 `results/` 的冻结权重，除非显式使用 `--skip-training`。
+
+完整入口也接受与 `prepare` 相同的滤波覆盖参数：`--highpass-hz`、`--lowpass-hz`、`--notch-hz`、`--notch-quality-factor` 和 `--bandpass-order`。任务一还可直接覆盖 `--eegwavenet-batch-size`、`--learning-rate-factor`、`--gradient-clip-norm`、`--normalization-clip`、`--maximum-evaluation-windows` 及 `--[no-]mixed-precision`；这些值会同时写入 `config_resolved.json` 和 `run_manifest`，并实际用于缓存/训练，而不是只作为显示参数。
 
 若要构建训练用的事件分组、背景块和跨 split 原始窗口 purge：
 

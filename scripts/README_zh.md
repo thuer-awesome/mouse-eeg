@@ -2,6 +2,8 @@
 
 `train_pg36.py`、`render_task2_pg36_corrected_v2.py` 和 `render_task1_corrected_model_performance.py` 是正式结果对应的脚本入口。其余脚本按来源阶段保留，均要求显式传入数据/输出路径；不应直接把默认路径当作新的实验结果。
 
+完整重跑不要手工拼接脚本，优先运行仓库根目录的 `epilepsy-eeg run-task1` 或 `epilepsy-eeg run-pg36`。编排器会按顺序调用这些脚本和 `src/mouse_sleep/epilepsy/` 中的模型/训练实现，并把每一阶段的命令和终端输出写入 run 的 `logs/`。因此提交到 Git 的不是只有结果或权重，而是完整的 raw-to-result 代码链；权重只是可选的冻结复核快照。
+
 优先使用顶层 `epilepsy-eeg` CLI：它统一记录参数、阻止非空输出目录被静默覆盖，并把 YAML 配置和命令行覆盖写入运行 manifest。直接运行脚本适合研究人员调试，仍必须显式指定输入和输出，并在完成后运行 `epilepsy-eeg audit`。
 
 任务一主链：

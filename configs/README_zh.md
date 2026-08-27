@@ -10,3 +10,5 @@
 - `training` 与 `model_overrides`：三模型的优化、采样、早停和设备。
 
 任务二 `training` 节控制五个 PG36 分类器的 epoch、batch、学习率、早停和输出子目录。显式 CLI 参数覆盖 YAML；改变正式参数时必须写入新的 run 目录并重新审计。
+
+`model_registry.yaml` 是源码模型清单，记录每个 CLI 名称对应的构造器、输入形状、上下文和可选依赖；它不包含权重路径。权重只在具体 run 的 `models/` 或 `05_classification_pooled/` 下由训练阶段产生。

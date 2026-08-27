@@ -11,6 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import argparse
 from pathlib import Path
 
 import matplotlib as mpl
@@ -122,8 +123,18 @@ def _copy_window_figure_and_sources() -> dict[str, object]:
     for suffix in (".png", ".pdf", ".svg"):
         source = source_stem.with_suffix(suffix)
         target = target_stem.with_suffix(suffix)
+        # A newly trained run has no historical ``deep_learning_metrics``
+        # folder.  The corrected window panel below is the authoritative
+        # figure in that case; retain a machine-readable note instead of
+        # silently fabricating a pre-correction panel.
         if not source.exists():
-            raise FileNotFoundError(source)
+            return {
+                "semantic_level": "held-out 4-s window classification",
+                "version": "no historical baseline available for this run",
+                "decoder_dependency": "none",
+                "source_stem": str(source_stem),
+                "outputs": [],
+            }
         shutil.copy2(source, target)
         copied.append(str(target))
         source_hashes[str(source)] = _sha256(source)
@@ -287,7 +298,10 @@ def _render_corrected_window_figure() -> dict[str, object]:
 
     cmap = LinearSegmentedColormap.from_list("confusion_blue", ("#F2F5F7", "#7EA9C8", "#174A6E"))
     metrics_frame = pd.DataFrame(rows).set_index("model")
-    for ax, model in zip(cm_axes, MODELS, strict=True):
+    for ax in cm_axes:
+        ax.set_visible(False)
+    for ax, model in zip(cm_axes, MODELS):
+        ax.set_visible(True)
         values = metrics_frame.loc[model, ["tn", "fp", "fn", "tp"]].to_numpy(float).reshape(2, 2)
         fractions = values / np.maximum(values.sum(axis=1, keepdims=True), 1)
         ax.imshow(fractions, cmap=cmap, vmin=0, vmax=1, aspect="equal")
@@ -344,6 +358,33 @@ def _copy_training_diagnostics() -> dict[str, object]:
             shutil.copy2(source, SOURCE_ROOT / f"history_{model}.csv")
             source_hashes[str(source)] = _sha256(source)
 
+    if not outputs:
+        # Render directly from the run histories when this is a fresh
+        # end-to-end experiment rather than a copy of the historical result.
+        histories = {}
+        for model in MODELS:
+            path = RUN_ROOT / model / "history.csv"
+            if path.is_file():
+                histories[model] = pd.read_csv(path)
+                shutil.copy2(path, SOURCE_ROOT / f"history_{model}.csv")
+        if histories:
+            fig, axes = plt.subplots(1, 2, figsize=(7.2047, 2.45), constrained_layout=True)
+            for model, history in histories.items():
+                if {"epoch", "train_loss", "val_loss"}.issubset(history.columns):
+                    axes[0].plot(history["epoch"], history["train_loss"], marker=MARKERS[model], ms=2.8, lw=0.9, color=COLORS[model], label=LABELS[model])
+                    axes[0].plot(history["epoch"], history["val_loss"], marker=MARKERS[model], ms=2.8, lw=0.9, ls="--", color=COLORS[model], alpha=0.72)
+                metric = "validation_auprc" if "validation_auprc" in history.columns else "val_macro_auprc"
+                if metric in history:
+                    axes[1].plot(history["epoch"], history[metric], marker=MARKERS[model], ms=2.8, lw=0.9, color=COLORS[model], label=LABELS[model])
+            axes[0].set_xlabel("Epoch"); axes[0].set_ylabel("Loss"); axes[0].set_title("Optimization history", loc="left", fontweight="bold")
+            axes[1].set_xlabel("Epoch"); axes[1].set_ylabel("Validation AUPRC"); axes[1].set_title("Validation ranking", loc="left", fontweight="bold")
+            axes[0].legend(frameon=False, fontsize=5.8)
+            for axis in axes:
+                _clean_axis(axis, "y")
+            stem = OUT_ROOT / "figure_s1_training_diagnostics_frozen_models"
+            _save(fig, stem)
+            outputs = [str(stem.with_suffix(suffix)) for suffix in (".png", ".pdf", ".svg", ".tiff")]
+
     return {
         "semantic_level": "model optimization history",
         "decoder_dependency": "none",
@@ -354,6 +395,13 @@ def _copy_training_diagnostics() -> dict[str, object]:
 
 
 def _load_corrected_metrics() -> pd.DataFrame:
+    def metric(value: object) -> float:
+        # JSON encodes undefined event metrics as ``null`` when a smoke run
+        # emits no positive candidate intervals.  Keep those values explicit
+        # as NaN so the renderer can still finish and the figure shows a gap
+        # instead of aborting the complete pipeline.
+        return float("nan") if value is None else float(value)
+
     rows: list[dict[str, object]] = []
     for model in MODELS:
         path = CORRECTED_ROOT / "models" / model / "events_corrected_v1_test" / "event_metrics.json"
@@ -371,23 +419,23 @@ def _load_corrected_metrics() -> pd.DataFrame:
                 "matched_events": matched_events,
                 "missed_events": true_events - matched_events,
                 "false_positive_events": int(pooled["false_positive_events"]),
-                "event_sensitivity": float(pooled["event_sensitivity"]),
-                "event_precision": float(pooled["event_precision"]),
-                "event_f1": float(pooled["event_f1"]),
-                "mean_iou": float(pooled["mean_iou"]),
-                "median_iou": float(pooled["median_iou"]),
-                "mean_annotated_event_coverage": float(pooled["mean_annotated_event_coverage"]),
-                "median_absolute_onset_error_seconds": float(pooled["median_absolute_onset_error_seconds"]),
-                "median_absolute_offset_error_seconds": float(pooled["median_absolute_offset_error_seconds"]),
-                "median_absolute_duration_error_seconds": float(pooled["median_absolute_duration_error_seconds"]),
-                "false_positive_events_per_hour": float(pooled["false_positive_events_per_hour"]),
+                "event_sensitivity": metric(pooled["event_sensitivity"]),
+                "event_precision": metric(pooled["event_precision"]),
+                "event_f1": metric(pooled["event_f1"]),
+                "mean_iou": metric(pooled["mean_iou"]),
+                "median_iou": metric(pooled["median_iou"]),
+                "mean_annotated_event_coverage": metric(pooled["mean_annotated_event_coverage"]),
+                "median_absolute_onset_error_seconds": metric(pooled["median_absolute_onset_error_seconds"]),
+                "median_absolute_offset_error_seconds": metric(pooled["median_absolute_offset_error_seconds"]),
+                "median_absolute_duration_error_seconds": metric(pooled["median_absolute_duration_error_seconds"]),
+                "false_positive_events_per_hour": metric(pooled["false_positive_events_per_hour"]),
                 "zero_coverage_events": int(pooled["zero_coverage_events"]),
-                "zero_coverage_rate": float(pooled["zero_coverage_rate"]),
+                "zero_coverage_rate": metric(pooled["zero_coverage_rate"]),
                 "long_events_ge_30s": int(pooled["long_events_ge_30s"]),
                 "long_events_ge_30s_zero_coverage": int(pooled["long_events_ge_30s_zero_coverage"]),
-                "long_events_ge_30s_zero_coverage_rate": float(pooled["long_events_ge_30s_zero_coverage_rate"]),
-                "fragmentation_rate": float(pooled["fragmentation_rate"]),
-                "merged_prediction_rate": float(pooled["merged_prediction_rate"]),
+                "long_events_ge_30s_zero_coverage_rate": metric(pooled["long_events_ge_30s_zero_coverage_rate"]),
+                "fragmentation_rate": metric(pooled["fragmentation_rate"]),
+                "merged_prediction_rate": metric(pooled["merged_prediction_rate"]),
                 "formal_event_denominator": int(payload["formal_event_denominator"]),
                 "visual_event_denominator": int(payload["clinical_event_denominator"]),
                 "source_path": str(path),
@@ -469,7 +517,10 @@ def _build_corrected_event_figure(frame: pd.DataFrame) -> dict[str, object]:
     )
 
     cmap = LinearSegmentedColormap.from_list("event_audit_blue", ("#F2F5F7", "#7EA9C8", "#174A6E"))
-    for ax, (_, row) in zip(audit_axes, frame.iterrows(), strict=True):
+    for ax in audit_axes:
+        ax.set_visible(False)
+    for ax, (_, row) in zip(audit_axes, frame.iterrows()):
+        ax.set_visible(True)
         values = np.array(
             [
                 [row["matched_events"], row["missed_events"]],
@@ -510,7 +561,7 @@ def _build_corrected_event_figure(frame: pd.DataFrame) -> dict[str, object]:
     fig.text(
         0.01,
         0.006,
-        "Held-out corrected interval-aware decoder; n=953 formally observable manual channel-events. "
+        "Held-out corrected interval-aware decoder; the formal event denominator is recorded in source_data/corrected_event_metrics.csv. "
         "Bottom rows have different denominators (manual events versus predicted candidates), so they are event-audit matrices, not TN-based confusion matrices.",
         fontsize=6.1,
         color="#55585C",
@@ -544,7 +595,22 @@ def _write_readme() -> None:
     (OUT_ROOT / "README_zh.md").write_text(text, encoding="utf-8")
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
+    global RUN_ROOT, CORRECTED_ROOT, OUT_ROOT, SOURCE_ROOT, MODELS
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--run-root", type=Path, default=RUN_ROOT)
+    parser.add_argument("--corrected-root", type=Path, default=CORRECTED_ROOT)
+    parser.add_argument("--output-root", type=Path, default=OUT_ROOT)
+    parser.add_argument("--models", nargs="+", choices=tuple(LABELS), default=list(MODELS))
+    parser.add_argument("--allow-existing", action="store_true")
+    args = parser.parse_args(argv)
+    # Keep the established renderer functions unchanged while allowing a
+    # top-level run to supply an isolated output tree.
+    RUN_ROOT = args.run_root.resolve()
+    CORRECTED_ROOT = args.corrected_root.resolve()
+    OUT_ROOT = args.output_root.resolve()
+    SOURCE_ROOT = OUT_ROOT / "source_data"
+    MODELS = tuple(args.models)
     OUT_ROOT.mkdir(parents=True, exist_ok=True)
     SOURCE_ROOT.mkdir(parents=True, exist_ok=True)
     baseline_window = _copy_window_figure_and_sources()

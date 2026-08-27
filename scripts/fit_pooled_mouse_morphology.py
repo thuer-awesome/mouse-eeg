@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import argparse
 
 import numpy as np
 import pandas as pd
@@ -76,22 +77,64 @@ def choose_gmm(z: np.ndarray, seed: int) -> tuple[GaussianMixture, np.ndarray, p
     return models[selected][0], models[selected][1], grid
 
 
-def main() -> None:
-    event = pd.read_parquet(OUT / "01_tables" / "channel_event_features.parquet")
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, default=OUT)
+    parser.add_argument("--seed", type=int, default=20260823)
+    args = parser.parse_args(argv)
+    root = args.root.resolve()
+    event_path = root / "01_tables" / "channel_event_features.parquet"
+    if not event_path.is_file():
+        # Accept the intermediate channel-independent layout as a convenience,
+        # but always materialize the canonical 01_tables output below.
+        event_path = root / "channel_independent" / "channel_event_features.parquet"
+    event = pd.read_parquet(event_path)
+    if "split" not in event.columns:
+        raise ValueError(
+            "channel_event_features.parquet must contain an event-level split; "
+            "do not fit pooled clusters from a table with an implicit split"
+        )
     event = event.loc[event.channel_name.astype(str).isin(["CH7", "CH8"])].copy()
     assignments = []
     prototypes = []
     summaries = []
-    grids = OUT / "03_cross_mouse" / "pooled_mouse_gmm"
+    exclusions = []
+    grids = root / "03_cross_mouse" / "pooled_mouse_gmm"
     grids.mkdir(parents=True, exist_ok=True)
     for idx, (animal, group0) in enumerate(event.groupby("animal_id", sort=True)):
         group = group0.reset_index(drop=True).copy()
+        # The taxonomy is frozen from the training partition only.  The old
+        # fallback to ``group`` when a mouse had fewer than twelve training
+        # events leaked validation/test morphology into the fitted scaler and
+        # GMM.  A small training set is still valid (choose_gmm will select
+        # k=1); a mouse with no training events is explicitly excluded and
+        # causes the stage to fail rather than silently leaking held-out data.
         train = group.loc[group.split.astype(str).eq("train")].copy()
-        if len(train) < 12:
-            train = group.copy()
+        if train.empty:
+            exclusions.append(
+                {
+                    "animal_id": str(animal),
+                    "n_events": int(len(group)),
+                    "n_train_events": 0,
+                    "reason": "no_train_events",
+                }
+            )
+            summaries.append(
+                {
+                    "animal_id": str(animal),
+                    "n_events": int(len(group)),
+                    "n_train_events": 0,
+                    "n_pooled_clusters": 0,
+                    "selected_bic": np.nan,
+                    "selected_stability_ari": np.nan,
+                    "channels_in_fit": "",
+                    "status": "excluded_no_train_events",
+                }
+            )
+            continue
         scaler = RobustScaler(quantile_range=(10, 90)).fit(finite(train))
         z_train = scaler.transform(finite(train))
-        model, train_raw, grid = choose_gmm(z_train, 20260823 + idx * 101)
+        model, train_raw, grid = choose_gmm(z_train, int(args.seed) + idx * 101)
         order = np.argsort(model.means_[:, 0], kind="stable")
         remap = {int(old): int(new) for new, old in enumerate(order)}
         train_labels = np.asarray([remap[int(v)] for v in train_raw], dtype=int)
@@ -110,15 +153,27 @@ def main() -> None:
             prototypes.append({"animal_id": animal, "pooled_cluster": int(cluster), "pooled_label": f"{animal}-P{int(cluster) + 1:02d}", "n_train_events": int(len(subset)), **{f"f_{name}": float(value) for name, value in zip(FEATURES, values)}})
         grid.to_csv(grids / f"pooled_gmm_grid_{animal}.csv", index=False)
         selected = grid.loc[grid.selected].iloc[0]
-        summaries.append({"animal_id": animal, "n_events": int(len(group)), "n_train_events": int(len(train)), "n_pooled_clusters": int(selected.components), "selected_bic": float(selected.bic), "selected_stability_ari": float(selected.stability_ari), "channels_in_fit": "+".join(sorted(group.channel_name.astype(str).unique()))})
+        summaries.append({"animal_id": animal, "n_events": int(len(group)), "n_train_events": int(len(train)), "n_pooled_clusters": int(selected.components), "selected_bic": float(selected.bic), "selected_stability_ari": float(selected.stability_ari), "channels_in_fit": "+".join(sorted(group.channel_name.astype(str).unique())), "status": "included"})
+    exclusions_frame = pd.DataFrame(exclusions, columns=["animal_id", "n_events", "n_train_events", "reason"])
+    exclusions_frame.to_csv(root / "03_cross_mouse" / "pooled_mouse_exclusions.csv", index=False, encoding="utf-8-sig")
+    if exclusions:
+        # Keep the explicit exclusion artifact for audit/recovery, then stop
+        # before producing a taxonomy that would have silently dropped rows.
+        raise ValueError(
+            "pooled clustering requires at least one training event per mouse; "
+            f"excluded={','.join(row['animal_id'] for row in exclusions)} "
+            "(reason=no_train_events). "
+            "See 03_cross_mouse/pooled_mouse_exclusions.csv"
+        )
     result = pd.concat(assignments, ignore_index=True)
-    result.to_parquet(OUT / "03_cross_mouse" / "pooled_mouse_event_assignments.parquet", index=False)
-    pd.DataFrame(prototypes).to_parquet(OUT / "03_cross_mouse" / "pooled_mouse_prototypes.parquet", index=False)
-    pd.DataFrame(summaries).to_csv(OUT / "03_cross_mouse" / "pooled_mouse_cluster_summary.csv", index=False, encoding="utf-8-sig")
-    manifest = {"unit": "one eligible event x channel point; CH7 and CH8 fitted jointly within each mouse", "fit_split": "training events only", "label_prefix": "Pxx", "not_clinical": True, "n_event_channel": int(len(result)), "animals": sorted(result.animal_id.astype(str).unique())}
-    (OUT / "03_cross_mouse" / "pooled_mouse_clustering_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"pooled mouse clustering written to {OUT / '03_cross_mouse'}")
+    result.to_parquet(root / "03_cross_mouse" / "pooled_mouse_event_assignments.parquet", index=False)
+    pd.DataFrame(prototypes).to_parquet(root / "03_cross_mouse" / "pooled_mouse_prototypes.parquet", index=False)
+    pd.DataFrame(summaries).to_csv(root / "03_cross_mouse" / "pooled_mouse_cluster_summary.csv", index=False, encoding="utf-8-sig")
+    manifest = {"unit": "one eligible event x channel point; CH7 and CH8 fitted jointly within each mouse", "fit_split": "training events only", "label_prefix": "Pxx", "not_clinical": True, "n_event_channel": int(len(result)), "animals": sorted(result.animal_id.astype(str).unique()), "excluded_mice": exclusions}
+    (root / "03_cross_mouse" / "pooled_mouse_clustering_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"pooled mouse clustering written to {root / '03_cross_mouse'}")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

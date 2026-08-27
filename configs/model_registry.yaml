@@ -1,0 +1,56 @@
+schema_version: 1
+description: >-
+  Source-defined model registry. The checkpoint files under results/ are frozen
+  instances only; run-task1/run-pg36 construct these models from the checked-in
+  source and train them from random initialization.
+task1:
+  eegwavenet_sc:
+    source: src/mouse_sleep/epilepsy/single_channel_models.py
+    constructor: build_single_channel_model:eegwavenet_sc
+    trainer: src/mouse_sleep/epilepsy/single_channel_train.py
+    input: "[batch, 1, 1000]"
+    context: 1
+    output: "log P(non-seizure), log P(seizure)"
+  physio_sequence_no_aux:
+    source: src/mouse_sleep/epilepsy/single_channel_models.py
+    constructor: build_single_channel_model:physio_sequence_time_frequency
+    trainer: src/mouse_sleep/epilepsy/single_channel_train.py
+    input: "[batch, 21, 1, 1000]"
+    context: 21
+    branches: [multiscale_temporal, differentiable_stft, cross_modal_attention, epoch_tcn, transformer]
+    output: "P(non-seizure), P(seizure)"
+  physio_sequence_stats:
+    source: src/mouse_sleep/epilepsy/single_channel_models.py
+    constructor: build_single_channel_model:physio_sequence_stats_aux
+    trainer: src/mouse_sleep/epilepsy/single_channel_train.py
+    input: "[batch, 21, 1, 1000] + differentiable_statistics"
+    context: 21
+    auxiliary_head: statistics_regression
+    output: "P(non-seizure), P(seizure)"
+task2:
+  eegwavenet_sc:
+    source: scripts/train_pg36.py + src/mouse_sleep/epilepsy/single_channel_models.py
+    input: "[batch, 1, 1000]"
+    output: "PG01..PG36"
+  physio_tf:
+    source: scripts/train_pg36.py + src/mouse_sleep/epilepsy/single_channel_models.py
+    constructor: build_single_channel_model:physio_sequence_time_frequency
+    input: "[batch, 21, 1, 1000]"
+    output: "PG01..PG36"
+  physio_stats:
+    source: scripts/train_pg36.py + src/mouse_sleep/epilepsy/single_channel_models.py
+    constructor: build_single_channel_model:physio_sequence_stats_aux
+    input: "[batch, 21, 1, 1000]"
+    output: "PG01..PG36"
+  eegnetv4:
+    source: scripts/train_pg36.py
+    constructor: braindecode.models.EEGNetv4
+    dependency: braindecode
+    input: "[batch, 1, 1000]"
+    output: "PG01..PG36"
+  eegconformer:
+    source: scripts/train_pg36.py
+    constructor: braindecode.models.EEGConformer
+    dependency: braindecode
+    input: "[batch, 1, 1000]"
+    output: "PG01..PG36"
