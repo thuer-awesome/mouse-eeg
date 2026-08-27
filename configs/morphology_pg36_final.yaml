@@ -17,7 +17,9 @@ models:
   - eegnetv4
   - eegconformer
 primary_denominator: all_eligible_held_out_test_windows
-primary_test_windows: 32583
+# Informational only: the formal denominator is measured from the current
+# all-window evaluation table, because it changes when the raw cohort changes.
+primary_test_windows: null
 event_balanced_cap_per_event: 8
 event_balanced_is_sensitivity_only: true
 training:

@@ -123,7 +123,7 @@ epilepsy-eeg render-pg36 `
   --output <work/pg36_figures>
 ```
 
-五个模型、学习率、早停、事件窗口上限和设备均可由 YAML 或命令行覆盖。每个事件×有效通道仍是独立观察，CH7/CH8 不拼成 paired input；`max_per_event=8` 只用于训练采样或敏感性分析，正式测试主分母固定为 32,583 个窗口。
+五个模型、学习率、早停、事件窗口上限和设备均可由 YAML 或命令行覆盖。每个事件×有效通道仍是独立观察，CH7/CH8 不拼成 paired input；`max_per_event=8` 只用于训练采样或敏感性分析，正式测试主分母必须从当前运行的全窗口评估表读取，不能沿用历史固定数量。
 
 ## 审计和交接
 
@@ -134,4 +134,4 @@ epilepsy-eeg audit `
   --output work/release_audit.json
 ```
 
-审计必须报告：任务一三个模型和 decoder 配置、任务二恰好 PG01–PG36 和五个模型、任务二 32,583 测试窗口，以及没有 legacy/smoke/failed/archive 文件进入正式结果树。任何参数变更都应生成新的输出目录和 manifest，不直接覆盖 `results/`。
+审计必须报告：任务一三个模型和 decoder 配置、任务二 PG01–PG36 和五个模型、当前运行的全窗口测试分母，以及没有 legacy/smoke/failed/archive 文件进入正式结果树。任何参数变更都应生成新的输出目录和 manifest，不直接覆盖 `results/`。

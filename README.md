@@ -29,6 +29,11 @@ python -m pip install -U pip
 python -m pip install -e ".[all,dev]"
 ```
 
+After installation the `epilepsy-eeg` console command is available.  A fresh
+clone can also invoke the identical CLI before installation by setting
+`PYTHONPATH=src` and running `python -m epilepsy_eeg`; this is useful for a
+quick interface check and does not implicitly load a released checkpoint.
+
 For a CPU-only audit, `pip install -e ".[parquet,viz,dev]"` is sufficient. CUDA and the exact PyTorch build must be selected for the target machine.
 
 ## CLI entry points

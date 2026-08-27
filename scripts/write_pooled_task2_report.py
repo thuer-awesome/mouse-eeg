@@ -23,6 +23,21 @@ def main(argv: list[str] | None = None) -> int:
     manifest = json.loads((pooled / "pooled_label_freeze_manifest.json").read_text(encoding="utf-8"))
     audit = json.loads((pooled / "pooled_label_freeze_audit.json").read_text(encoding="utf-8"))
     metrics = pd.read_csv(cls / "all_window_model_comparison.csv").sort_values("macro_f1", ascending=False)
+    if metrics.empty or "n" not in metrics:
+        raise ValueError("all_window_model_comparison.csv must contain the formal test-window count column 'n'")
+    formal_test_windows = int(pd.to_numeric(metrics["n"], errors="raise").iloc[0])
+    if pd.to_numeric(metrics["n"], errors="raise").nunique() != 1:
+        raise ValueError("model comparison has inconsistent formal test-window denominators")
+    capped_test_windows = None
+    for candidate in sorted(cls.glob("*/test_predictions.parquet")):
+        try:
+            # Legacy capped tables do not share one schema (some use ``true``
+            # or only probability columns), so the row count is the stable
+            # sensitivity denominator we can report without guessing labels.
+            capped_test_windows = int(len(pd.read_parquet(candidate)))
+            break
+        except (OSError, ValueError, KeyError, ImportError):
+            continue
     model_lines = [
         f"| {row.model} | {row.accuracy:.3f} | {row.balanced_accuracy:.3f} | {row.macro_f1:.3f} | {row.macro_auprc:.3f} | {row.event_macro_f1:.3f} |"
         for _, row in metrics.iterrows()
@@ -47,7 +62,9 @@ def main(argv: list[str] | None = None) -> int:
 | Event x channel labels | {manifest['train_event_count']:,} | {manifest['val_event_count']:,} | {manifest['test_event_count']:,} | {manifest['n_event_channel']:,} |
 | Complete windows | {audit['split_counts_windows_output']['train']:,} | {audit['split_counts_windows_output']['val']:,} | {audit['split_counts_windows_output']['test']:,} | {manifest['n_windows']:,} |
 
-Training used an event-balanced sensitivity cap of at most eight windows per event (5,331 capped test windows). Formal performance below uses every eligible held-out test window (`n=32,583`).
+Training used an event-balanced sensitivity cap of at most eight windows per event.
+{f"The capped sensitivity table contains {capped_test_windows:,} test windows." if capped_test_windows is not None else "A capped sensitivity prediction table was not found in this run."}
+Formal performance below uses every eligible held-out test window (`n={formal_test_windows:,}`), with the denominator read from the all-window comparison table.
 
 ## Full-window model results
 
@@ -77,7 +94,7 @@ Per-stream Macro-F1 is intentionally strict: it averages over the complete PG01-
     (reports / "TASK2_POOLED_FINAL_REPORT.md").write_text(report, encoding="utf-8")
     index = f"""# Task 2 canonical index
 
-Start with [`07_reports/TASK2_POOLED_FINAL_REPORT.md`](../07_reports/TASK2_POOLED_FINAL_REPORT.md). The formal taxonomy is PG01-PG{manifest['n_global_categories']:02d}; all model metrics use 32,583 held-out windows.
+Start with [`07_reports/TASK2_POOLED_FINAL_REPORT.md`](../07_reports/TASK2_POOLED_FINAL_REPORT.md). The formal taxonomy is PG01-PG{manifest['n_global_categories']:02d}; all model metrics use {formal_test_windows:,} held-out windows in this run.
 
 1. Morphology process: [`paper_ready_morphology_pooled`](paper_ready_morphology_pooled)
 2. Cluster statistics: [`paper_ready_morphology_pooled/06_cluster_diagnostics`](paper_ready_morphology_pooled/06_cluster_diagnostics)

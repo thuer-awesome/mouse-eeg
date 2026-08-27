@@ -118,6 +118,24 @@ MID_GREY = "#66717A"
 LIGHT_GREY = "#D9DEE3"
 
 
+def _layout_paths(tax_root: Path) -> tuple[Path, Path, Path, Path]:
+    """Resolve the source-study tree or the compact release tree."""
+
+    if (tax_root / "taxonomy").is_dir():
+        return (
+            tax_root / "tables" / "channel_event_features.parquet",
+            tax_root / "taxonomy" / "pooled_event_labels.parquet",
+            tax_root / "taxonomy" / "pooled_category_registry.csv",
+            tax_root / "classification",
+        )
+    return (
+        tax_root / "01_tables" / "channel_event_features.parquet",
+        tax_root / "04_label_freeze_pooled" / "pooled_event_labels.parquet",
+        tax_root / "04_label_freeze_pooled" / "pooled_category_registry.csv",
+        tax_root / "05_classification_pooled",
+    )
+
+
 def natural(value: object) -> int:
     m = re.search(r"(\d+)", str(value))
     return int(m.group(1)) if m else 999999
@@ -231,8 +249,9 @@ def annotate_repelled(ax: plt.Axes, centers: pd.DataFrame, label_col: str = "glo
 
 
 def load_events(tax_root: Path) -> pd.DataFrame:
-    features = pd.read_parquet(tax_root / "01_tables" / "channel_event_features.parquet")
-    labels = pd.read_parquet(tax_root / "04_label_freeze_pooled" / "pooled_event_labels.parquet")
+    feature_path, label_path, _, _ = _layout_paths(tax_root)
+    features = pd.read_parquet(feature_path)
+    labels = pd.read_parquet(label_path)
     labels = labels[KEYS + ["global_label", "global_category", "global_distance", "low_confidence"]]
     merged = features.merge(labels, on=KEYS, how="inner", validate="one_to_one")
     merged = merged.loc[merged.channel_name.astype(str).isin(CHANNELS)].copy()
@@ -289,7 +308,16 @@ def plot_wave_panel(ax: plt.Axes, row: pd.Series | None, label: str, channel: st
         ax.text(0.5, 0.50, "not observed", transform=ax.transAxes, ha="center", va="center", color=MID_GREY, fontsize=7)
         ax.text(0.01, 0.05, "PG category absent in this channel", transform=ax.transAxes, fontsize=5.0, color=MID_GREY)
         return
-    signal = load_signal(row)
+    try:
+        signal = load_signal(row)
+    except (FileNotFoundError, OSError, ValueError, KeyError):
+        # Compact releases intentionally omit raw waveform caches.  Keep the
+        # category/channel cell explicit instead of failing the whole atlas;
+        # a raw run with mounted caches will render the trace and PSD.
+        ax.set_title(f"{label} | {channel} | n={support:,}", loc="left", fontsize=6.5, fontweight="bold", color=colour)
+        ax.text(0.5, 0.50, "waveform cache unavailable", transform=ax.transAxes, ha="center", va="center", color=MID_GREY, fontsize=6.5)
+        ax.text(0.01, 0.05, "re-render from raw run to include waveform", transform=ax.transAxes, fontsize=5.0, color=MID_GREY)
+        return
     fs = float(row.get("sampling_rate_hz", 250.0))
     time = np.arange(len(signal), dtype=float) / fs
     ax.plot(time, signal, color=colour, lw=0.65)
@@ -392,11 +420,23 @@ def render_per_mouse_waveforms(events: pd.DataFrame, out: Path) -> None:
             save_figure(fig, root / f"{animal}_pg_waveforms_p{page:02d}")
 
 
-def render_global_centroid_pca(events: pd.DataFrame, out: Path) -> pd.DataFrame:
+def render_global_centroid_pca(
+    events: pd.DataFrame, out: Path, tax_root: Path
+) -> pd.DataFrame:
     # Use the frozen training-fitted prototypes for the one-point-per-PG
     # geometry.  Event support is joined from the complete event table only
     # for annotation; held-out events never redefine a centroid.
-    proto_path = TAX_ROOT / "04_label_freeze_pooled" / "pooled_global_prototypes.parquet"
+    # Resolve the prototype table from the caller's taxonomy root.  The
+    # previous renderer used the module-level canonical path here, which made
+    # a fresh raw-to-result run silently reuse (or fail to find) an old
+    # experiment's prototypes.
+    proto_path = (
+        tax_root / "taxonomy" / "pooled_global_prototypes.parquet"
+        if (tax_root / "taxonomy").is_dir()
+        else tax_root / "04_label_freeze_pooled" / "pooled_global_prototypes.parquet"
+    )
+    if not proto_path.is_file():
+        raise FileNotFoundError(f"PG36 global prototype table not found: {proto_path}")
     prototypes = pd.read_parquet(proto_path)
     support = events.groupby("global_label", sort=True).agg(
         n_event_channel=("event_id", "size"),
@@ -529,17 +569,23 @@ def plot_pr_or_roc_grid(pred: pd.DataFrame, model: str, out: Path, kind: str) ->
     save_figure(fig, out / model / f"figure_{'pr' if kind == 'pr' else 'roc'}_all36")
 
 
-def render_all_class_pr_roc(tax_root: Path, out: Path) -> list[str]:
-    pred_root = tax_root / "05_classification_pooled"
-    models = ["eegwavenet_sc", "physio_tf", "physio_stats", "eegnetv4", "eegconformer"]
+def render_all_class_pr_roc(
+    tax_root: Path,
+    out: Path,
+    models: Iterable[str] | None = None,
+) -> list[str]:
+    _, _, _, pred_root = _layout_paths(tax_root)
+    selected_models = list(models or ["eegwavenet_sc", "physio_tf", "physio_stats", "eegnetv4", "eegconformer"])
     root = out / "06_classifier_pr_roc_all36"
-    for model in models:
+    rendered: list[str] = []
+    for model in selected_models:
         path = pred_root / model / "all_window_test_predictions.parquet"
         if not path.exists():
             continue
         pred = pd.read_parquet(path)
         plot_pr_or_roc_grid(pred, model, root, "pr")
         plot_pr_or_roc_grid(pred, model, root, "roc")
+        rendered.append(model)
     readme = (
         "# Five-model all-class PR/ROC audit\n\n"
         "Each model has two 6×6 figures: `figure_pr_all36` and `figure_roc_all36`. "
@@ -547,22 +593,25 @@ def render_all_class_pr_roc(tax_root: Path, out: Path) -> list[str]:
         "The pale curves in the earlier overview were the remaining classes, not atypical or excluded classes.\n"
     )
     (root / "README_zh.md").write_text(readme, encoding="utf-8")
-    return models
+    return rendered
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--taxonomy-root", type=Path, default=TAX_ROOT)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUT)
+    parser.add_argument("--models", nargs="+", default=None)
     args = parser.parse_args()
     tax_root = args.taxonomy_root.resolve(); out = args.output_dir.resolve(); out.mkdir(parents=True, exist_ok=True)
     events = load_events(tax_root)
     coords = render_per_mouse_pca(events, out)
     render_per_mouse_waveforms(events, out)
-    centroids = render_global_centroid_pca(events, out)
+    centroids = render_global_centroid_pca(events, out, tax_root)
     render_support_presence(events, out)
-    models = render_all_class_pr_roc(tax_root, out)
-    registry = pd.read_csv(tax_root / "04_label_freeze_pooled" / "pooled_category_registry.csv")
+    models = render_all_class_pr_roc(tax_root, out, args.models)
+    _, _, registry_path, _ = _layout_paths(tax_root)
+    registry = pd.read_csv(registry_path)
+    observed_combinations = int(events[["global_label", "channel_name"]].drop_duplicates().shape[0])
     manifest = {
         "schema_version": 2,
         "renderer": "render_task2_pg36_corrected_v2.py",
@@ -578,14 +627,20 @@ def main() -> int:
         "global_centroid_semantics": "one feature centroid point per PG category (36 points total)",
         "global_centroid_fit_scope": "frozen training-event PG prototypes; held-out events contribute support annotations only",
         "local_pxx_and_lxx": "excluded from formal figures; retained only in old audit directories",
-        "unobserved_pg_channel_combinations": int((events[["global_label", "channel_name"]].drop_duplicates().shape[0]) and (36 * 2 - events[["global_label", "channel_name"]].drop_duplicates().shape[0])),
+        "unobserved_pg_channel_combinations": int(max(0, len(PG_ORDER) * len(CHANNELS) - observed_combinations)),
         "five_models_all_class_pr_roc": models,
         "source_tables": {
-            "event_features": str(tax_root / "01_tables" / "channel_event_features.parquet"),
-            "frozen_event_labels": str(tax_root / "04_label_freeze_pooled" / "pooled_event_labels.parquet"),
-            "category_registry": str(tax_root / "04_label_freeze_pooled" / "pooled_category_registry.csv"),
+            "event_features": str(_layout_paths(tax_root)[0]),
+            "frozen_event_labels": str(_layout_paths(tax_root)[1]),
+            "category_registry": str(registry_path),
         },
         "excluded_rule": "E77/CH7 absent from frozen protocol",
+        "figure_contract": {
+            "core_claim": "show the pooled morphology structure and every frozen PG category without channel concatenation",
+            "data_unit": "one event x valid channel observation",
+            "transform": "robust scaling for PCA; representative waveform selected from real events",
+            "reviewer_risk": "a mouse displays only its observed PG subset; the union across mice is the formal PG36 set",
+        },
     }
     (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     readme = (

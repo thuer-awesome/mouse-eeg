@@ -26,6 +26,24 @@ MOUSE_COLOURS = {"E07": "#0072B2", "E50": "#D55E00", "E76": "#009E73", "E77": "#
 mpl.rcParams.update({"font.family": "sans-serif", "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"], "font.size": 7, "axes.spines.right": False, "axes.spines.top": False, "svg.fonttype": "none", "pdf.fonttype": 42})
 
 
+def _layout_paths(root: Path) -> tuple[Path, Path, Path, Path]:
+    """Resolve the source-study or compact-release table layout."""
+
+    if (root / "taxonomy").is_dir():
+        return (
+            root / "tables" / "channel_event_features.parquet",
+            root / "taxonomy" / "pooled_event_labels.parquet",
+            root / "taxonomy" / "pooled_category_registry.csv",
+            root / "tables" / "pooled_mouse_event_assignments.parquet",
+        )
+    return (
+        root / "01_tables" / "channel_event_features.parquet",
+        root / "04_label_freeze_pooled" / "pooled_event_labels.parquet",
+        root / "04_label_freeze_pooled" / "pooled_category_registry.csv",
+        root / "03_cross_mouse" / "pooled_mouse_event_assignments.parquet",
+    )
+
+
 def save(fig: plt.Figure, stem: Path) -> None:
     stem.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(stem.with_suffix(".svg"), bbox_inches="tight", facecolor="white")
@@ -47,11 +65,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     root = args.root.resolve()
     fig_root = (args.figure_dir.resolve() if args.figure_dir is not None else root / "06_figures" / "paper_ready_morphology_pooled") / "06_cluster_diagnostics"
-    events = pd.read_parquet(root / "01_tables" / "channel_event_features.parquet")
+    feature_path, labels_path, registry_path, assignments_path = _layout_paths(root)
+    events = pd.read_parquet(feature_path)
     events = events.loc[events.channel_name.astype(str).isin(["CH7", "CH8"])].copy()
     events = events.loc[~(events.animal_id.astype(str).eq("E77") & events.channel_name.astype(str).eq("CH7"))].copy()
-    assignments = pd.read_parquet(root / "03_cross_mouse" / "pooled_mouse_event_assignments.parquet")
-    labels = pd.read_parquet(root / "04_label_freeze_pooled" / "pooled_event_labels.parquet")
+    labels = pd.read_parquet(labels_path)
     events = events.merge(labels[["animal_id", "session_id", "event_id", "channel_name", "global_label", "pooled_label"]], on=["animal_id", "session_id", "event_id", "channel_name"], how="inner", validate="one_to_one")
     # Subsample only for display; the complete feature table remains in the
     # parquet audit and the PCA explained-variance report.
@@ -63,7 +81,9 @@ def main(argv: list[str] | None = None) -> int:
     z = RobustScaler(quantile_range=(10, 90)).fit_transform(finite(events))
     pca = PCA(n_components=3, random_state=20260823).fit(z)
     coords = pca.transform(z)
-    pd.DataFrame({"animal_id": events.animal_id.to_numpy(), "channel_name": events.channel_name.to_numpy(), "global_label": events.global_label.to_numpy(), "pc1": coords[:, 0], "pc2": coords[:, 1], "pc3": coords[:, 2]}).to_parquet(root / "03_cross_mouse" / "pooled_all_event_3d_pca_coordinates.parquet", index=False)
+    source_dir = fig_root / "source_data"
+    source_dir.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame({"animal_id": events.animal_id.to_numpy(), "channel_name": events.channel_name.to_numpy(), "global_label": events.global_label.to_numpy(), "pc1": coords[:, 0], "pc2": coords[:, 1], "pc3": coords[:, 2]}).to_parquet(source_dir / "pooled_all_event_3d_pca_coordinates.parquet", index=False)
     display_coords = coords[np.sort(take)]
 
     # Panel A: true three-dimensional joint structure, with mouse and channel
@@ -85,7 +105,18 @@ def main(argv: list[str] | None = None) -> int:
     ax.legend(handles=handles, frameon=False, fontsize=5.8, loc="upper left")
 
     # Panel B: pooled component counts and training support per mouse.
-    summary = pd.read_csv(root / "03_cross_mouse" / "pooled_mouse_cluster_summary.csv").sort_values("animal_id")
+    summary_path = root / "03_cross_mouse" / "pooled_mouse_cluster_summary.csv"
+    if summary_path.is_file():
+        summary = pd.read_csv(summary_path).sort_values("animal_id")
+    elif assignments_path.is_file():
+        assignments = pd.read_parquet(assignments_path)
+        summary = (
+            assignments.groupby("animal_id", sort=True)
+            .agg(n_pooled_clusters=("pooled_cluster", "nunique"), n_train_events=("event_id", "nunique"))
+            .reset_index()
+        )
+    else:
+        summary = pd.DataFrame(columns=["animal_id", "n_pooled_clusters", "n_train_events"])
     ax2 = fig.add_subplot(122)
     x = np.arange(len(summary)); bars = ax2.bar(x, summary.n_pooled_clusters, color=[MOUSE_COLOURS.get(str(v), "#777777") for v in summary.animal_id], width=.62)
     ax2.set_xticks(x, summary.animal_id.astype(str)); ax2.set_ylabel("Pooled clusters selected"); ax2.set_title("Within-mouse CH7 + CH8 pooled fits", loc="left", fontsize=7.5, fontweight="bold")
@@ -114,7 +145,7 @@ def main(argv: list[str] | None = None) -> int:
     fig.text(.01, -.02, "Vertical dotted line marks the selected component count; this is a statistical resolution audit, not a clinical subtype claim.", fontsize=5.8, color="#5F6972")
     save(fig, fig_root / "figure_7_pooled_gmm_bic_and_stability")
 
-    registry = pd.read_csv(root / "04_label_freeze_pooled" / "pooled_category_registry.csv").sort_values("n_event_channel", ascending=False).reset_index(drop=True)
+    registry = pd.read_csv(registry_path).sort_values("n_event_channel", ascending=False).reset_index(drop=True)
     fig, ax = plt.subplots(figsize=(183 / 25.4, 76 / 25.4), constrained_layout=True)
     colours = ["#D55E00" if bool(v) else "#0072B2" for v in registry.mouse_specific_flag]
     ax.bar(np.arange(len(registry)), registry.n_event_channel, color=colours, width=.8)
@@ -122,7 +153,7 @@ def main(argv: list[str] | None = None) -> int:
     ax.legend(handles=[Line2D([], [], marker="s", color="#0072B2", linestyle="none", label="shared across ≥2 mice"), Line2D([], [], marker="s", color="#D55E00", linestyle="none", label="animal-specific")], frameon=False, fontsize=6, ncol=2, loc="upper right")
     fig.text(.01, -.03, "PG labels are exploratory morphology categories; no category is interpreted as a clinical seizure subtype without review.", fontsize=5.8, color="#5F6972")
     save(fig, fig_root / "figure_8_pg_support_ranked")
-    manifest = {"figures": ["figure_6_pooled_3d_pca_and_cluster_counts", "figure_7_pooled_gmm_bic_and_stability", "figure_8_pg_support_ranked"], "n_event_channel": int(len(events)), "n_display_points": int(len(display)), "pca_components": 3, "n_pg_categories": int(len(registry)), "pca_explained_variance": pca.explained_variance_ratio_.tolist()}
+    manifest = {"figures": ["figure_6_pooled_3d_pca_and_cluster_counts", "figure_7_pooled_gmm_bic_and_stability", "figure_8_pg_support_ranked"], "n_event_channel": int(len(events)), "n_display_points": int(len(display)), "pca_components": 3, "n_pg_categories": int(len(registry)), "pca_explained_variance": pca.explained_variance_ratio_.tolist(), "source_tables": {"event_features": str(feature_path), "event_labels": str(labels_path), "category_registry": str(registry_path), "pooled_assignments": str(assignments_path)}}
     (fig_root / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
     return 0

@@ -7,7 +7,6 @@
 - Within each mouse, all eligible CH7+CH8 event points are fitted jointly (`Pxx` pooled clusters): 40 pooled prototypes.
 - Cross-mouse PG freeze: 36 exploratory categories at robust distance threshold 0.90; 3 shared across at least two mice and 33 animal-specific; same-mouse merge violations = 0.
 - PG labels are morphology categories for exploratory classification, not clinical seizure subtypes.
-- The formal waveform atlas is rendered as a complete `PG x channel` grid: 36 global PG categories x 2 valid channel identities = 72 possible combinations; 61 have observed event support and 11 are explicitly marked `not observed`. Each observed panel is one independent channel stream.
 - Model input note: Physio-TF and Physio+statistics consume the full 21-epoch sequence; EEGWaveNet-SC, EEGNetv4 and EEGConformer remain single-window paper baselines. The shared loader enforces the same event-contained context contract but does not silently change baseline architectures.
 - Preprocessing: 250 Hz, 0.5-70 Hz zero-phase band-pass and 50 Hz notch. Amplitude is shape-normalized a.u.; ADC-to-uV calibration is unconfirmed.
 
@@ -18,7 +17,9 @@
 | Event x channel labels | 6,393 | 1,375 | 1,376 | 9,144 |
 | Complete windows | 130,216 | 31,731 | 32,583 | 194,530 |
 
-Training used an event-balanced sensitivity cap of at most eight windows per event (5,331 capped test windows). Formal performance below uses every eligible held-out test window (`n=32,583`).
+Training used an event-balanced sensitivity cap of at most eight windows per event.
+The capped sensitivity table contains 5,331 test windows.
+Formal performance below uses every eligible held-out test window (`n=32,583`), with the denominator read from the all-window comparison table.
 
 ## Full-window model results
 
@@ -34,14 +35,14 @@ The best full-window Macro-F1 in this run is **physio_stats (0.465)**. The best 
 
 ## Canonical outputs
 
-- Taxonomy and label audit: [`04_label_freeze_pooled`](04_label_freeze_pooled)
-- Classifier checkpoints, full-window predictions and per-class tables: [`05_classification_pooled`](05_classification_pooled)
-- Main morphology figures: [`06_figures/paper_ready_morphology_pooled`](06_figures/paper_ready_morphology_pooled)
-- Statistical cluster diagnostics (3D PCA, BIC/stability, PG support): [`06_figures/paper_ready_morphology_pooled/06_cluster_diagnostics`](06_figures/paper_ready_morphology_pooled/06_cluster_diagnostics)
-- Main paper-style classifier figures: [`06_figures/paper_ready_classifier_pooled`](06_figures/paper_ready_classifier_pooled)
-- Split/leakage audit figure: [`06_figures/paper_ready_classifier_pooled/figure_0_data_split_audit`](06_figures/paper_ready_classifier_pooled/figure_0_data_split_audit)
-- Complete PR/ROC, support-recall and per-model confusion figures: [`06_figures/strict_classifier_full_pooled`](06_figures/strict_classifier_full_pooled)
-- Legacy 21-state and previous G taxonomy are retained under `historical_21_read_only`, `legacy_style_morphology`, `legacy_style_cross_mouse`, and `04_label_freeze`; they are priors/audit references, not the PG final classifier.
+- Taxonomy and label audit: [`taxonomy`](taxonomy)
+- Classifier checkpoints, full-window predictions and per-class tables: [`classification`](classification)
+- Main morphology figures: [`figures`](figures)
+- Statistical cluster diagnostics (3D PCA, BIC/stability, PG support): [`figures/06_cluster_diagnostics`](figures/06_cluster_diagnostics)
+- Main paper-style classifier figures: [`figures/model_summary`](figures/model_summary)
+- Split/leakage audit figure: [`figures/model_summary/figure_0_data_split_audit`](figures/model_summary/figure_0_data_split_audit)
+- Complete PR/ROC, support-recall and per-model confusion figures: [`figures/confusion_all_windows`](figures/confusion_all_windows)
+- Historical 21-state and previous G taxonomy artifacts are intentionally excluded from this PG36 release and remain available only in the source study archive.
 
 Task 1 binary seizure onset/offset decoding remains a separate model line. Its legacy figures are not overwritten by this task-2 run.
 

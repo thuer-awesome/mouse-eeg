@@ -29,6 +29,7 @@ import pandas as pd
 
 from .paths import MODEL_ORDER_TASK1, MODEL_ORDER_TASK2, project_root, read_yaml, write_json
 from .raw_adapter import build_protocol, discover_files, discover_label_files
+from .figure_manifest import task1_figure_families, task2_figure_families, write_figure_manifest
 
 
 def _utc_now() -> str:
@@ -836,7 +837,11 @@ def run_task1_pipeline(
         render_atlas = [sys.executable, str(_script("render_corrected_event_atlas.py")), "--corrected-root", str(corrected), "--protocol-dir", str(strict_protocol), "--output-dir", str(atlas), "--models", *selected_models, "--allow-existing"]
         _run_subprocess("07_render_event_atlas", render_atlas, output, stages)
 
-    _write_task1_indexes(output, stages)
+    figure_families = _write_task1_indexes(
+        output,
+        stages,
+        render_requested=not skip_render,
+    )
     run_manifest = {
         "schema_version": 1,
         "task": "annotation_detection",
@@ -852,6 +857,7 @@ def run_task1_pipeline(
         "models": list(selected_models),
         "output_root": str(output),
         "stages": stages,
+        "figure_families": figure_families,
         "directories": {
             "preprocessing": str(prepared),
             "protocol": str(strict_protocol),
@@ -893,7 +899,12 @@ def _copy_if_exists(source: Path, target: Path) -> bool:
     return True
 
 
-def _write_task1_indexes(output: Path, stages: list[dict[str, Any]]) -> None:
+def _write_task1_indexes(
+    output: Path,
+    stages: list[dict[str, Any]],
+    *,
+    render_requested: bool = True,
+) -> list[dict[str, Any]]:
     """Create a small, stable root index without duplicating large artifacts."""
 
     metrics = output / "metrics"
@@ -922,6 +933,7 @@ def _write_task1_indexes(output: Path, stages: list[dict[str, Any]]) -> None:
         "- `models/<model>/`：源码训练产生的 `model.pt`、`history.csv`、预测和指标。\n"
         "- `decoder/`：独立的连续概率解码与事件级审计。\n"
         "- `figures/model_performance/`、`figures/clinical_event_atlas/`：由表格重新绘制的图。\n"
+        "- `figures/FIGURE_MANIFEST.json`：任务一图族、脚本、分母和状态的机器可读索引。\n"
         "- `logs/`：与终端同步的逐阶段日志。\n"
         f"- 根级指标索引：{', '.join(f'`{item}`' for item in copied) if copied else '阶段尚未生成指标'}。\n\n"
         "## 阶段日志\n\n"
@@ -931,9 +943,23 @@ def _write_task1_indexes(output: Path, stages: list[dict[str, Any]]) -> None:
         "原始记录和临床标签不会复制到 run；`run_manifest.json` 仅保存路径、大小和 SHA256。该流程是离线/回放和医生在环研究接口，不等同于已验证的实时临床部署。\n"
     )
     (reports / "RUN_REPORT_zh.md").write_text(report, encoding="utf-8")
+    families = task1_figure_families(output, stages, requested=render_requested)
+    write_figure_manifest(
+        root=output,
+        task="annotation_detection",
+        families=families,
+        path=output / "figures" / "FIGURE_MANIFEST.json",
+    )
+    return families
 
 
-def _write_pg36_indexes(output: Path, stages: list[dict[str, Any]]) -> None:
+def _write_pg36_indexes(
+    output: Path,
+    stages: list[dict[str, Any]],
+    *,
+    render_requested: bool = True,
+    expected_classes: int = 36,
+) -> list[dict[str, Any]]:
     """Create a compact root index for a full PG36 rerun."""
 
     metrics = output / "metrics"
@@ -959,6 +985,7 @@ def _write_pg36_indexes(output: Path, stages: list[dict[str, Any]]) -> None:
         "- `04_label_freeze_pooled/`：冻结 PG01–PG36 标签。\n"
         "- `05_classification_pooled/<model>/`：源码训练产生的 checkpoint、history、预测、混淆矩阵和指标。\n"
         "- `06_figures/`：逐鼠形态、全局 PCA、支持矩阵和五模型全类别图。\n"
+        "- `06_figures/FIGURE_MANIFEST.json`：任务二每个图族的脚本、输入、分母和输出清单。\n"
         "- `logs/`：与终端同步的逐阶段日志。\n"
         f"- 根级指标索引：{', '.join(f'`{item}`' for item in copied) if copied else '阶段尚未生成指标'}。\n\n"
         "PG 类别是探索性形态类别，不是临床确证亚型；原始数据和敏感标签不会复制到 run。\n\n"
@@ -968,6 +995,19 @@ def _write_pg36_indexes(output: Path, stages: list[dict[str, Any]]) -> None:
         + "\n"
     )
     (reports / "RUN_REPORT_zh.md").write_text(report, encoding="utf-8")
+    families = task2_figure_families(
+        output,
+        stages,
+        requested=render_requested,
+        expected_classes=expected_classes,
+    )
+    write_figure_manifest(
+        root=output,
+        task="morphology_pg36",
+        families=families,
+        path=output / "06_figures" / "FIGURE_MANIFEST.json",
+    )
+    return families
 
 
 @_failure_manifest("morphology_pg36", "output_root")
@@ -1313,12 +1353,97 @@ def run_pg36_pipeline(
         eval_command.append("--allow-non36")
     _run_subprocess("07_evaluate_all_windows", eval_command, output, stages)
     if not skip_render:
-        figure_root = output / "06_figures" / "paper_ready_morphology_pooled"
-        render_command = [sys.executable, str(_script("render_task2_pg36_corrected_v2.py")), "--taxonomy-root", str(output), "--output-dir", str(figure_root)]
-        _run_subprocess("08_render_pg36", render_command, output, stages)
-        _run_subprocess("09_write_pg36_report", [sys.executable, str(_script("write_pooled_task2_report.py")), "--root", str(output)], output, stages)
+        morphology_root = output / "06_figures" / "paper_ready_morphology_pooled"
+        classifier_root = output / "06_figures" / "paper_ready_classifier_pooled"
+        full_classifier_root = output / "06_figures" / "strict_classifier_full_pooled"
+        _run_subprocess(
+            "08_render_pg36",
+            [
+                sys.executable,
+                str(_script("render_task2_pg36_corrected_v2.py")),
+                "--taxonomy-root",
+                str(output),
+                "--output-dir",
+                str(morphology_root),
+                "--models",
+                *selected_models,
+            ],
+            output,
+            stages,
+        )
+        _run_subprocess(
+            "09_render_cluster_diagnostics",
+            [
+                sys.executable,
+                str(_script("render_pooled_cluster_diagnostics.py")),
+                "--root",
+                str(output),
+                "--figure-dir",
+                str(morphology_root),
+            ],
+            output,
+            stages,
+        )
+        _run_subprocess(
+            "10_render_split_audit",
+            [
+                sys.executable,
+                str(_script("render_pooled_split_audit.py")),
+                "--root",
+                str(output),
+                "--figure-dir",
+                str(classifier_root),
+            ],
+            output,
+            stages,
+        )
+        _run_subprocess(
+            "11_render_classifier_summary",
+            [
+                sys.executable,
+                str(_script("render_pg36_classifier_summary.py")),
+                "--class-dir",
+                str(class_root),
+                "--figure-dir",
+                str(classifier_root),
+                "--label-prefix",
+                "PG",
+                "--allow-existing",
+            ],
+            output,
+            stages,
+        )
+        _run_subprocess(
+            "12_render_classifier_full",
+            [
+                sys.executable,
+                str(_script("render_pg36_classifier_full.py")),
+                "--class-dir",
+                str(class_root),
+                "--label-path",
+                str(label_path),
+                "--figure-root",
+                str(full_classifier_root),
+                "--label-prefix",
+                "PG",
+                "--require-full-window",
+            ],
+            output,
+            stages,
+        )
+        _run_subprocess(
+            "13_write_pg36_report",
+            [sys.executable, str(_script("write_pooled_task2_report.py")), "--root", str(output)],
+            output,
+            stages,
+        )
 
-    _write_pg36_indexes(output, stages)
+    figure_families = _write_pg36_indexes(
+        output,
+        stages,
+        render_requested=not skip_render,
+        expected_classes=expected_classes,
+    )
     run_manifest = {
         "schema_version": 1,
         "task": "morphology_pg36",
@@ -1332,6 +1457,7 @@ def run_pg36_pipeline(
         "models": list(selected_models),
         "output_root": str(output),
         "stages": stages,
+        "figure_families": figure_families,
         "directories": {
             "preprocessing": str(output / "preprocessing") if (output / "preprocessing").exists() else None,
             "task1_protocol": str(output / "task1_protocol") if (output / "task1_protocol").exists() else None,
@@ -1352,7 +1478,7 @@ def run_pg36_pipeline(
     (output / "README_zh.md").write_text(
         "# PG36 完整重跑\n\n"
         "本目录由 `epilepsy-eeg run-pg36` 生成。raw 模式依次执行预处理、严格协议、独立事件×通道特征、逐鼠 pooled 聚类、PG01–PG36 冻结、五模型训练、全测试窗口评估和论文图；`--taxonomy-root` 模式只复用已冻结的表并重新训练/评估/渲染。\n\n"
-        "PG 标签是探索性形态类别，不是临床亚型。每个有效 CH7/CH8 通道是独立观察，通道不会拼接。\n",
+        "PG 标签是探索性形态类别，不是临床亚型。每个有效 CH7/CH8 通道是独立观察，通道不会拼接。所有图族和正式分母见 `06_figures/FIGURE_MANIFEST.json`。\n",
         encoding="utf-8",
     )
     return output

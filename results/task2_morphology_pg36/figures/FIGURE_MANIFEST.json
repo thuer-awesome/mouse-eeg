@@ -1,0 +1,1020 @@
+{
+  "schema_version": 1,
+  "task": "morphology_pg36",
+  "generated_at_utc": "2026-08-27T21:23:40.879097+00:00",
+  "figure_families": [
+    {
+      "name": "morphology_atlas",
+      "path": "figures",
+      "renderer": "scripts/render_task2_pg36_corrected_v2.py",
+      "status": "generated",
+      "source_inputs": [
+        "tables",
+        "taxonomy"
+      ],
+      "denominator": "all eligible event×valid-channel morphology rows",
+      "semantics": "PG morphology atlas; each valid channel is independent",
+      "outputs": [
+        {
+          "path": "figures/01_per_mouse_pg_pca/E07_pg36_independent_points.pdf",
+          "bytes": 58782
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E07_pg36_independent_points.png",
+          "bytes": 423502
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E07_pg36_independent_points.svg",
+          "bytes": 27593
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E50_pg36_independent_points.pdf",
+          "bytes": 94152
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E50_pg36_independent_points.png",
+          "bytes": 1029707
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E50_pg36_independent_points.svg",
+          "bytes": 78210
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E76_pg36_independent_points.pdf",
+          "bytes": 68705
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E76_pg36_independent_points.png",
+          "bytes": 657727
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E76_pg36_independent_points.svg",
+          "bytes": 49866
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E77_pg36_independent_points.pdf",
+          "bytes": 56089
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E77_pg36_independent_points.png",
+          "bytes": 383451
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E77_pg36_independent_points.svg",
+          "bytes": 22871
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E79_pg36_independent_points.pdf",
+          "bytes": 68877
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E79_pg36_independent_points.png",
+          "bytes": 600760
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E79_pg36_independent_points.svg",
+          "bytes": 48327
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E81_pg36_independent_points.pdf",
+          "bytes": 65229
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E81_pg36_independent_points.png",
+          "bytes": 582016
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E81_pg36_independent_points.svg",
+          "bytes": 43910
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E82_pg36_independent_points.pdf",
+          "bytes": 71320
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E82_pg36_independent_points.png",
+          "bytes": 669102
+        },
+        {
+          "path": "figures/01_per_mouse_pg_pca/E82_pg36_independent_points.svg",
+          "bytes": 52279
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E07_pg_waveforms_p01.pdf",
+          "bytes": 70986
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E07_pg_waveforms_p01.png",
+          "bytes": 552198
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E07_pg_waveforms_p01.svg",
+          "bytes": 89309
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E50_pg_waveforms_p01.pdf",
+          "bytes": 133950
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E50_pg_waveforms_p01.png",
+          "bytes": 1234693
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E50_pg_waveforms_p01.svg",
+          "bytes": 283955
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E76_pg_waveforms_p01.pdf",
+          "bytes": 122343
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E76_pg_waveforms_p01.png",
+          "bytes": 1140254
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E76_pg_waveforms_p01.svg",
+          "bytes": 245352
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E77_pg_waveforms_p01.pdf",
+          "bytes": 61733
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E77_pg_waveforms_p01.png",
+          "bytes": 377828
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E77_pg_waveforms_p01.svg",
+          "bytes": 56104
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E79_pg_waveforms_p01.pdf",
+          "bytes": 112290
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E79_pg_waveforms_p01.png",
+          "bytes": 994244
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E79_pg_waveforms_p01.svg",
+          "bytes": 219796
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E81_pg_waveforms_p01.pdf",
+          "bytes": 114062
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E81_pg_waveforms_p01.png",
+          "bytes": 1129745
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E81_pg_waveforms_p01.svg",
+          "bytes": 231487
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E82_pg_waveforms_p01.pdf",
+          "bytes": 170109
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E82_pg_waveforms_p01.png",
+          "bytes": 1563025
+        },
+        {
+          "path": "figures/02_per_mouse_pg_waveforms/E82_pg_waveforms_p01.svg",
+          "bytes": 377167
+        },
+        {
+          "path": "figures/03_global_pg_centroid_pca/figure_3_pg36_centroid_pca_and_separation.pdf",
+          "bytes": 64164
+        },
+        {
+          "path": "figures/03_global_pg_centroid_pca/figure_3_pg36_centroid_pca_and_separation.png",
+          "bytes": 770361
+        },
+        {
+          "path": "figures/03_global_pg_centroid_pca/figure_3_pg36_centroid_pca_and_separation.svg",
+          "bytes": 99425
+        },
+        {
+          "path": "figures/04_pg_support_presence/figure_4_pg_support_presence_p01.pdf",
+          "bytes": 52303
+        },
+        {
+          "path": "figures/04_pg_support_presence/figure_4_pg_support_presence_p01.png",
+          "bytes": 382044
+        },
+        {
+          "path": "figures/04_pg_support_presence/figure_4_pg_support_presence_p01.svg",
+          "bytes": 49461
+        },
+        {
+          "path": "figures/04_pg_support_presence/figure_4_pg_support_presence_p02.pdf",
+          "bytes": 52445
+        },
+        {
+          "path": "figures/04_pg_support_presence/figure_4_pg_support_presence_p02.png",
+          "bytes": 397147
+        },
+        {
+          "path": "figures/04_pg_support_presence/figure_4_pg_support_presence_p02.svg",
+          "bytes": 51744
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegconformer/figure_pr_all36.pdf",
+          "bytes": 135974
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegconformer/figure_pr_all36.png",
+          "bytes": 778008
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegconformer/figure_pr_all36.svg",
+          "bytes": 502295
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegconformer/figure_roc_all36.pdf",
+          "bytes": 97373
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegconformer/figure_roc_all36.png",
+          "bytes": 983384
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegconformer/figure_roc_all36.svg",
+          "bytes": 356828
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegnetv4/figure_pr_all36.pdf",
+          "bytes": 131997
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegnetv4/figure_pr_all36.png",
+          "bytes": 747038
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegnetv4/figure_pr_all36.svg",
+          "bytes": 485828
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegnetv4/figure_roc_all36.pdf",
+          "bytes": 104784
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegnetv4/figure_roc_all36.png",
+          "bytes": 995322
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegnetv4/figure_roc_all36.svg",
+          "bytes": 378518
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegwavenet_sc/figure_pr_all36.pdf",
+          "bytes": 131784
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegwavenet_sc/figure_pr_all36.png",
+          "bytes": 738885
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegwavenet_sc/figure_pr_all36.svg",
+          "bytes": 485305
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegwavenet_sc/figure_roc_all36.pdf",
+          "bytes": 104410
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegwavenet_sc/figure_roc_all36.png",
+          "bytes": 1003526
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/eegwavenet_sc/figure_roc_all36.svg",
+          "bytes": 373281
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_stats/figure_pr_all36.pdf",
+          "bytes": 135839
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_stats/figure_pr_all36.png",
+          "bytes": 821199
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_stats/figure_pr_all36.svg",
+          "bytes": 494499
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_stats/figure_roc_all36.pdf",
+          "bytes": 78164
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_stats/figure_roc_all36.png",
+          "bytes": 918012
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_stats/figure_roc_all36.svg",
+          "bytes": 298635
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_tf/figure_pr_all36.pdf",
+          "bytes": 135840
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_tf/figure_pr_all36.png",
+          "bytes": 816395
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_tf/figure_pr_all36.svg",
+          "bytes": 494550
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_tf/figure_roc_all36.pdf",
+          "bytes": 82200
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_tf/figure_roc_all36.png",
+          "bytes": 923123
+        },
+        {
+          "path": "figures/06_classifier_pr_roc_all36/physio_tf/figure_roc_all36.svg",
+          "bytes": 310816
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_class_support_recall.pdf",
+          "bytes": 44536
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_class_support_recall.png",
+          "bytes": 167219
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_class_support_recall.svg",
+          "bytes": 57113
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 47955
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_confusion_matrix_all_windows.png",
+          "bytes": 127856
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_confusion_matrix_all_windows.svg",
+          "bytes": 42922
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_pr_roc.pdf",
+          "bytes": 257890
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_pr_roc.png",
+          "bytes": 484490
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_pr_roc.svg",
+          "bytes": 750293
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_class_support_recall.pdf",
+          "bytes": 44495
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_class_support_recall.png",
+          "bytes": 167360
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_class_support_recall.svg",
+          "bytes": 57111
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 49102
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_confusion_matrix_all_windows.png",
+          "bytes": 129071
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_confusion_matrix_all_windows.svg",
+          "bytes": 43086
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_pr_roc.pdf",
+          "bytes": 271911
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_pr_roc.png",
+          "bytes": 477876
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_pr_roc.svg",
+          "bytes": 800029
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_class_support_recall.pdf",
+          "bytes": 44500
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_class_support_recall.png",
+          "bytes": 166517
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_class_support_recall.svg",
+          "bytes": 57120
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 49003
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_confusion_matrix_all_windows.png",
+          "bytes": 129002
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_confusion_matrix_all_windows.svg",
+          "bytes": 42751
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_pr_roc.pdf",
+          "bytes": 273072
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_pr_roc.png",
+          "bytes": 471178
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_pr_roc.svg",
+          "bytes": 796204
+        },
+        {
+          "path": "figures/confusion_all_windows/figure_5_per_animal_channel_metrics.pdf",
+          "bytes": 45179
+        },
+        {
+          "path": "figures/confusion_all_windows/figure_5_per_animal_channel_metrics.png",
+          "bytes": 91008
+        },
+        {
+          "path": "figures/confusion_all_windows/figure_5_per_animal_channel_metrics.svg",
+          "bytes": 16128
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_class_support_recall.pdf",
+          "bytes": 45037
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_class_support_recall.png",
+          "bytes": 167750
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_class_support_recall.svg",
+          "bytes": 57119
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 48378
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_confusion_matrix_all_windows.png",
+          "bytes": 127913
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_confusion_matrix_all_windows.svg",
+          "bytes": 42254
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_pr_roc.pdf",
+          "bytes": 216922
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_pr_roc.png",
+          "bytes": 481740
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_pr_roc.svg",
+          "bytes": 594974
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_class_support_recall.pdf",
+          "bytes": 45032
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_class_support_recall.png",
+          "bytes": 167618
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_class_support_recall.svg",
+          "bytes": 57114
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 48354
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_confusion_matrix_all_windows.png",
+          "bytes": 127591
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_confusion_matrix_all_windows.svg",
+          "bytes": 42215
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_pr_roc.pdf",
+          "bytes": 224482
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_pr_roc.png",
+          "bytes": 480134
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_pr_roc.svg",
+          "bytes": 618419
+        },
+        {
+          "path": "figures/model_summary/figure_0_data_split_audit/figure_0_event_level_split_audit.pdf",
+          "bytes": 51549
+        },
+        {
+          "path": "figures/model_summary/figure_0_data_split_audit/figure_0_event_level_split_audit.png",
+          "bytes": 427805
+        },
+        {
+          "path": "figures/model_summary/figure_0_data_split_audit/figure_0_event_level_split_audit.svg",
+          "bytes": 45835
+        },
+        {
+          "path": "figures/model_summary/figure_1_training_loss.pdf",
+          "bytes": 58742
+        },
+        {
+          "path": "figures/model_summary/figure_1_training_loss.png",
+          "bytes": 384161
+        },
+        {
+          "path": "figures/model_summary/figure_1_training_loss.svg",
+          "bytes": 54914
+        },
+        {
+          "path": "figures/model_summary/figure_2_training_macro_f1.pdf",
+          "bytes": 49366
+        },
+        {
+          "path": "figures/model_summary/figure_2_training_macro_f1.png",
+          "bytes": 423072
+        },
+        {
+          "path": "figures/model_summary/figure_2_training_macro_f1.svg",
+          "bytes": 50137
+        },
+        {
+          "path": "figures/model_summary/figure_3_model_comparison_primary_metrics.pdf",
+          "bytes": 55443
+        },
+        {
+          "path": "figures/model_summary/figure_3_model_comparison_primary_metrics.png",
+          "bytes": 247647
+        },
+        {
+          "path": "figures/model_summary/figure_3_model_comparison_primary_metrics.svg",
+          "bytes": 33344
+        },
+        {
+          "path": "figures/model_summary/figure_4_physio_stats_confusion_and_support.pdf",
+          "bytes": 58068
+        },
+        {
+          "path": "figures/model_summary/figure_4_physio_stats_confusion_and_support.png",
+          "bytes": 353692
+        },
+        {
+          "path": "figures/model_summary/figure_4_physio_stats_confusion_and_support.svg",
+          "bytes": 43495
+        },
+        {
+          "path": "figures/model_summary/figure_5_per_stream_macro_f1.pdf",
+          "bytes": 48843
+        },
+        {
+          "path": "figures/model_summary/figure_5_per_stream_macro_f1.png",
+          "bytes": 332057
+        },
+        {
+          "path": "figures/model_summary/figure_5_per_stream_macro_f1.svg",
+          "bytes": 32264
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegconformer.pdf",
+          "bytes": 42802
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegconformer.png",
+          "bytes": 154155
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegconformer.svg",
+          "bytes": 19126
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegnetv4.pdf",
+          "bytes": 44225
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegnetv4.png",
+          "bytes": 154817
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegnetv4.svg",
+          "bytes": 19282
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegwavenet_sc.pdf",
+          "bytes": 44728
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegwavenet_sc.png",
+          "bytes": 157953
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegwavenet_sc.svg",
+          "bytes": 18955
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_stats.pdf",
+          "bytes": 42889
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_stats.png",
+          "bytes": 153510
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_stats.svg",
+          "bytes": 18479
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_tf.pdf",
+          "bytes": 42804
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_tf.png",
+          "bytes": 152143
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_tf.svg",
+          "bytes": 18435
+        }
+      ]
+    },
+    {
+      "name": "classifier_summary",
+      "path": "figures/model_summary",
+      "renderer": "scripts/render_pg36_classifier_summary.py",
+      "status": "generated",
+      "source_inputs": [
+        "classification"
+      ],
+      "denominator": "all eligible held-out test windows",
+      "semantics": "training curves and primary classifier comparison",
+      "outputs": [
+        {
+          "path": "figures/model_summary/figure_0_data_split_audit/figure_0_event_level_split_audit.pdf",
+          "bytes": 51549
+        },
+        {
+          "path": "figures/model_summary/figure_0_data_split_audit/figure_0_event_level_split_audit.png",
+          "bytes": 427805
+        },
+        {
+          "path": "figures/model_summary/figure_0_data_split_audit/figure_0_event_level_split_audit.svg",
+          "bytes": 45835
+        },
+        {
+          "path": "figures/model_summary/figure_1_training_loss.pdf",
+          "bytes": 58742
+        },
+        {
+          "path": "figures/model_summary/figure_1_training_loss.png",
+          "bytes": 384161
+        },
+        {
+          "path": "figures/model_summary/figure_1_training_loss.svg",
+          "bytes": 54914
+        },
+        {
+          "path": "figures/model_summary/figure_2_training_macro_f1.pdf",
+          "bytes": 49366
+        },
+        {
+          "path": "figures/model_summary/figure_2_training_macro_f1.png",
+          "bytes": 423072
+        },
+        {
+          "path": "figures/model_summary/figure_2_training_macro_f1.svg",
+          "bytes": 50137
+        },
+        {
+          "path": "figures/model_summary/figure_3_model_comparison_primary_metrics.pdf",
+          "bytes": 55443
+        },
+        {
+          "path": "figures/model_summary/figure_3_model_comparison_primary_metrics.png",
+          "bytes": 247647
+        },
+        {
+          "path": "figures/model_summary/figure_3_model_comparison_primary_metrics.svg",
+          "bytes": 33344
+        },
+        {
+          "path": "figures/model_summary/figure_4_physio_stats_confusion_and_support.pdf",
+          "bytes": 58068
+        },
+        {
+          "path": "figures/model_summary/figure_4_physio_stats_confusion_and_support.png",
+          "bytes": 353692
+        },
+        {
+          "path": "figures/model_summary/figure_4_physio_stats_confusion_and_support.svg",
+          "bytes": 43495
+        },
+        {
+          "path": "figures/model_summary/figure_5_per_stream_macro_f1.pdf",
+          "bytes": 48843
+        },
+        {
+          "path": "figures/model_summary/figure_5_per_stream_macro_f1.png",
+          "bytes": 332057
+        },
+        {
+          "path": "figures/model_summary/figure_5_per_stream_macro_f1.svg",
+          "bytes": 32264
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegconformer.pdf",
+          "bytes": 42802
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegconformer.png",
+          "bytes": 154155
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegconformer.svg",
+          "bytes": 19126
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegnetv4.pdf",
+          "bytes": 44225
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegnetv4.png",
+          "bytes": 154817
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegnetv4.svg",
+          "bytes": 19282
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegwavenet_sc.pdf",
+          "bytes": 44728
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegwavenet_sc.png",
+          "bytes": 157953
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_eegwavenet_sc.svg",
+          "bytes": 18955
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_stats.pdf",
+          "bytes": 42889
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_stats.png",
+          "bytes": 153510
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_stats.svg",
+          "bytes": 18479
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_tf.pdf",
+          "bytes": 42804
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_tf.png",
+          "bytes": 152143
+        },
+        {
+          "path": "figures/model_summary/supplementary_confusion_matrices/confusion_physio_tf.svg",
+          "bytes": 18435
+        }
+      ]
+    },
+    {
+      "name": "classifier_full_window",
+      "path": "figures/confusion_all_windows",
+      "renderer": "scripts/render_pg36_classifier_full.py",
+      "status": "generated",
+      "source_inputs": [
+        "classification",
+        "taxonomy"
+      ],
+      "denominator": "all eligible held-out test windows",
+      "semantics": "all-class PR/ROC, support/recall and confusion",
+      "outputs": [
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_class_support_recall.pdf",
+          "bytes": 44536
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_class_support_recall.png",
+          "bytes": 167219
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_class_support_recall.svg",
+          "bytes": 57113
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 47955
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_confusion_matrix_all_windows.png",
+          "bytes": 127856
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_confusion_matrix_all_windows.svg",
+          "bytes": 42922
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_pr_roc.pdf",
+          "bytes": 257890
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_pr_roc.png",
+          "bytes": 484490
+        },
+        {
+          "path": "figures/confusion_all_windows/eegconformer/figure_pr_roc.svg",
+          "bytes": 750293
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_class_support_recall.pdf",
+          "bytes": 44495
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_class_support_recall.png",
+          "bytes": 167360
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_class_support_recall.svg",
+          "bytes": 57111
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 49102
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_confusion_matrix_all_windows.png",
+          "bytes": 129071
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_confusion_matrix_all_windows.svg",
+          "bytes": 43086
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_pr_roc.pdf",
+          "bytes": 271911
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_pr_roc.png",
+          "bytes": 477876
+        },
+        {
+          "path": "figures/confusion_all_windows/eegnetv4/figure_pr_roc.svg",
+          "bytes": 800029
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_class_support_recall.pdf",
+          "bytes": 44500
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_class_support_recall.png",
+          "bytes": 166517
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_class_support_recall.svg",
+          "bytes": 57120
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 49003
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_confusion_matrix_all_windows.png",
+          "bytes": 129002
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_confusion_matrix_all_windows.svg",
+          "bytes": 42751
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_pr_roc.pdf",
+          "bytes": 273072
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_pr_roc.png",
+          "bytes": 471178
+        },
+        {
+          "path": "figures/confusion_all_windows/eegwavenet_sc/figure_pr_roc.svg",
+          "bytes": 796204
+        },
+        {
+          "path": "figures/confusion_all_windows/figure_5_per_animal_channel_metrics.pdf",
+          "bytes": 45179
+        },
+        {
+          "path": "figures/confusion_all_windows/figure_5_per_animal_channel_metrics.png",
+          "bytes": 91008
+        },
+        {
+          "path": "figures/confusion_all_windows/figure_5_per_animal_channel_metrics.svg",
+          "bytes": 16128
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_class_support_recall.pdf",
+          "bytes": 45037
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_class_support_recall.png",
+          "bytes": 167750
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_class_support_recall.svg",
+          "bytes": 57119
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 48378
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_confusion_matrix_all_windows.png",
+          "bytes": 127913
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_confusion_matrix_all_windows.svg",
+          "bytes": 42254
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_pr_roc.pdf",
+          "bytes": 216922
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_pr_roc.png",
+          "bytes": 481740
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_stats/figure_pr_roc.svg",
+          "bytes": 594974
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_class_support_recall.pdf",
+          "bytes": 45032
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_class_support_recall.png",
+          "bytes": 167618
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_class_support_recall.svg",
+          "bytes": 57114
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_confusion_matrix_all_windows.pdf",
+          "bytes": 48354
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_confusion_matrix_all_windows.png",
+          "bytes": 127591
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_confusion_matrix_all_windows.svg",
+          "bytes": 42215
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_pr_roc.pdf",
+          "bytes": 224482
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_pr_roc.png",
+          "bytes": 480134
+        },
+        {
+          "path": "figures/confusion_all_windows/physio_tf/figure_pr_roc.svg",
+          "bytes": 618419
+        }
+      ]
+    }
+  ]
+}

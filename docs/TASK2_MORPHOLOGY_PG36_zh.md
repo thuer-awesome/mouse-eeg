@@ -12,7 +12,7 @@
 
 ## 模型与分母
 
-五个模型为 EEGWaveNet-SC、Physio-TF、Physio + statistics、EEGNetv4、EEGConformer。`classification/all_window_model_comparison.csv` 是正式主表，全部 32,583 个合格测试窗口；`test_predictions.parquet` 和 `model_comparison.csv` 的每事件最多 8 窗口结果仅作平衡敏感性分析。模型的 Macro-F1、balanced accuracy、Macro-AUPRC、Macro-AUROC 和 PG36 混淆矩阵均按该口径解释。
+五个模型为 EEGWaveNet-SC、Physio-TF、Physio + statistics、EEGNetv4、EEGConformer。`classification/all_window_model_comparison.csv` 是正式主表，测试窗口分母以该表 `n` 列为准；`test_predictions.parquet` 和 `model_comparison.csv` 的每事件最多 8 窗口结果仅作平衡敏感性分析。模型的 Macro-F1、balanced accuracy、Macro-AUPRC、Macro-AUROC 和 PG36 混淆矩阵均按该口径解释。
 
 当前 PG36 分类准确率并不代表临床亚型识别能力；类别是从当前数据形态统计中得到的探索性标签，必须由临床和后续独立数据验证其语义。
 

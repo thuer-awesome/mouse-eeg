@@ -133,6 +133,7 @@ def _parser() -> argparse.ArgumentParser:
     render1 = sub.add_parser("render-task1", help="任务一：从已有 corrected 输出重绘临床图集")
     render1.add_argument("--corrected-root", type=_path, required=True)
     render1.add_argument("--protocol-dir", type=_path, required=True)
+    render1.add_argument("--model-run-root", type=_path, help="已有模型运行目录；默认取 corrected-root 的同级 models")
     render1.add_argument("--output", type=_path, required=True)
     render1.add_argument("--models", nargs="+", choices=MODEL_ORDER_TASK1, default=list(MODEL_ORDER_TASK1))
     render1.add_argument("--allow-existing", action="store_true")
@@ -162,6 +163,8 @@ def _parser() -> argparse.ArgumentParser:
     render2 = sub.add_parser("render-pg36", help="任务二：按冻结 PG36 数据重绘全部形态学/分类图")
     render2.add_argument("--taxonomy-root", type=_path, required=True)
     render2.add_argument("--output", type=_path, required=True)
+    render2.add_argument("--allow-capped-fallback", action="store_true", help="缺少全窗口预测时允许显式回退到事件平衡敏感性结果")
+    render2.add_argument("--include-tiff", action="store_true")
     render2.add_argument("--allow-existing", action="store_true")
 
     train2 = sub.add_parser("train-pg36", help="任务二：训练五个 PG36 分类器（可配置）")
@@ -339,14 +342,42 @@ def _run_train_task1(args: argparse.Namespace) -> int:
 
 
 def _run_render_task1(args: argparse.Namespace) -> int:
-    # Keep the wrapper aligned with the checked-in script name.  The source
-    # project used several historical ``*_v1`` names, but this release carries
-    # one canonical renderer to avoid silently invoking a missing/legacy file.
-    script = project_root() / "scripts" / "render_corrected_event_atlas.py"
-    command = [sys.executable, str(script), "--corrected-root", str(args.corrected_root), "--protocol-dir", str(args.protocol_dir), "--output-dir", str(args.output), "--models", *args.models]
-    if args.allow_existing:
-        command.append("--allow-existing")
-    subprocess.run(command, check=True)
+    corrected_root = args.corrected_root.resolve()
+    output = args.output.resolve()
+    model_root = (args.model_run_root.resolve() if args.model_run_root is not None else corrected_root.parent / "models")
+    if output.exists() and any(output.iterdir()) and not args.allow_existing:
+        raise FileExistsError(f"输出目录非空: {output}; 如确认覆盖请使用 --allow-existing")
+    output.mkdir(parents=True, exist_ok=True)
+    performance = output / "model_performance"
+    performance_command = [
+        sys.executable,
+        str(project_root() / "scripts" / "render_task1_corrected_model_performance.py"),
+        "--run-root",
+        str(model_root),
+        "--corrected-root",
+        str(corrected_root),
+        "--output-root",
+        str(performance),
+        "--models",
+        *args.models,
+        "--allow-existing",
+    ]
+    subprocess.run(performance_command, check=True)
+    atlas = output / "clinical_event_atlas"
+    atlas_command = [
+        sys.executable,
+        str(project_root() / "scripts" / "render_corrected_event_atlas.py"),
+        "--corrected-root",
+        str(corrected_root),
+        "--protocol-dir",
+        str(args.protocol_dir.resolve()),
+        "--output-dir",
+        str(atlas),
+        "--models",
+        *args.models,
+        "--allow-existing",
+    ]
+    subprocess.run(atlas_command, check=True)
     return 0
 
 
@@ -452,9 +483,89 @@ def _run_build_task1_protocol(args: argparse.Namespace) -> int:
 def _run_render_pg36(args: argparse.Namespace) -> int:
     if args.output.exists() and any(args.output.iterdir()) and not args.allow_existing:
         raise FileExistsError(f"输出目录非空: {args.output}; 如确认覆盖请使用 --allow-existing")
-    script = project_root() / "scripts" / "render_pg36.py"
-    command = [sys.executable, str(script), "--taxonomy-root", str(args.taxonomy_root), "--output-dir", str(args.output)]
-    subprocess.run(command, check=True)
+    taxonomy_root = args.taxonomy_root.resolve()
+    output = args.output.resolve()
+    output.mkdir(parents=True, exist_ok=True)
+    morphology = output / "paper_ready_morphology_pooled"
+    available_models = [model for model in MODEL_ORDER_TASK2 if ((taxonomy_root / "classification" if (taxonomy_root / "taxonomy").is_dir() else taxonomy_root / "05_classification_pooled") / model).is_dir()]
+    if not available_models:
+        available_models = list(MODEL_ORDER_TASK2)
+    subprocess.run(
+        [
+            sys.executable,
+            str(project_root() / "scripts" / "render_task2_pg36_corrected_v2.py"),
+            "--taxonomy-root",
+            str(taxonomy_root),
+            "--output-dir",
+            str(morphology),
+            "--models",
+            *available_models,
+        ],
+        check=True,
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            str(project_root() / "scripts" / "render_pooled_cluster_diagnostics.py"),
+            "--root",
+            str(taxonomy_root),
+            "--figure-dir",
+            str(morphology),
+        ],
+        check=True,
+    )
+    classifier = output / "paper_ready_classifier_pooled"
+    subprocess.run(
+        [
+            sys.executable,
+            str(project_root() / "scripts" / "render_pooled_split_audit.py"),
+            "--root",
+            str(taxonomy_root),
+            "--figure-dir",
+            str(classifier),
+        ],
+        check=True,
+    )
+    if (taxonomy_root / "taxonomy").is_dir():
+        label_path = taxonomy_root / "taxonomy" / "pooled_channel_window_labels.parquet"
+        class_dir = taxonomy_root / "classification"
+    else:
+        label_path = taxonomy_root / "04_label_freeze_pooled" / "pooled_channel_window_labels.parquet"
+        class_dir = taxonomy_root / "05_classification_pooled"
+    subprocess.run(
+        [
+            sys.executable,
+            str(project_root() / "scripts" / "render_pg36_classifier_summary.py"),
+            "--class-dir",
+            str(class_dir),
+            "--figure-dir",
+            str(classifier),
+            "--label-prefix",
+            "PG",
+            "--allow-existing",
+        ],
+        check=True,
+    )
+    full = output / "strict_classifier_full_pooled"
+    full_command = [
+        sys.executable,
+        str(project_root() / "scripts" / "render_pg36_classifier_full.py"),
+        "--class-dir",
+        str(class_dir),
+        "--label-path",
+        str(label_path),
+        "--figure-root",
+        str(full),
+        "--label-prefix",
+        "PG",
+    ]
+    if args.allow_capped_fallback:
+        full_command.append("--allow-capped-fallback")
+    elif not all((class_dir / model / "all_window_test_predictions.parquet").is_file() for model in MODEL_ORDER_TASK2 if (class_dir / model).is_dir()):
+        full_command.append("--require-full-window")
+    if args.allow_existing:
+        full_command.append("--allow-existing")
+    subprocess.run(full_command, check=True)
     return 0
 
 

@@ -1,8 +1,9 @@
 {
-  "source_rows": 114219,
-  "source_events": 6225,
-  "unfolded_complete_channel_windows": 194530,
-  "event_channel_observations": 9144,
+  "schema_version": 1,
+  "taxonomy_version": "pooled_global_v1_constrained_cross_mouse",
+  "n_global_categories": 36,
+  "n_event_channel": 9144,
+  "n_windows": 194530,
   "animals": [
     "E07",
     "E50",
@@ -17,66 +18,67 @@
     "CH8"
   ],
   "excluded_e77_ch7": true,
-  "complete_window_threshold": 0.99,
-  "events_without_complete_window": 1381,
   "event_split_counts": {
-    "source_events": {
-      "train": 4357,
-      "val": 934,
-      "test": 934
-    },
     "eligible_event_channel": {
       "train": 6393,
-      "val": 1375,
-      "test": 1376
+      "test": 1376,
+      "val": 1375
     },
     "eligible_windows": {
       "train": 130216,
-      "val": 31731,
-      "test": 32583
+      "test": 32583,
+      "val": 31731
     }
   },
-  "cross_split_overlapping_event_pairs": 0,
-  "local_prototypes": 55,
-  "global_categories": 45,
-  "mouse_specific_categories": [
-    "G04",
-    "G12",
-    "G26"
-  ],
-  "low_confidence_event_channel_rows": 44,
-  "low_confidence_window_rows": 349,
-  "test_category_support": {
-    "classes_present": 45,
-    "minimum_windows": 11,
-    "maximum_windows": 9004
+  "source_batch_counts": {
+    "combined_protocol": 135844,
+    "old": 58686
   },
-  "feature_columns": [
-    "log_robust_amplitude",
-    "log_rms",
-    "log_line_length",
-    "hjorth_mobility",
-    "hjorth_complexity",
-    "peak_frequency_hz",
-    "spectral_entropy",
-    "relative_delta",
-    "relative_theta",
-    "relative_beta",
-    "relative_low_gamma_clean",
-    "relative_high_gamma",
-    "baseline_z__log_robust_amplitude",
-    "baseline_z__log_rms",
-    "baseline_z__log_line_length",
-    "baseline_z__hjorth_mobility",
-    "baseline_z__hjorth_complexity",
-    "baseline_z__peak_frequency_hz",
-    "baseline_z__spectral_entropy",
-    "baseline_z__relative_delta",
-    "baseline_z__relative_theta",
-    "baseline_z__relative_beta",
-    "baseline_z__relative_low_gamma_clean",
-    "baseline_z__relative_high_gamma"
-  ],
-  "new_batch_included": true,
-  "historical_binary_outputs_modified": false
+  "cross_split_mixed_event_keys": 0,
+  "cross_split_overlapping_windows": 0,
+  "low_confidence_window_rows": 361,
+  "test_category_support": {
+    "classes_present": 36,
+    "minimum_windows": 7,
+    "maximum_windows": 9150,
+    "counts": {
+      "PG01": 229,
+      "PG02": 484,
+      "PG03": 164,
+      "PG04": 40,
+      "PG05": 40,
+      "PG06": 581,
+      "PG07": 28,
+      "PG08": 19,
+      "PG09": 488,
+      "PG10": 8979,
+      "PG11": 3309,
+      "PG12": 298,
+      "PG13": 34,
+      "PG14": 216,
+      "PG15": 7,
+      "PG16": 111,
+      "PG17": 814,
+      "PG18": 94,
+      "PG19": 1291,
+      "PG20": 562,
+      "PG21": 771,
+      "PG22": 54,
+      "PG23": 8,
+      "PG24": 725,
+      "PG25": 172,
+      "PG26": 109,
+      "PG27": 1721,
+      "PG28": 89,
+      "PG29": 466,
+      "PG30": 83,
+      "PG31": 494,
+      "PG32": 9150,
+      "PG33": 344,
+      "PG34": 10,
+      "PG35": 43,
+      "PG36": 556
+    }
+  },
+  "source_root_is_provenance_only": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\02_morphology_taxonomy\\all_mice_old_plus_new\\strict_all_channel_v1"
 }

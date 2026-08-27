@@ -21,6 +21,16 @@
   ],
   "artifacts": [
     {
+      "path": "README_zh.md",
+      "bytes": 466,
+      "sha256": "268635cc633d7c3e198af669d9949b85c4191023e7182c38460c84ecc9ac4eba"
+    },
+    {
+      "path": "task1_validation.json",
+      "bytes": 235,
+      "sha256": "4ab05b4a509f3a1e81a4cebfdbfce31fcedb0f86e0c5b3acde8579fd13db5895"
+    },
+    {
       "path": "event_atlas/corrected_atlas_manifest.json",
       "bytes": 1073,
       "sha256": "15872b16c47b823c652658597c0e2f65f1155e7a552c1cebb1460f8cb2133e1a"
@@ -64,6 +74,496 @@
       "path": "event_atlas/README_zh_corrected.md",
       "bytes": 653,
       "sha256": "3f9e4fc12742511f436d91677aab9524f3a3707df95bf6623f2b03b6f24da78d"
+    },
+    {
+      "path": "figures/FIGURE_MANIFEST.json",
+      "bytes": 14517,
+      "sha256": "d2b2bdb21cf01970629bf7c4c4d3e73a9af151b1f2a189c031334c0a3aa2cae1"
+    },
+    {
+      "path": "metrics/combined_decoder_comparison.csv",
+      "bytes": 1691,
+      "sha256": "5cc830feeda07dc16105cfb744a336088afd896c235503d5058809ccd1ba6f52"
+    },
+    {
+      "path": "metrics/CORRECTED_DECODER_FINAL_REPORT_zh.md",
+      "bytes": 3047,
+      "sha256": "94a92d814b0ff38edb4948dc070bf44b291e32ea199c22d14083ffbec397ba9c"
+    },
+    {
+      "path": "metrics/CURRENT_INDEX_zh.md",
+      "bytes": 2407,
+      "sha256": "fef13ef562df852e0f7b0e248def8e4ff6b1ea1575a92b10a35b0d6990d92539"
+    },
+    {
+      "path": "metrics/manifest.json",
+      "bytes": 1598,
+      "sha256": "8a8b7ff77e8d23de43f566625387a07ad7459f00b7eb04ede70b3a78a5e7b520"
+    },
+    {
+      "path": "metrics/README_zh.md",
+      "bytes": 855,
+      "sha256": "33790e8aee2664aba0cc08b08ecd5b17037eae5a6ac18c5fedc2ea3eef00cb6c"
+    },
+    {
+      "path": "metrics/RUN_SUMMARY.json",
+      "bytes": 438,
+      "sha256": "02708dc62f6b929c958fd91aef15062d218e1a01db3db6d08987fd9fed2733cf"
+    },
+    {
+      "path": "metrics/TRAINING_LOG_zh.md",
+      "bytes": 2726,
+      "sha256": "fa430549fc6a8087fd03c0fbcb8a8c8b439634eebf6ce3b04297e47cce9ae1aa"
+    },
+    {
+      "path": "models/eegwavenet_sc/decoder_candidates.csv",
+      "bytes": 22679,
+      "sha256": "c1cfa28c6d211836ad886ba1da959c50aaa4553a7655d5386bcb69249176d517"
+    },
+    {
+      "path": "models/eegwavenet_sc/decoder_fit.json",
+      "bytes": 3740,
+      "sha256": "709a9491383dc84d6baae4b57dd26f8832374fc1deac7f96ac559247c4166a5b"
+    },
+    {
+      "path": "models/eegwavenet_sc/history.csv",
+      "bytes": 2097,
+      "sha256": "8aac17846a3c1a4405646226ab943bd9df518815d337e517584b7ba91cec9ea7"
+    },
+    {
+      "path": "models/eegwavenet_sc/metrics.json",
+      "bytes": 9256,
+      "sha256": "1069157a5a82a4cc53a5c1d447740facd1d0e795e0b2a4507ea2c3d623f5c676"
+    },
+    {
+      "path": "models/eegwavenet_sc/model.pt",
+      "bytes": 167579,
+      "sha256": "26e2913263e972a0a52e78a949b41e49a6bf909e7ab7b87ff3c9cef534210d34"
+    },
+    {
+      "path": "models/eegwavenet_sc/run_manifest.json",
+      "bytes": 1690,
+      "sha256": "6f7e00612c864ac7c0c2a6ad0f5ca5268308e961c7d02e2bc3f19fdf0af00722"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/decoder_candidates.csv",
+      "bytes": 22855,
+      "sha256": "a7ab8fc250c211b47eeeb942d36f0cbdcd48f8901b47df55937ecdadc52018d4"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/decoder_fit.json",
+      "bytes": 3690,
+      "sha256": "e9a9e5a5e3c25d04db35f5c88f44b85c9a7251dc2fb1cb22c3aef84f0022ba8b"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/history.csv",
+      "bytes": 2137,
+      "sha256": "048dde7249ed1c02b6a1cbc2b695d6d5eee03a12b2d5b32a34261729c71d9094"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/metrics.json",
+      "bytes": 9248,
+      "sha256": "7938c28edf77f184526de492530e349b61b8ff0f885393fa4bfe320eadac7af9"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/model.pt",
+      "bytes": 736250,
+      "sha256": "b9e2b27012953f65642708898a05351bc7955263d6a2648c24177202ad08e59d"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/run_manifest.json",
+      "bytes": 1707,
+      "sha256": "1bd844a8c24c280d41303ce2071b69afacd031fe6aa9479155aca8664fc6898d"
+    },
+    {
+      "path": "models/physio_sequence_stats/decoder_candidates.csv",
+      "bytes": 22547,
+      "sha256": "47cd1ccb35a795a6d4cca29cf93a54cc0c832b5d645b727bde15b49d41589521"
+    },
+    {
+      "path": "models/physio_sequence_stats/decoder_fit.json",
+      "bytes": 3688,
+      "sha256": "820ba1c2b8dc18f40b12512660428a7bfa7700e2e3189065561813b1812ad7cc"
+    },
+    {
+      "path": "models/physio_sequence_stats/history.csv",
+      "bytes": 2556,
+      "sha256": "8c03f611cabacff33b998212cede88c3ca8de605c8bcf575aebd51e5a4f4ff5a"
+    },
+    {
+      "path": "models/physio_sequence_stats/metrics.json",
+      "bytes": 9245,
+      "sha256": "2c4c4ec7cd690dcebf8c0f58d0a2da101ebb0e5b04ee3eff138ce8b28b5e8baf"
+    },
+    {
+      "path": "models/physio_sequence_stats/model.pt",
+      "bytes": 757425,
+      "sha256": "9c56e122eb213c7f29be3ac8ddff4fbaa064ba5a14e2b48fdb406979d57705b8"
+    },
+    {
+      "path": "models/physio_sequence_stats/run_manifest.json",
+      "bytes": 1707,
+      "sha256": "a26c16ca6c5fd8775852812b90a16e9f6727e9930ef4401d00ae9e5c36a7415b"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_full_recording/event_matches.parquet",
+      "bytes": 374972,
+      "sha256": "caf59b6697c23324f6e2043beb22c0daff42f797cd6d582c88abde443fb1a258"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_full_recording/excluded_events.csv",
+      "bytes": 10833,
+      "sha256": "96b542f27468389650baa8b7fb55423a29673b8ec865b538f0435179fa7bee8e"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_full_recording/predicted_events.parquet",
+      "bytes": 438957,
+      "sha256": "ed4ff6f646dc08a867455afe10ac310e9ff8a6afe463efdd14faf3f684759e49"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_full_recording/true_event_assessments.parquet",
+      "bytes": 188943,
+      "sha256": "4b952b3f5bb66880ef47f76372be266746a3b16d33c881d3c6ebcbeb443e0248"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_test/decoded_tracks.parquet",
+      "bytes": 11710758,
+      "sha256": "72279f17ce25e753366ec27f5a0000e6063c3bf29d29fe1dccfe0daded118eef"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_test/event_matches.parquet",
+      "bytes": 69901,
+      "sha256": "2ad8ebb9d30c561670f84b1bc83ec60dee4652bdcbd1f70a5b664d437c914f7a"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_test/event_metrics.json",
+      "bytes": 9514625,
+      "sha256": "d6294c90018f78b32742f761dd2052b5ee12af7c457be8f7cdf962c5cd06a921"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_test/excluded_events.csv",
+      "bytes": 1172,
+      "sha256": "b029fbc286a408c71809529592035d100a3dc830265e60076493799e981cd6ec"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_test/predicted_events.parquet",
+      "bytes": 84433,
+      "sha256": "72796ebf1958e8b91f05ab1832b0837f6354354b071a6c9e8d13a69371e53823"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_test/true_event_assessments.parquet",
+      "bytes": 37586,
+      "sha256": "58f7477e186cc5aaf8c0064d1f20c12ea8a99b830e66c4bf906ad0c18709ba47"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_validation/decoded_tracks.parquet",
+      "bytes": 16656672,
+      "sha256": "3daa37c7c38feae834779bd92d7c6e26937a6d464c1dc52129bce507c41ee4ff"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_validation/event_matches.parquet",
+      "bytes": 70421,
+      "sha256": "419c88c8020119b7d2937ab0dda209eaa6d64bba9f210719626be59769b273d7"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_validation/event_metrics.json",
+      "bytes": 9657946,
+      "sha256": "cedc5d0c8e3de9c62a4685a3188ab6f01f9b45e432ccd2afc07642488050a65e"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_validation/excluded_events.csv",
+      "bytes": 1545,
+      "sha256": "6edb48c1ede6f70432e29bb5381bb612679a4592ac89ebc4cb0b5d5abd35a483"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_validation/predicted_events.parquet",
+      "bytes": 100881,
+      "sha256": "08d36f9ee4d6c131ce3107db8a0d7f753218d9549af06feaca0ed7a412b0f521"
+    },
+    {
+      "path": "models/physio_sequence_stats/events_corrected_v1_validation/true_event_assessments.parquet",
+      "bytes": 37664,
+      "sha256": "b9525879ef9986cb5b531920dc1cf330247dc44111a64540708822545e25e4b2"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_full_recording/event_matches.parquet",
+      "bytes": 373828,
+      "sha256": "13ee170d727baea2cef84f0679ee507492954ebc249279a365eccd8684301369"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_full_recording/excluded_events.csv",
+      "bytes": 10833,
+      "sha256": "96b542f27468389650baa8b7fb55423a29673b8ec865b538f0435179fa7bee8e"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_full_recording/predicted_events.parquet",
+      "bytes": 482943,
+      "sha256": "0e64282125b0182600b68cec9627a7e4a2c5a421a95f3e112ea9e907a14f7a15"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_full_recording/true_event_assessments.parquet",
+      "bytes": 186969,
+      "sha256": "556d8141f9c6fa43559379878467f326691d0ca13ee9d95e891609792cef6647"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/decoded_tracks.parquet",
+      "bytes": 11697055,
+      "sha256": "bbba12fe5b10a77c2580e00f98548c713b8927273bb91eedabbca89235bf6db7"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/event_matches.parquet",
+      "bytes": 70638,
+      "sha256": "3fa418f51b66114a3c34955c3f944025ba514b688859e3922a5b58537cd661f4"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/event_metrics.json",
+      "bytes": 9517025,
+      "sha256": "0c04c6cabcd1c0e83a0c3fdade5919e5d9c8286253aa65c5751223c38a79821f"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/excluded_events.csv",
+      "bytes": 1172,
+      "sha256": "b029fbc286a408c71809529592035d100a3dc830265e60076493799e981cd6ec"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/predicted_events.parquet",
+      "bytes": 92261,
+      "sha256": "be716c3333941b1d95a9a9d4a919f622158e7c0896eb4171191c0fe1ca886394"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/true_event_assessments.parquet",
+      "bytes": 37413,
+      "sha256": "6b4614de4c52b9f8a8ba632deb4fa0c6e14b69c453d61f8f6af3bb81a74f6dd3"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/decoded_tracks.parquet",
+      "bytes": 16621528,
+      "sha256": "2b753171f2266083b80a12e180a543823cd0ca9eff5000d904d59d14552d07ba"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/event_matches.parquet",
+      "bytes": 70372,
+      "sha256": "a58952d1220dfa4a7c536dfe96d4b4a4455993f88d7df6988ae899a5000ff1e0"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/event_metrics.json",
+      "bytes": 9657304,
+      "sha256": "b3fdcadcfa8bcff60d40bf0731ebda840393c99c392dbedb935716a3e5ebf941"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/excluded_events.csv",
+      "bytes": 1545,
+      "sha256": "6edb48c1ede6f70432e29bb5381bb612679a4592ac89ebc4cb0b5d5abd35a483"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/predicted_events.parquet",
+      "bytes": 112436,
+      "sha256": "b7b99b8f5a3d15a0484f4caf5fe24835fa98ce22923f9d8b93ad54d75f5cde1d"
+    },
+    {
+      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/true_event_assessments.parquet",
+      "bytes": 37382,
+      "sha256": "448c2b828faa0f9825f69aaa5b587d348202678fbf38d999548ce31f0b54c729"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_full_recording/event_matches.parquet",
+      "bytes": 358731,
+      "sha256": "911e213e62ffa99849709bb3557080bd7b6b4d53e76c3c64e4bd6abbeea5d022"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_full_recording/excluded_events.csv",
+      "bytes": 10833,
+      "sha256": "96b542f27468389650baa8b7fb55423a29673b8ec865b538f0435179fa7bee8e"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_full_recording/predicted_events.parquet",
+      "bytes": 318892,
+      "sha256": "ce6edee8d82496e8a978173e92a90f3c4104d1f6b36234dce2e955abd4da8bd5"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_full_recording/true_event_assessments.parquet",
+      "bytes": 197870,
+      "sha256": "612ffc49c3f3467f24a9ef27afb583680c91230589217e93acfc124bc0f37633"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_test/decoded_tracks.parquet",
+      "bytes": 12181930,
+      "sha256": "dbf0b08690995f1edde4bab841dc1d5feab1faa8b36c0a4d12bd8d2a34147d22"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_test/event_matches.parquet",
+      "bytes": 65889,
+      "sha256": "3c61b1af758c5319414c5cfa3aabdf5375e58dfd3c54d6dd9fa9135feb1cee84"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_test/event_metrics.json",
+      "bytes": 9508688,
+      "sha256": "c844a39fe35e1c47a93b52b0fb056b9af12f8128577eed5247fc97de52984b90"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_test/excluded_events.csv",
+      "bytes": 1172,
+      "sha256": "b029fbc286a408c71809529592035d100a3dc830265e60076493799e981cd6ec"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_test/predicted_events.parquet",
+      "bytes": 64541,
+      "sha256": "f5026fbf8c2b8c0915907e08c14bea3fb9dee763895ed294c367748a10bc14d3"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_test/true_event_assessments.parquet",
+      "bytes": 38339,
+      "sha256": "c054092ce7d6c11722eb46f3f8e0bd2fde5aa4f4a13e0bec129ff1c7cb69a6f8"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_validation/decoded_tracks.parquet",
+      "bytes": 17188542,
+      "sha256": "120f4222109bc5e80a2c1bcda63d0b927589367223cd6b1bfa42fbf8d7f42d08"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_validation/event_matches.parquet",
+      "bytes": 67081,
+      "sha256": "25c858983adf77b84b968b33ea74a0aa2380123dcb37aa72c095edaa0bc01dea"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_validation/event_metrics.json",
+      "bytes": 9651002,
+      "sha256": "fe2b54f2a540376ec622e53bd725838372481e1ca32a7499e906385fde69432a"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_validation/excluded_events.csv",
+      "bytes": 1545,
+      "sha256": "6edb48c1ede6f70432e29bb5381bb612679a4592ac89ebc4cb0b5d5abd35a483"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_validation/predicted_events.parquet",
+      "bytes": 75848,
+      "sha256": "5abc027f99f0178ee612d6fe9e9a46f0eb459974e255d7a7c8263d3f45610b5b"
+    },
+    {
+      "path": "models/eegwavenet_sc/events_corrected_v1_validation/true_event_assessments.parquet",
+      "bytes": 38432,
+      "sha256": "c60bea5724e284263e610a114209e260380c5ef2f433da35a0780eeafc3dda60"
+    },
+    {
+      "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.pdf",
+      "bytes": 86435,
+      "sha256": "941eaecd8aeb4431ee0cfa4a76badab5b887e6ad7330610e71fc96fda0695115"
+    },
+    {
+      "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.png",
+      "bytes": 330416,
+      "sha256": "3a7f2ef9ab51ea2ee9ee0bf11c948f98e73f2b3502f0952d563f79b9b89a3900"
+    },
+    {
+      "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.svg",
+      "bytes": 133591,
+      "sha256": "e2a9a1489068b7a203145cea0ea28ea00f42198718213b31e7d5a418509958d3"
+    },
+    {
+      "path": "figures/model_performance/figure_1_window_classification_confusion.pdf",
+      "bytes": 97463,
+      "sha256": "607261ec28307c63ec957894de4ba62b0814b68afa22ff3e16887e2cefcab364"
+    },
+    {
+      "path": "figures/model_performance/figure_1_window_classification_confusion.png",
+      "bytes": 333966,
+      "sha256": "92ce6f70e298ed34e62eba5863191a7ec2284a960500455b828caab8c727f24f"
+    },
+    {
+      "path": "figures/model_performance/figure_1_window_classification_confusion.svg",
+      "bytes": 140276,
+      "sha256": "655cd256587aa06537016d295c11d3345df6b9a0d2b8c9513471914b2ed420b6"
+    },
+    {
+      "path": "figures/model_performance/figure_2_corrected_event_detection_audit.pdf",
+      "bytes": 56613,
+      "sha256": "48db67f5d48b923a9955638d83f285c282dd1c6c23affd9866b8a5bba3c91881"
+    },
+    {
+      "path": "figures/model_performance/figure_2_corrected_event_detection_audit.png",
+      "bytes": 322657,
+      "sha256": "48a8af71fcf3602817cbc8a02c07489688b1682e2603723defcdc687c1ed2d17"
+    },
+    {
+      "path": "figures/model_performance/figure_2_corrected_event_detection_audit.svg",
+      "bytes": 46766,
+      "sha256": "75f41c3ee98e05572863c2050334c07933f993afb460aeeb6ca8496d78477271"
+    },
+    {
+      "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.pdf",
+      "bytes": 45272,
+      "sha256": "0a192bb2a00c375794c8aae3f3f6c73ef5126a16c309ed1b0ea7109f0ebfa443"
+    },
+    {
+      "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.png",
+      "bytes": 217346,
+      "sha256": "d2cf80c31a6eea243fce427487e7d71feb5a0c0b50e557a27f993c8a25453995"
+    },
+    {
+      "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.svg",
+      "bytes": 40113,
+      "sha256": "de81fb1513e75980a63dd36359be8f43541a5017b596a3f7085f3a681d6e5336"
+    },
+    {
+      "path": "figures/model_performance/performance_manifest.json",
+      "bytes": 10483,
+      "sha256": "63751c3261bac6bbb3c0262e0e96c596deeecaab59cff561a82d93b1ece3a114"
+    },
+    {
+      "path": "figures/model_performance/README_zh.md",
+      "bytes": 1618,
+      "sha256": "5201c8ac73caf833e73d79b0dc77f06dc36700c39e20cba93527a821847fb82a"
+    },
+    {
+      "path": "figures/model_performance/source_data/calibration_bins.csv",
+      "bytes": 1934,
+      "sha256": "c87703726dbd1543ee77648d75aeca7b79a37ed19c66e702bc8682d0201ccc99"
+    },
+    {
+      "path": "figures/model_performance/source_data/confusion_matrices.csv",
+      "bytes": 408,
+      "sha256": "7bfff3f2ad201f033f8b91081bbd1bf9111ce4c0a608d97bbf1c7c7e8e85c459"
+    },
+    {
+      "path": "figures/model_performance/source_data/corrected_confusion_matrices.csv",
+      "bytes": 408,
+      "sha256": "34b64a21230d6680d838ef8a769d0c704802bc9f9ceb650bdeffaf0e0b33265a"
+    },
+    {
+      "path": "figures/model_performance/source_data/corrected_event_metrics.csv",
+      "bytes": 2378,
+      "sha256": "ebca067124b1bdbe54e66595b1e6394d4c7733e41749d3d6b0f5018371dc7ca9"
+    },
+    {
+      "path": "figures/model_performance/source_data/corrected_window_metrics.csv",
+      "bytes": 999,
+      "sha256": "17ce6691f220a57d6c1ee1449dcc905dc55fa586048f429dc203317f58cde968"
+    },
+    {
+      "path": "figures/model_performance/source_data/history_eegwavenet_sc.csv",
+      "bytes": 2097,
+      "sha256": "8aac17846a3c1a4405646226ab943bd9df518815d337e517584b7ba91cec9ea7"
+    },
+    {
+      "path": "figures/model_performance/source_data/history_physio_sequence_no_aux.csv",
+      "bytes": 2137,
+      "sha256": "048dde7249ed1c02b6a1cbc2b695d6d5eee03a12b2d5b32a34261729c71d9094"
+    },
+    {
+      "path": "figures/model_performance/source_data/history_physio_sequence_stats.csv",
+      "bytes": 2556,
+      "sha256": "8c03f611cabacff33b998212cede88c3ca8de605c8bcf575aebd51e5a4f4ff5a"
+    },
+    {
+      "path": "figures/model_performance/source_data/per_animal_window_metrics.csv",
+      "bytes": 2022,
+      "sha256": "602102f0143bece04be3008b61b469855746beffd5934f2bb99e37ca3eada9c8"
+    },
+    {
+      "path": "figures/model_performance/source_data/window_metrics.csv",
+      "bytes": 936,
+      "sha256": "0abe58d4a772af57a9d5cd8681f58214376c0ece3fd153df6d60a7194f05a0b1"
     },
     {
       "path": "event_atlas/eegwavenet_sc/boundary_shift_gt_2s.pdf",
@@ -529,491 +1029,6 @@
       "path": "event_atlas/source_data/physio_sequence_stats_manual_event_coverage.csv",
       "bytes": 340418,
       "sha256": "01864474a358229f33dda63aab7c72298c50a9fa4ce8a490492f6bbbf3584912"
-    },
-    {
-      "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.pdf",
-      "bytes": 86435,
-      "sha256": "941eaecd8aeb4431ee0cfa4a76badab5b887e6ad7330610e71fc96fda0695115"
-    },
-    {
-      "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.png",
-      "bytes": 330416,
-      "sha256": "3a7f2ef9ab51ea2ee9ee0bf11c948f98e73f2b3502f0952d563f79b9b89a3900"
-    },
-    {
-      "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.svg",
-      "bytes": 133591,
-      "sha256": "e2a9a1489068b7a203145cea0ea28ea00f42198718213b31e7d5a418509958d3"
-    },
-    {
-      "path": "figures/model_performance/figure_1_window_classification_confusion.pdf",
-      "bytes": 97463,
-      "sha256": "607261ec28307c63ec957894de4ba62b0814b68afa22ff3e16887e2cefcab364"
-    },
-    {
-      "path": "figures/model_performance/figure_1_window_classification_confusion.png",
-      "bytes": 333966,
-      "sha256": "92ce6f70e298ed34e62eba5863191a7ec2284a960500455b828caab8c727f24f"
-    },
-    {
-      "path": "figures/model_performance/figure_1_window_classification_confusion.svg",
-      "bytes": 140276,
-      "sha256": "655cd256587aa06537016d295c11d3345df6b9a0d2b8c9513471914b2ed420b6"
-    },
-    {
-      "path": "figures/model_performance/figure_2_corrected_event_detection_audit.pdf",
-      "bytes": 56613,
-      "sha256": "48db67f5d48b923a9955638d83f285c282dd1c6c23affd9866b8a5bba3c91881"
-    },
-    {
-      "path": "figures/model_performance/figure_2_corrected_event_detection_audit.png",
-      "bytes": 322657,
-      "sha256": "48a8af71fcf3602817cbc8a02c07489688b1682e2603723defcdc687c1ed2d17"
-    },
-    {
-      "path": "figures/model_performance/figure_2_corrected_event_detection_audit.svg",
-      "bytes": 46766,
-      "sha256": "75f41c3ee98e05572863c2050334c07933f993afb460aeeb6ca8496d78477271"
-    },
-    {
-      "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.pdf",
-      "bytes": 45272,
-      "sha256": "0a192bb2a00c375794c8aae3f3f6c73ef5126a16c309ed1b0ea7109f0ebfa443"
-    },
-    {
-      "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.png",
-      "bytes": 217346,
-      "sha256": "d2cf80c31a6eea243fce427487e7d71feb5a0c0b50e557a27f993c8a25453995"
-    },
-    {
-      "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.svg",
-      "bytes": 40113,
-      "sha256": "de81fb1513e75980a63dd36359be8f43541a5017b596a3f7085f3a681d6e5336"
-    },
-    {
-      "path": "figures/model_performance/performance_manifest.json",
-      "bytes": 10483,
-      "sha256": "63751c3261bac6bbb3c0262e0e96c596deeecaab59cff561a82d93b1ece3a114"
-    },
-    {
-      "path": "figures/model_performance/README_zh.md",
-      "bytes": 1618,
-      "sha256": "5201c8ac73caf833e73d79b0dc77f06dc36700c39e20cba93527a821847fb82a"
-    },
-    {
-      "path": "figures/model_performance/source_data/calibration_bins.csv",
-      "bytes": 1934,
-      "sha256": "c87703726dbd1543ee77648d75aeca7b79a37ed19c66e702bc8682d0201ccc99"
-    },
-    {
-      "path": "figures/model_performance/source_data/confusion_matrices.csv",
-      "bytes": 408,
-      "sha256": "7bfff3f2ad201f033f8b91081bbd1bf9111ce4c0a608d97bbf1c7c7e8e85c459"
-    },
-    {
-      "path": "figures/model_performance/source_data/corrected_confusion_matrices.csv",
-      "bytes": 408,
-      "sha256": "34b64a21230d6680d838ef8a769d0c704802bc9f9ceb650bdeffaf0e0b33265a"
-    },
-    {
-      "path": "figures/model_performance/source_data/corrected_event_metrics.csv",
-      "bytes": 2378,
-      "sha256": "ebca067124b1bdbe54e66595b1e6394d4c7733e41749d3d6b0f5018371dc7ca9"
-    },
-    {
-      "path": "figures/model_performance/source_data/corrected_window_metrics.csv",
-      "bytes": 999,
-      "sha256": "17ce6691f220a57d6c1ee1449dcc905dc55fa586048f429dc203317f58cde968"
-    },
-    {
-      "path": "figures/model_performance/source_data/history_eegwavenet_sc.csv",
-      "bytes": 2097,
-      "sha256": "8aac17846a3c1a4405646226ab943bd9df518815d337e517584b7ba91cec9ea7"
-    },
-    {
-      "path": "figures/model_performance/source_data/history_physio_sequence_no_aux.csv",
-      "bytes": 2137,
-      "sha256": "048dde7249ed1c02b6a1cbc2b695d6d5eee03a12b2d5b32a34261729c71d9094"
-    },
-    {
-      "path": "figures/model_performance/source_data/history_physio_sequence_stats.csv",
-      "bytes": 2556,
-      "sha256": "8c03f611cabacff33b998212cede88c3ca8de605c8bcf575aebd51e5a4f4ff5a"
-    },
-    {
-      "path": "figures/model_performance/source_data/per_animal_window_metrics.csv",
-      "bytes": 2022,
-      "sha256": "602102f0143bece04be3008b61b469855746beffd5934f2bb99e37ca3eada9c8"
-    },
-    {
-      "path": "figures/model_performance/source_data/window_metrics.csv",
-      "bytes": 936,
-      "sha256": "0abe58d4a772af57a9d5cd8681f58214376c0ece3fd153df6d60a7194f05a0b1"
-    },
-    {
-      "path": "metrics/combined_decoder_comparison.csv",
-      "bytes": 1691,
-      "sha256": "5cc830feeda07dc16105cfb744a336088afd896c235503d5058809ccd1ba6f52"
-    },
-    {
-      "path": "metrics/CORRECTED_DECODER_FINAL_REPORT_zh.md",
-      "bytes": 3047,
-      "sha256": "94a92d814b0ff38edb4948dc070bf44b291e32ea199c22d14083ffbec397ba9c"
-    },
-    {
-      "path": "metrics/CURRENT_INDEX_zh.md",
-      "bytes": 2407,
-      "sha256": "fef13ef562df852e0f7b0e248def8e4ff6b1ea1575a92b10a35b0d6990d92539"
-    },
-    {
-      "path": "metrics/manifest.json",
-      "bytes": 1598,
-      "sha256": "8a8b7ff77e8d23de43f566625387a07ad7459f00b7eb04ede70b3a78a5e7b520"
-    },
-    {
-      "path": "metrics/README_zh.md",
-      "bytes": 855,
-      "sha256": "33790e8aee2664aba0cc08b08ecd5b17037eae5a6ac18c5fedc2ea3eef00cb6c"
-    },
-    {
-      "path": "metrics/RUN_SUMMARY.json",
-      "bytes": 438,
-      "sha256": "02708dc62f6b929c958fd91aef15062d218e1a01db3db6d08987fd9fed2733cf"
-    },
-    {
-      "path": "metrics/TRAINING_LOG_zh.md",
-      "bytes": 2726,
-      "sha256": "fa430549fc6a8087fd03c0fbcb8a8c8b439634eebf6ce3b04297e47cce9ae1aa"
-    },
-    {
-      "path": "models/eegwavenet_sc/decoder_candidates.csv",
-      "bytes": 22679,
-      "sha256": "c1cfa28c6d211836ad886ba1da959c50aaa4553a7655d5386bcb69249176d517"
-    },
-    {
-      "path": "models/eegwavenet_sc/decoder_fit.json",
-      "bytes": 3740,
-      "sha256": "709a9491383dc84d6baae4b57dd26f8832374fc1deac7f96ac559247c4166a5b"
-    },
-    {
-      "path": "models/eegwavenet_sc/history.csv",
-      "bytes": 2097,
-      "sha256": "8aac17846a3c1a4405646226ab943bd9df518815d337e517584b7ba91cec9ea7"
-    },
-    {
-      "path": "models/eegwavenet_sc/metrics.json",
-      "bytes": 9256,
-      "sha256": "1069157a5a82a4cc53a5c1d447740facd1d0e795e0b2a4507ea2c3d623f5c676"
-    },
-    {
-      "path": "models/eegwavenet_sc/model.pt",
-      "bytes": 167579,
-      "sha256": "26e2913263e972a0a52e78a949b41e49a6bf909e7ab7b87ff3c9cef534210d34"
-    },
-    {
-      "path": "models/eegwavenet_sc/run_manifest.json",
-      "bytes": 1690,
-      "sha256": "6f7e00612c864ac7c0c2a6ad0f5ca5268308e961c7d02e2bc3f19fdf0af00722"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_full_recording/event_matches.parquet",
-      "bytes": 358731,
-      "sha256": "911e213e62ffa99849709bb3557080bd7b6b4d53e76c3c64e4bd6abbeea5d022"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_full_recording/excluded_events.csv",
-      "bytes": 10833,
-      "sha256": "96b542f27468389650baa8b7fb55423a29673b8ec865b538f0435179fa7bee8e"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_full_recording/predicted_events.parquet",
-      "bytes": 318892,
-      "sha256": "ce6edee8d82496e8a978173e92a90f3c4104d1f6b36234dce2e955abd4da8bd5"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_full_recording/true_event_assessments.parquet",
-      "bytes": 197870,
-      "sha256": "612ffc49c3f3467f24a9ef27afb583680c91230589217e93acfc124bc0f37633"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_test/decoded_tracks.parquet",
-      "bytes": 12181930,
-      "sha256": "dbf0b08690995f1edde4bab841dc1d5feab1faa8b36c0a4d12bd8d2a34147d22"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_test/event_matches.parquet",
-      "bytes": 65889,
-      "sha256": "3c61b1af758c5319414c5cfa3aabdf5375e58dfd3c54d6dd9fa9135feb1cee84"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_test/event_metrics.json",
-      "bytes": 9508688,
-      "sha256": "c844a39fe35e1c47a93b52b0fb056b9af12f8128577eed5247fc97de52984b90"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_test/excluded_events.csv",
-      "bytes": 1172,
-      "sha256": "b029fbc286a408c71809529592035d100a3dc830265e60076493799e981cd6ec"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_test/predicted_events.parquet",
-      "bytes": 64541,
-      "sha256": "f5026fbf8c2b8c0915907e08c14bea3fb9dee763895ed294c367748a10bc14d3"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_test/true_event_assessments.parquet",
-      "bytes": 38339,
-      "sha256": "c054092ce7d6c11722eb46f3f8e0bd2fde5aa4f4a13e0bec129ff1c7cb69a6f8"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_validation/decoded_tracks.parquet",
-      "bytes": 17188542,
-      "sha256": "120f4222109bc5e80a2c1bcda63d0b927589367223cd6b1bfa42fbf8d7f42d08"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_validation/event_matches.parquet",
-      "bytes": 67081,
-      "sha256": "25c858983adf77b84b968b33ea74a0aa2380123dcb37aa72c095edaa0bc01dea"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_validation/event_metrics.json",
-      "bytes": 9651002,
-      "sha256": "fe2b54f2a540376ec622e53bd725838372481e1ca32a7499e906385fde69432a"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_validation/excluded_events.csv",
-      "bytes": 1545,
-      "sha256": "6edb48c1ede6f70432e29bb5381bb612679a4592ac89ebc4cb0b5d5abd35a483"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_validation/predicted_events.parquet",
-      "bytes": 75848,
-      "sha256": "5abc027f99f0178ee612d6fe9e9a46f0eb459974e255d7a7c8263d3f45610b5b"
-    },
-    {
-      "path": "models/eegwavenet_sc/events_corrected_v1_validation/true_event_assessments.parquet",
-      "bytes": 38432,
-      "sha256": "c60bea5724e284263e610a114209e260380c5ef2f433da35a0780eeafc3dda60"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/decoder_candidates.csv",
-      "bytes": 22855,
-      "sha256": "a7ab8fc250c211b47eeeb942d36f0cbdcd48f8901b47df55937ecdadc52018d4"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/decoder_fit.json",
-      "bytes": 3690,
-      "sha256": "e9a9e5a5e3c25d04db35f5c88f44b85c9a7251dc2fb1cb22c3aef84f0022ba8b"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/history.csv",
-      "bytes": 2137,
-      "sha256": "048dde7249ed1c02b6a1cbc2b695d6d5eee03a12b2d5b32a34261729c71d9094"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/metrics.json",
-      "bytes": 9248,
-      "sha256": "7938c28edf77f184526de492530e349b61b8ff0f885393fa4bfe320eadac7af9"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/model.pt",
-      "bytes": 736250,
-      "sha256": "b9e2b27012953f65642708898a05351bc7955263d6a2648c24177202ad08e59d"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/run_manifest.json",
-      "bytes": 1707,
-      "sha256": "1bd844a8c24c280d41303ce2071b69afacd031fe6aa9479155aca8664fc6898d"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_full_recording/event_matches.parquet",
-      "bytes": 373828,
-      "sha256": "13ee170d727baea2cef84f0679ee507492954ebc249279a365eccd8684301369"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_full_recording/excluded_events.csv",
-      "bytes": 10833,
-      "sha256": "96b542f27468389650baa8b7fb55423a29673b8ec865b538f0435179fa7bee8e"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_full_recording/predicted_events.parquet",
-      "bytes": 482943,
-      "sha256": "0e64282125b0182600b68cec9627a7e4a2c5a421a95f3e112ea9e907a14f7a15"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_full_recording/true_event_assessments.parquet",
-      "bytes": 186969,
-      "sha256": "556d8141f9c6fa43559379878467f326691d0ca13ee9d95e891609792cef6647"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/decoded_tracks.parquet",
-      "bytes": 11697055,
-      "sha256": "bbba12fe5b10a77c2580e00f98548c713b8927273bb91eedabbca89235bf6db7"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/event_matches.parquet",
-      "bytes": 70638,
-      "sha256": "3fa418f51b66114a3c34955c3f944025ba514b688859e3922a5b58537cd661f4"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/event_metrics.json",
-      "bytes": 9517025,
-      "sha256": "0c04c6cabcd1c0e83a0c3fdade5919e5d9c8286253aa65c5751223c38a79821f"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/excluded_events.csv",
-      "bytes": 1172,
-      "sha256": "b029fbc286a408c71809529592035d100a3dc830265e60076493799e981cd6ec"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/predicted_events.parquet",
-      "bytes": 92261,
-      "sha256": "be716c3333941b1d95a9a9d4a919f622158e7c0896eb4171191c0fe1ca886394"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_test/true_event_assessments.parquet",
-      "bytes": 37413,
-      "sha256": "6b4614de4c52b9f8a8ba632deb4fa0c6e14b69c453d61f8f6af3bb81a74f6dd3"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/decoded_tracks.parquet",
-      "bytes": 16621528,
-      "sha256": "2b753171f2266083b80a12e180a543823cd0ca9eff5000d904d59d14552d07ba"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/event_matches.parquet",
-      "bytes": 70372,
-      "sha256": "a58952d1220dfa4a7c536dfe96d4b4a4455993f88d7df6988ae899a5000ff1e0"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/event_metrics.json",
-      "bytes": 9657304,
-      "sha256": "b3fdcadcfa8bcff60d40bf0731ebda840393c99c392dbedb935716a3e5ebf941"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/excluded_events.csv",
-      "bytes": 1545,
-      "sha256": "6edb48c1ede6f70432e29bb5381bb612679a4592ac89ebc4cb0b5d5abd35a483"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/predicted_events.parquet",
-      "bytes": 112436,
-      "sha256": "b7b99b8f5a3d15a0484f4caf5fe24835fa98ce22923f9d8b93ad54d75f5cde1d"
-    },
-    {
-      "path": "models/physio_sequence_no_aux/events_corrected_v1_validation/true_event_assessments.parquet",
-      "bytes": 37382,
-      "sha256": "448c2b828faa0f9825f69aaa5b587d348202678fbf38d999548ce31f0b54c729"
-    },
-    {
-      "path": "models/physio_sequence_stats/decoder_candidates.csv",
-      "bytes": 22547,
-      "sha256": "47cd1ccb35a795a6d4cca29cf93a54cc0c832b5d645b727bde15b49d41589521"
-    },
-    {
-      "path": "models/physio_sequence_stats/decoder_fit.json",
-      "bytes": 3688,
-      "sha256": "820ba1c2b8dc18f40b12512660428a7bfa7700e2e3189065561813b1812ad7cc"
-    },
-    {
-      "path": "models/physio_sequence_stats/history.csv",
-      "bytes": 2556,
-      "sha256": "8c03f611cabacff33b998212cede88c3ca8de605c8bcf575aebd51e5a4f4ff5a"
-    },
-    {
-      "path": "models/physio_sequence_stats/metrics.json",
-      "bytes": 9245,
-      "sha256": "2c4c4ec7cd690dcebf8c0f58d0a2da101ebb0e5b04ee3eff138ce8b28b5e8baf"
-    },
-    {
-      "path": "models/physio_sequence_stats/model.pt",
-      "bytes": 757425,
-      "sha256": "9c56e122eb213c7f29be3ac8ddff4fbaa064ba5a14e2b48fdb406979d57705b8"
-    },
-    {
-      "path": "models/physio_sequence_stats/run_manifest.json",
-      "bytes": 1707,
-      "sha256": "a26c16ca6c5fd8775852812b90a16e9f6727e9930ef4401d00ae9e5c36a7415b"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_full_recording/event_matches.parquet",
-      "bytes": 374972,
-      "sha256": "caf59b6697c23324f6e2043beb22c0daff42f797cd6d582c88abde443fb1a258"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_full_recording/excluded_events.csv",
-      "bytes": 10833,
-      "sha256": "96b542f27468389650baa8b7fb55423a29673b8ec865b538f0435179fa7bee8e"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_full_recording/predicted_events.parquet",
-      "bytes": 438957,
-      "sha256": "ed4ff6f646dc08a867455afe10ac310e9ff8a6afe463efdd14faf3f684759e49"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_full_recording/true_event_assessments.parquet",
-      "bytes": 188943,
-      "sha256": "4b952b3f5bb66880ef47f76372be266746a3b16d33c881d3c6ebcbeb443e0248"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_test/decoded_tracks.parquet",
-      "bytes": 11710758,
-      "sha256": "72279f17ce25e753366ec27f5a0000e6063c3bf29d29fe1dccfe0daded118eef"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_test/event_matches.parquet",
-      "bytes": 69901,
-      "sha256": "2ad8ebb9d30c561670f84b1bc83ec60dee4652bdcbd1f70a5b664d437c914f7a"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_test/event_metrics.json",
-      "bytes": 9514625,
-      "sha256": "d6294c90018f78b32742f761dd2052b5ee12af7c457be8f7cdf962c5cd06a921"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_test/excluded_events.csv",
-      "bytes": 1172,
-      "sha256": "b029fbc286a408c71809529592035d100a3dc830265e60076493799e981cd6ec"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_test/predicted_events.parquet",
-      "bytes": 84433,
-      "sha256": "72796ebf1958e8b91f05ab1832b0837f6354354b071a6c9e8d13a69371e53823"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_test/true_event_assessments.parquet",
-      "bytes": 37586,
-      "sha256": "58f7477e186cc5aaf8c0064d1f20c12ea8a99b830e66c4bf906ad0c18709ba47"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_validation/decoded_tracks.parquet",
-      "bytes": 16656672,
-      "sha256": "3daa37c7c38feae834779bd92d7c6e26937a6d464c1dc52129bce507c41ee4ff"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_validation/event_matches.parquet",
-      "bytes": 70421,
-      "sha256": "419c88c8020119b7d2937ab0dda209eaa6d64bba9f210719626be59769b273d7"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_validation/event_metrics.json",
-      "bytes": 9657946,
-      "sha256": "cedc5d0c8e3de9c62a4685a3188ab6f01f9b45e432ccd2afc07642488050a65e"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_validation/excluded_events.csv",
-      "bytes": 1545,
-      "sha256": "6edb48c1ede6f70432e29bb5381bb612679a4592ac89ebc4cb0b5d5abd35a483"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_validation/predicted_events.parquet",
-      "bytes": 100881,
-      "sha256": "08d36f9ee4d6c131ce3107db8a0d7f753218d9549af06feaca0ed7a412b0f521"
-    },
-    {
-      "path": "models/physio_sequence_stats/events_corrected_v1_validation/true_event_assessments.parquet",
-      "bytes": 37664,
-      "sha256": "b9525879ef9986cb5b531920dc1cf330247dc44111a64540708822545e25e4b2"
     }
   ]
 }

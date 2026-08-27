@@ -10,7 +10,7 @@
   "device": "cuda",
   "split": "test_all_eligible_windows",
   "best_epoch": 10,
-  "label_path": "E:\\自动睡眠分析\\sleep_staging\\output\\epilepsy_program_20260821\\02_morphology_taxonomy\\all_mice_old_plus_new\\strict_all_channel_v1\\04_label_freeze_pooled\\pooled_channel_window_labels.parquet",
+  "label_path": "taxonomy/pooled_channel_window_labels.parquet",
   "label_prefix": "PG",
   "event_accuracy": 0.4484011627906977,
   "event_balanced_accuracy": 0.32122495453720074,

@@ -1,5 +1,5 @@
 {
-  "output_subdir": "05_classification_pooled",
+  "output_subdir": "classification",
   "label_prefix": "PG",
   "models": [
     "eegconformer",

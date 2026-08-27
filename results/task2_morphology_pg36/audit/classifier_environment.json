@@ -1,10 +1,5 @@
 {
   "torch": "2.8.0+cu128",
-  "python_executable": "sleep_staging/.venv/Scripts/python.exe",
-  "braindecode_version": "0.8.1",
-  "scikit_learn_version": "1.8.0",
-  "pandas_version": "2.3.3",
-  "numpy_version": "2.3.5",
   "cuda": true,
   "device": "cuda",
   "braindecode_import_error": null,
@@ -15,6 +10,14 @@
     "eegnetv4",
     "eegconformer"
   ],
+  "classes": 36,
+  "sequence_length": 21,
+  "normalization": "per-window median/MAD, clip ±20",
+  "weights_pretrained": false,
+  "label_path": "taxonomy/pooled_channel_window_labels.parquet",
+  "label_prefix": "PG",
+  "output_subdir": "classification",
+  "schema_version": 1,
   "training_models": [
     "eegwavenet_sc",
     "physio_tf",
@@ -30,17 +33,13 @@
     "eegconformer"
   ],
   "checkpoint_classes": {
-    "eegwavenet_sc": 45,
-    "physio_tf": 45,
-    "physio_stats": 45,
-    "eegnetv4": 45,
-    "eegconformer": 45
+    "eegwavenet_sc": 36,
+    "physio_tf": 36,
+    "physio_stats": 36,
+    "eegnetv4": 36,
+    "eegconformer": 36
   },
-  "primary_metrics_file": "05_classification/all_window_model_comparison.csv",
-  "sensitivity_metrics_file": "05_classification/model_comparison.csv",
-  "audit_note": "This manifest was normalized after the all-window evaluator overwrote models_requested with its last single-model invocation; it now reflects all five completed model directories.",
-  "classes": 45,
-  "sequence_length": 21,
-  "normalization": "per-window median/MAD, clip ±20",
-  "weights_pretrained": false
+  "primary_metrics_file": "classification/all_window_model_comparison.csv",
+  "sensitivity_metrics_file": "classification/model_comparison.csv",
+  "source_environment_is_provenance_only": true
 }

@@ -49,5 +49,5 @@
     164
   ],
   "label_prefix": "PG",
-  "output_subdir": "05_classification_pooled"
+  "output_subdir": "classification"
 }

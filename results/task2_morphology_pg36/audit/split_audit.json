@@ -1,43 +1,69 @@
 {
-  "split_unit": "clinical_event",
-  "assignment": "deterministic per-animal randomization, mixed animals in train/val/test",
+  "schema_version": 1,
+  "split_unit": "clinical_event with independent valid-channel observations",
+  "assignment": "mixed animals in train/val/test; event identities never cross splits",
   "target_ratio": {
-    "train": 0.70,
+    "train": 0.7,
     "val": 0.15,
     "test": 0.15
   },
-  "source_event_counts": {
-    "train": 4357,
-    "val": 934,
-    "test": 934,
-    "total": 6225
-  },
   "eligible_event_channel_counts": {
     "train": 6393,
-    "val": 1375,
     "test": 1376,
-    "total": 9144
+    "val": 1375
   },
   "eligible_window_counts": {
     "train": 130216,
-    "val": 31731,
     "test": 32583,
-    "total": 194530
+    "val": 31731
   },
+  "n_global_categories": 36,
   "test_category_support": {
-    "classes_present": 45,
-    "minimum_windows": 11,
-    "maximum_windows": 9004,
-    "note": "All frozen categories occur in test, but support is highly imbalanced."
+    "classes_present": 36,
+    "minimum_windows": 7,
+    "maximum_windows": 9150,
+    "counts": {
+      "PG01": 229,
+      "PG02": 484,
+      "PG03": 164,
+      "PG04": 40,
+      "PG05": 40,
+      "PG06": 581,
+      "PG07": 28,
+      "PG08": 19,
+      "PG09": 488,
+      "PG10": 8979,
+      "PG11": 3309,
+      "PG12": 298,
+      "PG13": 34,
+      "PG14": 216,
+      "PG15": 7,
+      "PG16": 111,
+      "PG17": 814,
+      "PG18": 94,
+      "PG19": 1291,
+      "PG20": 562,
+      "PG21": 771,
+      "PG22": 54,
+      "PG23": 8,
+      "PG24": 725,
+      "PG25": 172,
+      "PG26": 109,
+      "PG27": 1721,
+      "PG28": 89,
+      "PG29": 466,
+      "PG30": 83,
+      "PG31": 494,
+      "PG32": 9150,
+      "PG33": 344,
+      "PG34": 10,
+      "PG35": 43,
+      "PG36": 556
+    }
   },
-  "complete_window_threshold": 0.99,
-  "events_without_complete_window": 1381,
   "overlap_audit": {
-    "unit": "deduplicated animal_id + session_id + event_id intervals",
-    "eligible_unique_events_checked": 4844,
-    "cross_split_overlapping_event_pairs": 0,
-    "additional_raw_window_purge": 0,
-    "note": "All retained windows are contained in non-overlapping clinical events; no extra purge was required for this snapshot. Re-run this audit after adding data."
+    "cross_split_mixed_event_keys": 0,
+    "cross_split_overlapping_windows": 0
   },
   "context": {
     "sequence_length_epochs": 21,

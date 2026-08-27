@@ -29,10 +29,16 @@
   "event_distance_low_confidence_quantile": 0.995,
   "event_distance_low_confidence_threshold": 6.813312285231302,
   "source_files": {
-    "pooled_mouse_prototypes": "03_cross_mouse/pooled_mouse_prototypes.parquet",
-    "pooled_mouse_event_assignments": "03_cross_mouse/pooled_mouse_event_assignments.parquet",
-    "channel_event_features": "01_tables/channel_event_features.parquet",
-    "source_window_labels": "04_label_freeze/frozen_channel_window_labels.parquet"
+    "pooled_mouse_prototypes": "tables/pooled_mouse_prototypes.parquet",
+    "pooled_mouse_event_assignments": "tables/pooled_mouse_event_assignments.parquet",
+    "channel_event_features": "tables/channel_event_features.parquet",
+    "source_window_labels": "taxonomy/pooled_channel_window_labels.parquet"
   },
-  "category_semantics": "exploratory pooled morphology category; not a clinically validated seizure subtype"
+  "category_semantics": "exploratory pooled morphology category; not a clinically validated seizure subtype",
+  "release_layout": {
+    "taxonomy": "taxonomy",
+    "tables": "tables",
+    "classification": "classification",
+    "figures": "figures"
+  }
 }

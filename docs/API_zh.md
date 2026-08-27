@@ -14,6 +14,10 @@ epilepsy-eeg run-pg36 --input <raw-file-or-dir> --labels <label-file-or-dir> `
 
 训练 stdout/stderr 会同时显示在终端和 `<new-run>/logs/`；源码生成的 checkpoint、`history.csv`、预测表、指标、混淆矩阵和论文图均写入该 run。`--skip-training` 是显式例外，只能在同一个 run 目录已有完整权重时使用。
 
+如果尚未执行 editable install，可在仓库根目录先设置
+`$env:PYTHONPATH = (Resolve-Path .\\src)`，然后把下面命令中的
+`epilepsy-eeg` 替换为 `python -m epilepsy_eeg`。两者调用完全相同的源码入口。
+
 两个完整入口的滤波 CLI 覆盖项为 `--highpass-hz`、`--lowpass-hz`、`--notch-hz`、`--notch-quality-factor`、`--bandpass-order`。任务一额外支持 `--eegwavenet-batch-size`、`--learning-rate-factor`、`--gradient-clip-norm`、`--normalization-clip`、`--maximum-evaluation-windows` 和 `--[no-]mixed-precision`；解析后的值会保存在 run provenance 中并传入实际构造器。
 
 ## `prepare`

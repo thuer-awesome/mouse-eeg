@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "task": "annotation_detection",
+  "generated_at_utc": "2026-08-27T21:23:40.332474+00:00",
+  "figure_families": [
+    {
+      "name": "model_performance",
+      "path": "figures/model_performance",
+      "renderer": "scripts/render_task1_corrected_model_performance.py",
+      "status": "generated",
+      "source_inputs": [
+        "models",
+        "metrics"
+      ],
+      "denominator": "supervised held-out 4-s windows; event TN is undefined",
+      "semantics": "corrected window metrics, confusion, PR/ROC and training diagnostics",
+      "outputs": [
+        {
+          "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.pdf",
+          "bytes": 86435
+        },
+        {
+          "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.png",
+          "bytes": 330416
+        },
+        {
+          "path": "figures/model_performance/figure_0_baseline_window_classification_confusion.svg",
+          "bytes": 133591
+        },
+        {
+          "path": "figures/model_performance/figure_1_window_classification_confusion.pdf",
+          "bytes": 97463
+        },
+        {
+          "path": "figures/model_performance/figure_1_window_classification_confusion.png",
+          "bytes": 333966
+        },
+        {
+          "path": "figures/model_performance/figure_1_window_classification_confusion.svg",
+          "bytes": 140276
+        },
+        {
+          "path": "figures/model_performance/figure_2_corrected_event_detection_audit.pdf",
+          "bytes": 56613
+        },
+        {
+          "path": "figures/model_performance/figure_2_corrected_event_detection_audit.png",
+          "bytes": 322657
+        },
+        {
+          "path": "figures/model_performance/figure_2_corrected_event_detection_audit.svg",
+          "bytes": 46766
+        },
+        {
+          "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.pdf",
+          "bytes": 45272
+        },
+        {
+          "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.png",
+          "bytes": 217346
+        },
+        {
+          "path": "figures/model_performance/figure_s1_training_diagnostics_frozen_models.svg",
+          "bytes": 40113
+        }
+      ]
+    },
+    {
+      "name": "clinical_event_atlas",
+      "path": "event_atlas",
+      "renderer": "scripts/render_corrected_event_atlas.py",
+      "status": "generated",
+      "source_inputs": [
+        "models",
+        "metrics"
+      ],
+      "denominator": "all manual test event×channel rows",
+      "semantics": "raw waveform, probability and interval-aware decoded state",
+      "outputs": [
+        {
+          "path": "event_atlas/eegwavenet_sc/boundary_shift_gt_2s.pdf",
+          "bytes": 10179060
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_boundary_shift_gt_2s.pdf",
+          "bytes": 130627
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_boundary_shift_gt_2s.png",
+          "bytes": 505306
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_boundary_shift_gt_2s.svg",
+          "bytes": 283669
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_full_coverage_ge_0p9.pdf",
+          "bytes": 113996
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_full_coverage_ge_0p9.png",
+          "bytes": 296775
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_full_coverage_ge_0p9.svg",
+          "bytes": 199147
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_label_external_prediction.pdf",
+          "bytes": 112393
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_label_external_prediction.png",
+          "bytes": 294746
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_label_external_prediction.svg",
+          "bytes": 200796
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_low_overlap_gt_0_to_0p5.pdf",
+          "bytes": 129942
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_low_overlap_gt_0_to_0p5.png",
+          "bytes": 505089
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_low_overlap_gt_0_to_0p5.svg",
+          "bytes": 283659
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_missed_coverage_0.pdf",
+          "bytes": 125823
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_missed_coverage_0.png",
+          "bytes": 424351
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_missed_coverage_0.svg",
+          "bytes": 267497
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_missed_ge_30s.pdf",
+          "bytes": 126168
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_missed_ge_30s.png",
+          "bytes": 426430
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_missed_ge_30s.svg",
+          "bytes": 267509
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_partial_coverage_0p5_to_0p9.pdf",
+          "bytes": 116211
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_partial_coverage_0p5_to_0p9.png",
+          "bytes": 358443
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/example_partial_coverage_0p5_to_0p9.svg",
+          "bytes": 205253
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/full_coverage_ge_0p9.pdf",
+          "bytes": 41506822
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/label_external_prediction.pdf",
+          "bytes": 114860331
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/low_overlap_gt_0_to_0p5.pdf",
+          "bytes": 2391208
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/missed_coverage_0.pdf",
+          "bytes": 13033766
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/missed_ge_30s.pdf",
+          "bytes": 1522728
+        },
+        {
+          "path": "event_atlas/eegwavenet_sc/partial_coverage_0p5_to_0p9.pdf",
+          "bytes": 8809776
+        },
+        {
+          "path": "event_atlas/event_atlas_summary.pdf",
+          "bytes": 46149
+        },
+        {
+          "path": "event_atlas/event_atlas_summary.png",
+          "bytes": 117506
+        },
+        {
+          "path": "event_atlas/event_atlas_summary.svg",
+          "bytes": 25928
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/boundary_shift_gt_2s.pdf",
+          "bytes": 8155914
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_boundary_shift_gt_2s.pdf",
+          "bytes": 118386
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_boundary_shift_gt_2s.png",
+          "bytes": 439730
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_boundary_shift_gt_2s.svg",
+          "bytes": 209820
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_full_coverage_ge_0p9.pdf",
+          "bytes": 116294
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_full_coverage_ge_0p9.png",
+          "bytes": 357408
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_full_coverage_ge_0p9.svg",
+          "bytes": 203598
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_label_external_prediction.pdf",
+          "bytes": 111075
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_label_external_prediction.png",
+          "bytes": 265176
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_label_external_prediction.svg",
+          "bytes": 199661
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_low_overlap_gt_0_to_0p5.pdf",
+          "bytes": 112043
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_low_overlap_gt_0_to_0p5.png",
+          "bytes": 266634
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_low_overlap_gt_0_to_0p5.svg",
+          "bytes": 200989
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_missed_coverage_0.pdf",
+          "bytes": 124173
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_missed_coverage_0.png",
+          "bytes": 415324
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_missed_coverage_0.svg",
+          "bytes": 263895
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_missed_ge_30s.pdf",
+          "bytes": 124554
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_missed_ge_30s.png",
+          "bytes": 416768
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_missed_ge_30s.svg",
+          "bytes": 263907
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_partial_coverage_0p5_to_0p9.pdf",
+          "bytes": 113325
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_partial_coverage_0p5_to_0p9.png",
+          "bytes": 267315
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/example_partial_coverage_0p5_to_0p9.svg",
+          "bytes": 204025
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/full_coverage_ge_0p9.pdf",
+          "bytes": 55545847
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/label_external_prediction.pdf",
+          "bytes": 199201253
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/low_overlap_gt_0_to_0p5.pdf",
+          "bytes": 1131087
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/missed_coverage_0.pdf",
+          "bytes": 4241259
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/missed_ge_30s.pdf",
+          "bytes": 473793
+        },
+        {
+          "path": "event_atlas/physio_sequence_no_aux/partial_coverage_0p5_to_0p9.pdf",
+          "bytes": 4719787
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/boundary_shift_gt_2s.pdf",
+          "bytes": 9542227
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_boundary_shift_gt_2s.pdf",
+          "bytes": 118367
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_boundary_shift_gt_2s.png",
+          "bytes": 409601
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_boundary_shift_gt_2s.svg",
+          "bytes": 245172
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_full_coverage_ge_0p9.pdf",
+          "bytes": 116592
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_full_coverage_ge_0p9.png",
+          "bytes": 355324
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_full_coverage_ge_0p9.svg",
+          "bytes": 203850
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_label_external_prediction.pdf",
+          "bytes": 115739
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_label_external_prediction.png",
+          "bytes": 390331
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_label_external_prediction.svg",
+          "bytes": 206020
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_low_overlap_gt_0_to_0p5.pdf",
+          "bytes": 118071
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_low_overlap_gt_0_to_0p5.png",
+          "bytes": 396417
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_low_overlap_gt_0_to_0p5.svg",
+          "bytes": 234700
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_missed_coverage_0.pdf",
+          "bytes": 125333
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_missed_coverage_0.png",
+          "bytes": 455207
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_missed_coverage_0.svg",
+          "bytes": 267715
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_missed_ge_30s.pdf",
+          "bytes": 125719
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_missed_ge_30s.png",
+          "bytes": 455746
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_missed_ge_30s.svg",
+          "bytes": 267727
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_partial_coverage_0p5_to_0p9.pdf",
+          "bytes": 116239
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_partial_coverage_0p5_to_0p9.png",
+          "bytes": 357741
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/example_partial_coverage_0p5_to_0p9.svg",
+          "bytes": 206804
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/full_coverage_ge_0p9.pdf",
+          "bytes": 54943315
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/label_external_prediction.pdf",
+          "bytes": 168603059
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/low_overlap_gt_0_to_0p5.pdf",
+          "bytes": 1689788
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/missed_coverage_0.pdf",
+          "bytes": 4073163
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/missed_ge_30s.pdf",
+          "bytes": 611121
+        },
+        {
+          "path": "event_atlas/physio_sequence_stats/partial_coverage_0p5_to_0p9.pdf",
+          "bytes": 4936738
+        }
+      ]
+    }
+  ]
+}

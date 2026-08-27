@@ -451,7 +451,8 @@ def freeze(root: Path, threshold: float = 0.90, seed: int = 20260823) -> dict[st
 
 This directory is an independent label-freeze product derived from the
 within-mouse pooled CH7/CH8 morphology clusters. It does **not** overwrite the
-strict all-channel `04_label_freeze` directory or its G01-G45 taxonomy.
+strict all-channel `04_label_freeze` directory or its historical G01-G45
+taxonomy; that legacy lineage is never used as the current PG36 input.
 
 ## Frozen result
 

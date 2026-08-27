@@ -10,6 +10,7 @@ from typing import Any
 import pandas as pd
 
 from .paths import MODEL_ORDER_TASK1, sha256, write_json
+from .figure_manifest import figure_family, write_figure_manifest
 
 
 def _copy_file(source: Path, target: Path) -> None:
@@ -97,6 +98,46 @@ def materialize_task1(model_run_root: str | Path, corrected_root: str | Path, ou
     atlas_target = target / "event_atlas"
     copied.extend(_copy_filtered(atlas_source, atlas_target, extensions={".png", ".pdf", ".svg", ".csv", ".json", ".md", ".txt"} | ({".tiff"} if include_tiff else set())))
     audit = json.loads((source_corrected / "manifest.json").read_text(encoding="utf-8")) if (source_corrected / "manifest.json").is_file() else {}
+    manual_counts = audit.get("manual_event_counts", {}) if isinstance(audit, dict) else {}
+    clinical_denominator = int(manual_counts.get("test", 0) or 0)
+    atlas_manifest_data: dict[str, Any] = {}
+    if not clinical_denominator:
+        atlas_manifest = target / "event_atlas" / "corrected_atlas_manifest.json"
+        if atlas_manifest.is_file():
+            try:
+                atlas_manifest_data = json.loads(atlas_manifest.read_text(encoding="utf-8"))
+                clinical_denominator = int(atlas_manifest_data.get("clinical_atlas_denominator", 0) or 0)
+            except (OSError, ValueError, json.JSONDecodeError):
+                clinical_denominator = 0
+    formal_denominator = (
+        int(audit.get("formal_metric_denominator", 0) or 0)
+        if isinstance(audit, dict)
+        else 0
+    )
+    if not formal_denominator and isinstance(audit, dict):
+        formal_denominator = int(audit.get("formal_event_denominator", 0) or 0)
+    if not atlas_manifest_data:
+        atlas_manifest = target / "event_atlas" / "corrected_atlas_manifest.json"
+        if atlas_manifest.is_file():
+            try:
+                atlas_manifest_data = json.loads(atlas_manifest.read_text(encoding="utf-8"))
+            except (OSError, ValueError, json.JSONDecodeError):
+                atlas_manifest_data = {}
+    # The formal metric denominator can be smaller than the clinical atlas
+    # denominator because a small number of events fail the metric gate.  Do
+    # not silently replace that value with the larger atlas count.
+    if not formal_denominator:
+        formal_denominator = int(atlas_manifest_data.get("formal_metric_denominator", 0) or 0)
+    if not formal_denominator:
+        formal_denominator = clinical_denominator
+    (target / "README_zh.md").write_text(
+        "# 任务一：二分类连续预测打标\n\n"
+        "本目录对应 corrected interval-aware decoder。三个模型共享验证集拟合的全局解码参数，测试集不参与选择。"
+        "每个有效通道独立输入；`event_atlas/` 保存完整人工事件、模型候选和波形/概率/状态 PDF；"
+        "`figures/model_performance/` 保存窗口级混淆矩阵、PR/ROC、训练诊断和事件级汇总。"
+        "外部候选只是临床复核对象，不自动等同于误报。\n",
+        encoding="utf-8",
+    )
     artifacts = []
     for path in target.rglob("*"):
         if path.is_file() and path.name != "release_manifest.json":
@@ -108,8 +149,8 @@ def materialize_task1(model_run_root: str | Path, corrected_root: str | Path, ou
         "models": list(MODEL_ORDER_TASK1),
         "model_run_root_source": str(source_models),
         "corrected_root_source": str(source_corrected),
-        "clinical_atlas_denominator_test_channel_events": int(audit.get("manual_event_counts", {}).get("test", 957)),
-        "formal_metric_denominator_test_events": 953,
+        "clinical_atlas_denominator_test_channel_events": clinical_denominator,
+        "formal_metric_denominator_test_events": formal_denominator,
         "include_full_traces": bool(include_full_traces),
         "include_tiff": bool(include_tiff),
         "legacy_directories_excluded": True,
@@ -117,7 +158,41 @@ def materialize_task1(model_run_root: str | Path, corrected_root: str | Path, ou
         "artifacts": artifacts,
     }
     write_json(target / "release_manifest.json", release)
-    (target / "README_zh.md").write_text("# 任务一：二分类连续预测打标\n\n本目录对应 corrected interval-aware decoder。三个模型共享验证集拟合的全局解码参数，测试集不参与选择。每个有效通道独立输入；`event_atlas/` 保存完整人工事件、模型候选和波形/概率/状态 PDF；`figures/model_performance/` 保存窗口级混淆矩阵、PR/ROC、训练诊断和事件级汇总。外部候选只是临床复核对象，不自动等同于误报。\n", encoding="utf-8")
+    # A release gets its own compact lineage manifest; absolute source paths
+    # are intentionally not copied into the release's figure semantics.
+    families = [
+        figure_family(
+            root=target,
+            name="model_performance",
+            relative_path="figures/model_performance",
+            renderer="scripts/render_task1_corrected_model_performance.py",
+            source_inputs=(target / "models", target / "metrics"),
+            denominator="supervised held-out 4-s windows; event TN is undefined",
+            semantics="corrected window metrics, confusion, PR/ROC and training diagnostics",
+            requested=True,
+        ),
+        figure_family(
+            root=target,
+            name="clinical_event_atlas",
+            relative_path="event_atlas",
+            renderer="scripts/render_corrected_event_atlas.py",
+            source_inputs=(target / "models", target / "metrics"),
+            denominator="all manual test event×channel rows",
+            semantics="raw waveform, probability and interval-aware decoded state",
+            requested=True,
+        ),
+    ]
+    write_figure_manifest(root=target, task="annotation_detection", families=families, path=target / "figures" / "FIGURE_MANIFEST.json")
+    release["artifacts"] = [
+        {
+            "path": str(path.relative_to(target)).replace("\\", "/"),
+            "bytes": int(path.stat().st_size),
+            "sha256": sha256(path),
+        }
+        for path in target.rglob("*")
+        if path.is_file() and path.name != "release_manifest.json"
+    ]
+    write_json(target / "release_manifest.json", release)
     return target
 
 
@@ -136,6 +211,22 @@ def validate_task1(root: str | Path) -> dict[str, Any]:
     event_rows = pd.read_csv(comparison) if comparison.is_file() else pd.DataFrame()
     if not event_rows.empty and "model" in event_rows and set(event_rows.model.astype(str)) != set(MODEL_ORDER_TASK1):
         errors.append("corrected event metric table does not contain exactly three models")
+    figure_manifest = target / "figures" / "FIGURE_MANIFEST.json"
+    if not figure_manifest.is_file():
+        errors.append("missing figures/FIGURE_MANIFEST.json")
+    else:
+        try:
+            payload = json.loads(figure_manifest.read_text(encoding="utf-8"))
+            if payload.get("task") not in {None, "annotation_detection"}:
+                errors.append("figure manifest task is not annotation_detection")
+            families = payload.get("figure_families")
+            if not isinstance(families, list) or not families:
+                errors.append("figure manifest has no figure_families")
+        except (OSError, ValueError, TypeError, json.JSONDecodeError):
+            errors.append("invalid figures/FIGURE_MANIFEST.json")
+    for relative in ("figures/model_performance", "event_atlas"):
+        if not (target / relative).is_dir():
+            errors.append(f"missing formal figure directory: {relative}")
     result = {"root": str(target), "models": models, "ok": not errors, "errors": errors}
     write_json(target / "task1_validation.json", result)
     if errors:
