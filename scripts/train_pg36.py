@@ -249,7 +249,14 @@ def main(argv: list[str] | None = None) -> int:
     ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=DEFAULT_OUT); ap.add_argument("--label-path",type=Path,default=None,help="frozen channel-window label parquet"); ap.add_argument("--output-subdir",default="05_classification",help="classification result directory under --out"); ap.add_argument("--label-prefix",default=None,help="category prefix used in reports, e.g. PG"); ap.add_argument("--epochs",type=int,default=10); ap.add_argument("--batch-size",type=int,default=64); ap.add_argument("--max-per-event",type=int,default=8); ap.add_argument("--seed",type=int,default=20260823); ap.add_argument("--models",nargs="+",default=["eegwavenet_sc","physio_tf","physio_stats","eegnetv4","eegconformer"]); ap.add_argument("--device",default="auto"); ap.add_argument("--learning-rate",type=float,default=3e-4); ap.add_argument("--weight-decay",type=float,default=1e-4); ap.add_argument("--early-stopping-patience",type=int,default=3); ap.add_argument("--learning-rate-patience",type=int,default=1); ap.add_argument("--num-workers",type=int,default=0); args=ap.parse_args(argv)
     out=args.out.resolve(); seed_all(args.seed); device=torch.device("cuda" if args.device=="auto" and torch.cuda.is_available() else ("cpu" if args.device=="auto" else args.device));
     label_path = (args.label_path.resolve() if args.label_path is not None else out/"04_label_freeze"/"frozen_channel_window_labels.parquet")
-    labels=pd.read_parquet(label_path); labels=labels.loc[labels.global_category.notna()].copy(); labels["global_category"]=labels.global_category.astype(int); classes=int(labels.global_category.max()+1); context=labels.copy();
+    labels=pd.read_parquet(label_path); labels=labels.loc[labels.global_category.notna()].copy(); labels["global_category"]=labels.global_category.astype(int); classes=int(labels.global_category.max()+1)
+    if classes != 36:
+        raise ValueError(f"PG36 training requires exactly 36 global categories; found {classes}")
+    if "global_label" in labels.columns:
+        labels_text = labels["global_label"].astype(str)
+        if not labels_text.str.fullmatch(r"PG(?:0[1-9]|[12][0-9]|3[0-6])").all():
+            raise ValueError("PG36 label table contains labels outside PG01-PG36")
+    context=labels.copy();
     train_labels, val_labels, test_labels = split_label_frame(labels)
     inferred_prefix = "PG" if labels.get("global_label", pd.Series(dtype=str)).astype(str).str.startswith("PG").any() else "G"
     label_prefix = args.label_prefix or inferred_prefix

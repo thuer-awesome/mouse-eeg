@@ -77,7 +77,7 @@ def materialize_pg36(source_root: str | Path, output_root: str | Path, *, includ
     ):
         source_fig = source / source_subdir
         if source_fig.is_dir():
-            copied_count = _copy_tree(source_fig, target / target_subdir, exclude_suffixes={".tiff"})
+            copied_count = _copy_tree(source_fig, target / target_subdir, exclude_suffixes=set() if include_tiff else {".tiff"})
             copied.append(f"{source_subdir}: {copied_count} files")
     # Keep the full all-window predictions only when explicitly requested; the
     # metrics and confusion matrices are always retained.
@@ -140,6 +140,26 @@ def validate_pg36(root: str | Path) -> dict[str, Any]:
         errors.append("five-model comparison is incomplete")
     if not comparison.empty and not (comparison["n"].astype(int) == 32583).all():
         errors.append("primary denominator is not 32,583 windows")
+    figure_root = target / "figures"
+    if figure_root.is_dir():
+        required_dirs = [
+            "01_per_mouse_pg_pca",
+            "02_per_mouse_pg_waveforms",
+            "03_global_pg_centroid_pca",
+            "04_pg_support_presence",
+            "06_classifier_pr_roc_all36",
+        ]
+        for name in required_dirs:
+            if not (figure_root / name).is_dir():
+                errors.append(f"missing formal figure directory: {name}")
+        for model in MODEL_ORDER_TASK2:
+            confusion = figure_root / "confusion_all_windows" / model / "figure_confusion_matrix_all_windows.png"
+            if not confusion.is_file():
+                errors.append(f"missing all-class figure for model: {model}")
+            pr_figure = figure_root / "06_classifier_pr_roc_all36" / model / "figure_pr_all36.png"
+            roc_figure = figure_root / "06_classifier_pr_roc_all36" / model / "figure_roc_all36.png"
+            if not pr_figure.is_file() or not roc_figure.is_file():
+                errors.append(f"missing all-class PR/ROC figures for model: {model}")
     result = {"root": str(target), "taxonomy_classes": int(taxonomy.get("n_global_categories", 0)), "models": sorted(set(comparison.get("model", []))), "primary_test_windows": int(comparison["n"].iloc[0]) if not comparison.empty else None, "ok": not errors, "errors": errors}
     write_json(target / "pg36_validation.json", result)
     if errors:
