@@ -62,13 +62,13 @@
     },
     {
       "path": "event_atlas/figure_qa_notes.json",
-      "bytes": 1758,
-      "sha256": "727f11c568eacdefda049ff6981b46a34b50690ad99e657511da36e3ceae72a1"
+      "bytes": 1816,
+      "sha256": "0527867a4ab29a0d6b9545ccd2243989e4cf4521d4b294b9b0f5f4e047aff8c1"
     },
     {
       "path": "event_atlas/README.md",
-      "bytes": 3677,
-      "sha256": "7f28892de583591d7b4a900a6dc024ccb6c10b931390282144c743dccbc687fd"
+      "bytes": 3764,
+      "sha256": "e6692dcddf2a95ce6054e8e0397a06cd51fba231277321d071468ee0bc318872"
     },
     {
       "path": "event_atlas/README_zh_corrected.md",
@@ -87,13 +87,13 @@
     },
     {
       "path": "metrics/CORRECTED_DECODER_FINAL_REPORT_zh.md",
-      "bytes": 3047,
-      "sha256": "94a92d814b0ff38edb4948dc070bf44b291e32ea199c22d14083ffbec397ba9c"
+      "bytes": 3083,
+      "sha256": "1bf643b145f7aee7035114d88f434ef50fa7a4d1796e499a0d4854248ca0e6cb"
     },
     {
       "path": "metrics/CURRENT_INDEX_zh.md",
-      "bytes": 2407,
-      "sha256": "fef13ef562df852e0f7b0e248def8e4ff6b1ea1575a92b10a35b0d6990d92539"
+      "bytes": 2936,
+      "sha256": "a4a5d346e4cc32b10da929918e3e28198b3f2ee59badeacbc40129431c723221"
     },
     {
       "path": "metrics/manifest.json",
@@ -102,8 +102,8 @@
     },
     {
       "path": "metrics/README_zh.md",
-      "bytes": 855,
-      "sha256": "33790e8aee2664aba0cc08b08ecd5b17037eae5a6ac18c5fedc2ea3eef00cb6c"
+      "bytes": 1075,
+      "sha256": "dd1d2b1cc72dacc9cf682dc822af72f5f4473cb54ad700bf3c4c8f04b94be68f"
     },
     {
       "path": "metrics/RUN_SUMMARY.json",
@@ -112,8 +112,8 @@
     },
     {
       "path": "metrics/TRAINING_LOG_zh.md",
-      "bytes": 2726,
-      "sha256": "fa430549fc6a8087fd03c0fbcb8a8c8b439634eebf6ce3b04297e47cce9ae1aa"
+      "bytes": 3028,
+      "sha256": "29bae608ac273f40e5857a8b2779ea72d47f5dec83b4b686337e650c8c6be040"
     },
     {
       "path": "models/eegwavenet_sc/decoder_candidates.csv",
@@ -512,8 +512,8 @@
     },
     {
       "path": "figures/model_performance/README_zh.md",
-      "bytes": 1618,
-      "sha256": "5201c8ac73caf833e73d79b0dc77f06dc36700c39e20cba93527a821847fb82a"
+      "bytes": 1623,
+      "sha256": "e5e6c3fa9b010e60453cfd86edb8d83855d6c66ffa9632e4c9ce8381216c0b5b"
     },
     {
       "path": "figures/model_performance/source_data/calibration_bins.csv",

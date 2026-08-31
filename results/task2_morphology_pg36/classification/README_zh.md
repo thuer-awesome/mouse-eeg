@@ -1,6 +1,6 @@
 # Pooled PG 多分类输出
 
-这是任务二的唯一正式模型输出目录。输入标签为 `taxonomy/pooled_channel_window_labels.parquet`，共 PG01-PG36 36 个探索性形态类别；每个有效通道仍是独立样本，21 epoch 上下文只在同一事件、同一通道内取值。Physio-TF/Physio+statistics 使用完整 21 epoch 序列；EEGWaveNet-SC、EEGNetv4 和 EEGConformer 保持论文基线的单窗口输入，序列加载器只用于统一数据契约和边界填充，不把上下文偷偷拼入这些基线。
+这是任务二的唯一正式模型输出目录。输入标签为 `../taxonomy/pooled_channel_window_labels.parquet`，共 PG01-PG36 36 个探索性形态类别；每个有效通道仍是独立样本，21 epoch 上下文只在同一事件、同一通道内取值。Physio-TF/Physio+statistics 使用完整 21 epoch 序列；EEGWaveNet-SC、EEGNetv4 和 EEGConformer 保持论文基线的单窗口输入，序列加载器只用于统一数据契约和边界填充，不把上下文偷偷拼入这些基线。
 
 五个完整模型：`eegwavenet_sc`、`physio_tf`、`physio_stats`、`eegnetv4`、`eegconformer`。每个模型目录包含：
 
@@ -14,5 +14,7 @@
 - `event_level_test_predictions.parquet`：按事件×通道聚合的预测。
 
 目录根部的 `all_window_model_comparison.csv` 是正式模型比较表，`per_animal_channel_metrics.csv` 是独立鼠/通道稳健性审计。正式分母不是 capped 敏感性样本，而是完整测试窗口 32,583 个。
+
+重要对齐限制：PG36 使用自身的事件划分（6,393/1,375/1,376），与任务一严格 protocol（4,495/960/957）不同；测试键完全一致的只有 111/1,376，另有 642 条 split 不一致、591 条缺失。因此这些分类结果是形态探索快照，不能作为任务一严格跨域泛化结果，也不能与任务一指标合并。
 
 该模型输出的是 PG 形态类别，不是任务一的临床发作起始/结束打标器；二分类连续解码和边界修正保留在独立任务一目录。

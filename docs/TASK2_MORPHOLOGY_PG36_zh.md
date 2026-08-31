@@ -2,7 +2,7 @@
 
 ## 标签冻结
 
-正式标签文件为 `results/task2_morphology_pg36/taxonomy/pooled_channel_window_labels.parquet`，taxonomy version 为 `pooled_global_v1_constrained_cross_mouse`。共 7 只鼠、9,144 个事件×通道观察、194,530 个窗口、40 个 pooled mouse prototypes，约束合并后冻结 36 个全局 PG 类别。PG11、PG19、PG27 在多个鼠出现；因此逐鼠类别数相加为 40，而全局 set union 为 36。
+正式标签文件为当前 run 的 `04_label_freeze_pooled/pooled_channel_window_labels.parquet`，taxonomy version 为 `pooled_global_v1_constrained_cross_mouse`。共 7 只鼠、9,144 个事件×通道观察、194,530 个窗口、40 个 pooled mouse prototypes，约束合并后冻结 36 个全局 PG 类别。PG11、PG19、PG27 在多个鼠出现；因此逐鼠类别数相加为 40，而全局 set union 为 36。
 
 每个有效通道独立作为观察，CH7 与 CH8 只在图中用不同颜色/标记显示，不拼成一个 paired classifier 输入。E77/CH7 沿用坏道屏蔽。低置信度事件和无支持类别均显式写入审计表。
 
@@ -15,6 +15,10 @@
 五个模型为 EEGWaveNet-SC、Physio-TF、Physio + statistics、EEGNetv4、EEGConformer。`classification/all_window_model_comparison.csv` 是正式主表，测试窗口分母以该表 `n` 列为准；`test_predictions.parquet` 和 `model_comparison.csv` 的每事件最多 8 窗口结果仅作平衡敏感性分析。模型的 Macro-F1、balanced accuracy、Macro-AUPRC、Macro-AUROC 和 PG36 混淆矩阵均按该口径解释。
 
 当前 PG36 分类准确率并不代表临床亚型识别能力；类别是从当前数据形态统计中得到的探索性标签，必须由临床和后续独立数据验证其语义。
+
+**对齐门控（必须阅读）**：当前 PG36 表自己的事件 split 为 6,393/1,375/1,376，而严格 Task-1 protocol 为 4,495/960/957。测试集仅 111/1,376 个 `event_id+channel+split` 键完全一致；642 个 split 不一致，591 个键缺失。因此该快照只能作为形态探索和临床溯源审计，不能与 Task-1 严格指标混写。重新训练前必须从同一 protocol 重建特征、鼠内 GMM、PG 合并和 split。
+
+临床连续波形溯源图集位于 `07_clinical_traceability_pg36_v1/`；它显示每个事件的连续滤波 EEG 和全部物理滑窗，单个代表窗不再被当作完整事件。
 
 ## 训练命令
 
@@ -31,7 +35,7 @@ epilepsy-eeg run-pg36 `
 该入口会从原始数据重新提取独立通道特征、逐鼠聚类、冻结 PG36，并由仓库源码初始化和训练五个模型；训练日志同步写入 `<new-run>/logs/`，checkpoint、全窗口预测、指标、混淆矩阵和图写入 `<new-run>`。`--taxonomy-root` 仅用于已有冻结 taxonomy 的重训，并且仍需要标签表中引用的原始过滤缓存可访问。
 
 ```powershell
-epilepsy-eeg train-pg36 --out <taxonomy-root> --label-path <taxonomy-root>\taxonomy\pooled_channel_window_labels.parquet --output-subdir 05_classification_pooled --epochs 10
+epilepsy-eeg train-pg36 --out <taxonomy-root> --label-path <taxonomy-root>\04_label_freeze_pooled\pooled_channel_window_labels.parquet --output-subdir 05_classification_pooled --epochs 10
 epilepsy-eeg render-pg36 --taxonomy-root <taxonomy-root> --output <figures>
 ```
 

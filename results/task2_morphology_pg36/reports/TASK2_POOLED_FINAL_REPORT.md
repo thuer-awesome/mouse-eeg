@@ -19,7 +19,11 @@
 
 Training used an event-balanced sensitivity cap of at most eight windows per event.
 The capped sensitivity table contains 5,331 test windows.
-Formal performance below uses every eligible held-out test window (`n=32,583`), with the denominator read from the all-window comparison table.
+Reported full-window performance below uses every eligible held-out test window (`n=32,583`), with the denominator read from the all-window comparison table.
+
+### Alignment caveat
+
+This PG36 freeze uses its own event split (6,393/1,375/1,376 train/validation/test event×channel labels), not the Task-1 strict protocol split (4,495/960/957). The key audit found only 111 of 1,376 PG36 test keys with an exact `event_id + channel + split` match to the strict protocol; 642 keys were present with a split mismatch and 591 were absent. These classifier results are therefore a morphology-exploration snapshot, not a strict Task-1 generalization estimate, and must not be combined with Task-1 metrics.
 
 ## Full-window model results
 
@@ -35,13 +39,13 @@ The best full-window Macro-F1 in this run is **physio_stats (0.465)**. The best 
 
 ## Canonical outputs
 
-- Taxonomy and label audit: [`taxonomy`](taxonomy)
-- Classifier checkpoints, full-window predictions and per-class tables: [`classification`](classification)
-- Main morphology figures: [`figures`](figures)
-- Statistical cluster diagnostics (3D PCA, BIC/stability, PG support): [`figures/06_cluster_diagnostics`](figures/06_cluster_diagnostics)
-- Main paper-style classifier figures: [`figures/model_summary`](figures/model_summary)
-- Split/leakage audit figure: [`figures/model_summary/figure_0_data_split_audit`](figures/model_summary/figure_0_data_split_audit)
-- Complete PR/ROC, support-recall and per-model confusion figures: [`figures/confusion_all_windows`](figures/confusion_all_windows)
+- Taxonomy and label audit: [`taxonomy`](../taxonomy)
+- Classifier checkpoints, full-window predictions and per-class tables: [`classification`](../classification)
+- Main morphology figures: [`figures`](../figures)
+- Global centroid and support diagnostics: [`figures/03_global_pg_centroid_pca`](../figures/03_global_pg_centroid_pca) and [`figures/04_pg_support_presence`](../figures/04_pg_support_presence)
+- Main paper-style classifier figures: [`figures/model_summary`](../figures/model_summary)
+- Split/leakage audit figure: [`figures/model_summary/figure_0_data_split_audit`](../figures/model_summary/figure_0_data_split_audit)
+- Complete PR/ROC, support-recall and per-model confusion figures: [`figures/confusion_all_windows`](../figures/confusion_all_windows)
 - Historical 21-state and previous G taxonomy artifacts are intentionally excluded from this PG36 release and remain available only in the source study archive.
 
 Task 1 binary seizure onset/offset decoding remains a separate model line. Its legacy figures are not overwritten by this task-2 run.

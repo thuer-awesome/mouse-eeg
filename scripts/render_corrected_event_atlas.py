@@ -187,7 +187,7 @@ def main() -> int:
                 raise FileNotFoundError("corrected model output missing: " + ", ".join(missing))
             model_adapter = adapter / "models" / model
             _link_or_copy(event_source / "decoded_tracks.parquet", model_adapter / "continuous" / "continuous_predictions.parquet")
-            event_adapter = model_adapter / "events_redecoded_v2"
+            event_adapter = model_adapter / "events_corrected_v1_test"
             predicted_adapter = event_adapter / "test_predicted_events.parquet"
             _materialize_prediction_table(
                 event_source / "predicted_events.parquet", predicted_adapter
@@ -204,7 +204,7 @@ def main() -> int:
             protocol_dir,
             output_dir,
             models=tuple(args.models),
-            event_directory_name="events_redecoded_v2",
+            event_directory_name="events_corrected_v1_test",
         )
 
     # Derive denominators from the actual protocol/audit instead of carrying

@@ -11,3 +11,5 @@ This is the canonical visual package for the pooled morphology taxonomy. All for
 - `06_classifier_pr_roc_all36`: all five models, all 36 classes, one-vs-rest PR and ROC small multiples.
 
 The 36-class union is not expected to appear in every single mouse. Most PG categories are animal-specific; the support matrix makes that explicit. Pxx/Lxx are exploratory local labels and are not used in these formal figures.
+
+Alignment caveat: PG36 uses its own 6,393/1,375/1,376 event split rather than the Task-1 strict 4,495/960/957 protocol. Only 111/1,376 test keys match exactly; 642 have a split mismatch and 591 are absent. These are morphology-exploration figures, not a strict Task-1 cross-domain generalization result.

@@ -64,7 +64,11 @@ def main(argv: list[str] | None = None) -> int:
 
 Training used an event-balanced sensitivity cap of at most eight windows per event.
 {f"The capped sensitivity table contains {capped_test_windows:,} test windows." if capped_test_windows is not None else "A capped sensitivity prediction table was not found in this run."}
-Formal performance below uses every eligible held-out test window (`n={formal_test_windows:,}`), with the denominator read from the all-window comparison table.
+Reported full-window performance below uses every eligible held-out test window (`n={formal_test_windows:,}`), with the denominator read from the all-window comparison table.
+
+### Alignment caveat
+
+This PG36 split is a morphology-exploration split. It must be compared with a Task-1 strict protocol only after an explicit `event_id + channel + split` key audit; the two denominators and metrics must not be merged or presented as the same cross-domain generalization estimate.
 
 ## Full-window model results
 
@@ -76,13 +80,13 @@ The best full-window Macro-F1 in this run is **{metrics.iloc[0].model} ({metrics
 
 ## Canonical outputs
 
-- Taxonomy and label audit: [`04_label_freeze_pooled`](04_label_freeze_pooled)
-- Classifier checkpoints, full-window predictions and per-class tables: [`05_classification_pooled`](05_classification_pooled)
-- Main morphology figures: [`06_figures/paper_ready_morphology_pooled`](06_figures/paper_ready_morphology_pooled)
-- Statistical cluster diagnostics (3D PCA, BIC/stability, PG support): [`06_figures/paper_ready_morphology_pooled/06_cluster_diagnostics`](06_figures/paper_ready_morphology_pooled/06_cluster_diagnostics)
-- Main paper-style classifier figures: [`06_figures/paper_ready_classifier_pooled`](06_figures/paper_ready_classifier_pooled)
-- Split/leakage audit figure: [`06_figures/paper_ready_classifier_pooled/figure_0_data_split_audit`](06_figures/paper_ready_classifier_pooled/figure_0_data_split_audit)
-- Complete PR/ROC, support-recall and per-model confusion figures: [`06_figures/strict_classifier_full_pooled`](06_figures/strict_classifier_full_pooled)
+- Taxonomy and label audit: [`04_label_freeze_pooled`](../04_label_freeze_pooled)
+- Classifier checkpoints, full-window predictions and per-class tables: [`05_classification_pooled`](../05_classification_pooled)
+- Main morphology figures: [`06_figures/paper_ready_morphology_pooled`](../06_figures/paper_ready_morphology_pooled)
+- Statistical cluster diagnostics (3D PCA, BIC/stability, PG support): [`06_figures/paper_ready_morphology_pooled/06_cluster_diagnostics`](../06_figures/paper_ready_morphology_pooled/06_cluster_diagnostics)
+- Main paper-style classifier figures: [`06_figures/paper_ready_classifier_pooled`](../06_figures/paper_ready_classifier_pooled)
+- Split/leakage audit figure: [`06_figures/paper_ready_classifier_pooled/figure_0_data_split_audit`](../06_figures/paper_ready_classifier_pooled/figure_0_data_split_audit)
+- Complete PR/ROC, support-recall and per-model confusion figures: [`06_figures/strict_classifier_full_pooled`](../06_figures/strict_classifier_full_pooled)
 - Legacy 21-state and previous G taxonomy are retained under `historical_21_read_only`, `legacy_style_morphology`, `legacy_style_cross_mouse`, and `04_label_freeze`; they are priors/audit references, not the PG final classifier.
 
 Task 1 binary seizure onset/offset decoding remains a separate model line. Its legacy figures are not overwritten by this task-2 run.

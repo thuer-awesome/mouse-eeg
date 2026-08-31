@@ -814,12 +814,20 @@ def _write_readme(
     models: tuple[str, ...],
     event_directory_name: str,
 ) -> None:
+    corrected = event_directory_name == "events_corrected_v1_test"
+    title = "Corrected interval-aware held-out event atlas" if corrected else "Strict held-out event atlas"
+    scope_note = (
+        "The release is self-contained. Read `corrected_atlas_manifest.json` and `DENOMINATOR_NOTE_zh.txt` "
+        "for denominators, and consult the adjacent metrics report for split, purge and alignment status."
+        if corrected
+        else "These figures audit the frozen outputs supplied by the caller; consult that run's protocol and denominator manifests before making generalization claims."
+    )
     lines = [
-        "# Strict held-out event atlas",
+        f"# {title}",
         "",
         "This folder contains the complete test-set visual audit. Each valid EEG channel is an independent model stream. E77 CH7 is excluded.",
         f"The displayed decoded intervals and probabilities are read from each model's `{event_directory_name}` output; this is the frozen validation-selected re-decoding used for the audit.",
-        "Scope note: these figures audit the frozen outputs currently on disk. Read `DECODED_V2_AUDIT.md` and `PROTOCOL_AUDIT.json` before treating them as a formal generalization result; the split-boundary purge audit is maintained separately.",
+        scope_note,
         "",
         "## Reading order",
         "",
@@ -872,6 +880,7 @@ def _write_qa(
     models: tuple[str, ...],
     event_directory_name: str,
 ) -> None:
+    corrected = event_directory_name == "events_corrected_v1_test"
     qa = {
         "schema_version": 1,
         "core_conclusion": "The event atlas distinguishes complete recovery, partial coverage, complete misses, boundary shifts, and zero-label-overlap predictions without conflating any-overlap matching with full detection.",
@@ -879,7 +888,11 @@ def _write_qa(
         "backend": "Python/matplotlib only",
         "models_rendered": list(models),
         "event_directory_name": event_directory_name,
-        "protocol_status": "pre-purge v2 exploratory audit; not a final leakage-free performance estimate",
+        "protocol_status": (
+            "strict purged, validation-selected corrected-v1 held-out audit"
+            if corrected
+            else "caller-supplied frozen held-out audit"
+        ),
         "final_protocol": "epilepsy_blind_single_channel_v3_strict_purged",
         "test_manual_channel_events_per_model": manual_events,
         "label_external_candidates_across_models": candidates,
@@ -898,8 +911,10 @@ def _write_qa(
             "for indexed clinical review rather than manuscript placement."
         ),
         "scope_note": (
-            "Figures audit frozen outputs only. Consult DECODED_V2_AUDIT.md and PROTOCOL_AUDIT.json for the current "
-            "split-boundary purge status before making formal generalization claims."
+            "Figures audit the frozen corrected-v1 outputs in this release; consult corrected_atlas_manifest.json, "
+            "DENOMINATOR_NOTE_zh.txt and the adjacent metrics report for split-boundary purge, denominator and alignment status."
+            if corrected
+            else "Figures audit the frozen outputs supplied by the caller; consult its protocol and denominator manifests before making generalization claims."
         ),
         "matching_note": "Coverage uses union overlap; maximum pair IoU is descriptive; category membership does not use Hungarian assignment.",
         "source_trace": "complete filtered cache with training-background median/MAD normalization",

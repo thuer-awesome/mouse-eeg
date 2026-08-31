@@ -12,7 +12,7 @@
 
 - 12 epochs；all-window sampler；batch size 1024；seed 20260822；CUDA mixed precision。
 - 测试窗口：AUPRC 0.51584，AUROC 0.85753，窗口阳性比例 0.12578。
-- canonical decoder：`events_baseline`（验证集选择；未用测试集调参）。
+- 训练期 canonical decoder：`events_baseline`（验证集选择；未用测试集调参）。
 - 测试事件：sensitivity 0.90136，precision 0.11865，F1 0.20969，coverage 0.78049；完整漏检 28，其中 >=30 s 漏检 4；FP 62.15/channel-hour。
 - repaired decoder 作为保留消融：sensitivity 0.95908，但 precision/F1 降至 0.09640/0.17520，故未提升为 canonical。
 
@@ -20,14 +20,16 @@
 
 - `physio_sequence_no_aux` 与 `physio_sequence_stats`：1 epoch、2,048 samples/epoch、weighted smoke sampler。
 - 该运行仅用于检查生理分支和统计辅助头是否能工作，不能与 EEGWaveNet 的 12-epoch 结果等价比较。
-- 快速结果已移至 `03_archive_index/quick_comparison_1epoch/`。
+- 快速结果已移至外部历史归档；本 release 不复制该目录，来源位置由训练 run manifest 记录。
 
 ## 正式 Physio 训练与测试
 
 - 运行配置：12 epochs、262,144 weighted event-region samples/epoch、batch size 256、seed 20260822；按验证宏平均 AUPRC 保存最佳 checkpoint。
-- Physio-Sequence：best epoch 10，测试 AUPRC 0.53609，AUROC 0.89400；canonical 为 `events_baseline`。
-- Physio + statistics：best epoch 11，测试 AUPRC 0.54094，AUROC 0.89266；canonical 为 `events_baseline`。
+- Physio-Sequence：best epoch 10，测试 AUPRC 0.53609，AUROC 0.89400；训练期 canonical 为 `events_baseline`。
+- Physio + statistics：best epoch 11，测试 AUPRC 0.54094，AUROC 0.89266；训练期 canonical 为 `events_baseline`。
 - 两条正式模型均已完成连续推理、baseline/repaired 解码和测试事件审计。
+
+这里的 `events_baseline` 仅记录训练期 decoder lineage；当前 release 的主事件结果采用独立的 corrected interval-aware decoder，详见 `../event_atlas/` 和 `CORRECTED_DECODER_FINAL_REPORT_zh.md`。
 
 ## Epoch 与早停审计
 

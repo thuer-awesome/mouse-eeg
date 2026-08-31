@@ -32,6 +32,6 @@ This is a separate output line; historical v2 directories and task-2 directories
 ## Interpretation
 
 - The corrected interval support raises mean IoU and makes boundary plots physically interpretable, but it does not make the classifier clinically deployment-ready. Residual zero-coverage events and label-external candidates still require review.
-- The physio_sequence_stats row above was regenerated from the current `events_corrected_v1_test/event_metrics.json` (true-events=953); an earlier concurrent write produced a stale near-zero row in this report and must not be used.
-- The old figures remain valid only as historical evidence for the old decoder. Any figure claiming corrected onset/offset or corrected event counts must use `figures/clinical_event_atlas` in this directory.
-- `models/<model>/events_corrected_v1_test/` contains predicted intervals, one-to-one matches and true-event coverage; `events_corrected_v1_full_recording/` is descriptive full-trace output.
+- The physio_sequence_stats row above was regenerated from the current `../models/physio_sequence_stats/events_corrected_v1_test/event_metrics.json` (true-events=953); an earlier concurrent write produced a stale near-zero row in this report and must not be used.
+- The old figures remain valid only as historical evidence for the old decoder. Any figure claiming corrected onset/offset or corrected event counts must use `../event_atlas/` in this release.
+- `../models/<model>/events_corrected_v1_test/` contains predicted intervals, one-to-one matches and true-event coverage; `../models/<model>/events_corrected_v1_full_recording/` is descriptive full-trace output.

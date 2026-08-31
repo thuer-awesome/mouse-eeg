@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 """Train frozen morphology-category classifiers on independent EEG channels.
 
-The taxonomy is read-only input from ``04_label_freeze``.  Splits remain at
+The taxonomy is read-only input from an explicitly supplied PG36 label table
+(normally ``04_label_freeze_pooled/pooled_channel_window_labels.parquet``). Splits remain at
 clinical-event level, and every model receives one channel without animal or
 channel identity.  EEGNetv4 and EEGConformer are imported from the pinned
 Braindecode implementation; EEGWaveNet-SC and PhysioSequenceNet are the
@@ -236,7 +237,7 @@ def metrics(y: np.ndarray, p: np.ndarray, classes: int, label_prefix: str = "G")
     return result,pd.DataFrame(per),pd.DataFrame(cm,index=labels,columns=labels)
 
 
-def run_one(name: str, train_df: pd.DataFrame, val_df: pd.DataFrame, test_df: pd.DataFrame, context_df: pd.DataFrame, out: Path, classes: int, samples: int, seq_len: int, epochs: int, batch_size: int, seed: int, max_per_event: int, device: torch.device, output_subdir: str = "05_classification", label_prefix: str = "G", learning_rate: float = 3e-4, weight_decay: float = 1e-4, early_stopping_patience: int = 3, learning_rate_patience: int = 1, num_workers: int = 0, sample_rate_hz: float = 250.0) -> dict[str, Any]:
+def run_one(name: str, train_df: pd.DataFrame, val_df: pd.DataFrame, test_df: pd.DataFrame, context_df: pd.DataFrame, out: Path, classes: int, samples: int, seq_len: int, epochs: int, batch_size: int, seed: int, max_per_event: int, device: torch.device, output_subdir: str = "05_classification_pooled", label_prefix: str = "G", learning_rate: float = 3e-4, weight_decay: float = 1e-4, early_stopping_patience: int = 3, learning_rate_patience: int = 1, num_workers: int = 0, sample_rate_hz: float = 250.0) -> dict[str, Any]:
     seed_all(seed); model, needs_seq, log_model = build_model(name, classes, samples, seq_len); model.to(device)
     train_rows=select_rows(train_df,"train",max_per_event,seed); val_rows=select_rows(val_df,"val",max_per_event,seed); test_rows=select_rows(test_df,"test",max_per_event,seed)
     # Include all eligible rows in context lookup, but no label from another event.
@@ -274,9 +275,9 @@ def run_one(name: str, train_df: pd.DataFrame, val_df: pd.DataFrame, test_df: pd
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=DEFAULT_OUT); ap.add_argument("--label-path",type=Path,default=None,help="frozen channel-window label parquet"); ap.add_argument("--output-subdir",default="05_classification",help="classification result directory under --out"); ap.add_argument("--label-prefix",default=None,help="category prefix used in reports, e.g. PG"); ap.add_argument("--epochs",type=int,default=10); ap.add_argument("--batch-size",type=int,default=64); ap.add_argument("--max-per-event",type=int,default=8); ap.add_argument("--seed",type=int,default=20260823); ap.add_argument("--models",nargs="+",default=["eegwavenet_sc","physio_tf","physio_stats","eegnetv4","eegconformer"]); ap.add_argument("--device",default="auto"); ap.add_argument("--learning-rate",type=float,default=3e-4); ap.add_argument("--weight-decay",type=float,default=1e-4); ap.add_argument("--early-stopping-patience",type=int,default=3); ap.add_argument("--learning-rate-patience",type=int,default=1); ap.add_argument("--num-workers",type=int,default=0); ap.add_argument("--fail-on-error",action="store_true",help="任何模型失败时返回非零，而不是只写 FAILED.txt"); ap.add_argument("--allow-non36",action="store_true",help="仅调试用：允许类别数不是 36"); args=ap.parse_args(argv)
+    ap=argparse.ArgumentParser(); ap.add_argument("--out",type=Path,default=DEFAULT_OUT); ap.add_argument("--label-path",type=Path,required=True,help="必须显式指定 PG36 frozen channel-window label parquet；不要省略以免误用历史标签"); ap.add_argument("--output-subdir",default="05_classification_pooled",help="classification result directory under --out"); ap.add_argument("--label-prefix",default=None,help="category prefix used in reports, e.g. PG"); ap.add_argument("--epochs",type=int,default=10); ap.add_argument("--batch-size",type=int,default=64); ap.add_argument("--max-per-event",type=int,default=8); ap.add_argument("--seed",type=int,default=20260823); ap.add_argument("--models",nargs="+",default=["eegwavenet_sc","physio_tf","physio_stats","eegnetv4","eegconformer"]); ap.add_argument("--device",default="auto"); ap.add_argument("--learning-rate",type=float,default=3e-4); ap.add_argument("--weight-decay",type=float,default=1e-4); ap.add_argument("--early-stopping-patience",type=int,default=3); ap.add_argument("--learning-rate-patience",type=int,default=1); ap.add_argument("--num-workers",type=int,default=0); ap.add_argument("--fail-on-error",action="store_true",help="任何模型失败时返回非零，而不是只写 FAILED.txt"); ap.add_argument("--allow-non36",action="store_true",help="仅调试用：允许类别数不是 36"); args=ap.parse_args(argv)
     out=args.out.resolve(); seed_all(args.seed); device=torch.device("cuda" if args.device=="auto" and torch.cuda.is_available() else ("cpu" if args.device=="auto" else args.device));
-    label_path = (args.label_path.resolve() if args.label_path is not None else out/"04_label_freeze"/"frozen_channel_window_labels.parquet")
+    label_path = args.label_path.resolve()
     labels=pd.read_parquet(label_path); labels=labels.loc[labels.global_category.notna()].copy(); labels["global_category"]=labels.global_category.astype(int); classes=int(labels.global_category.max()+1)
     if classes != 36 and not args.allow_non36:
         raise ValueError(f"PG36 training requires exactly 36 global categories; found {classes}")
@@ -304,7 +305,7 @@ def main(argv: list[str] | None = None) -> int:
     # Keep the curated Chinese report separate from this machine-generated
     # run note so a future retraining cannot silently replace the audited
     # denominator/label documentation.
-    (out/"07_reports"/"CLASSIFIER_TASK2_REPORT_AUTO.md").write_text("# 冻结形态类别分类器自动摘要\n\n分类标签：`04_label_freeze/frozen_channel_window_labels.parquet`；模型："+", ".join(args.models)+f"；类别数：{classes}；序列上下文：21 epoch。\n事件平衡敏感性结果写入 `05_classification/model_comparison.csv`；全窗口主结果由 `evaluate_strict_classifiers_all_windows.py` 写入 `05_classification/all_window_model_comparison.csv`。\n",encoding="utf-8")
+    (out/"07_reports"/"CLASSIFIER_TASK2_REPORT_AUTO.md").write_text("# 冻结形态类别分类器自动摘要\n\n分类标签："+f"`{label_path}`；模型："+", ".join(args.models)+f"；类别数：{classes}；序列上下文：21 epoch。\n事件平衡敏感性结果写入 `{args.output_subdir}/model_comparison.csv`；全窗口主结果由 `evaluate_strict_classifiers_all_windows.py` 写入 `{args.output_subdir}/all_window_model_comparison.csv`。\n\n重要限制：PG36 分类结果仅代表当前形态探索 split；与任务一严格 protocol 比较前必须通过 `event_id + channel + split` 对齐审计，不能直接宣称跨域泛化，也不能与任务一指标合并。\n",encoding="utf-8")
     _json(out/"08_audit"/f"classifier_environment_{args.output_subdir}.json",{"torch":torch.__version__,"cuda":torch.cuda.is_available(),"device":str(device),"braindecode_import_error":_BRAINECODE_IMPORT_ERROR,"models_requested":args.models,"classes":classes,"sequence_length":21,"samples_per_window":int(samples_per_window),"sample_rate_hz":float(sample_rate_hz),"normalization":"per-window median/MAD","weights_pretrained":False,"label_path":str(label_path),"label_prefix":label_prefix,"output_subdir":args.output_subdir,"split_counts":{"train":int(len(train_labels)),"val":int(len(val_labels)),"test":int(len(test_labels))},"learning_rate":args.learning_rate,"weight_decay":args.weight_decay,"early_stopping_patience":args.early_stopping_patience,"learning_rate_patience":args.learning_rate_patience,"num_workers":args.num_workers})
     print(summary.to_string(index=False) if not summary.empty else "No model completed",flush=True); return 0
 

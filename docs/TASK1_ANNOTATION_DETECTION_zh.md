@@ -8,7 +8,7 @@
 
 ## 冻结模型与结果
 
-三个权重位于 `results/task1_annotation_detection/models/<model>/model.pt`。窗口级 corrected 表、混淆矩阵、PR/ROC 和训练诊断在 `figures/model_performance/`。事件级 corrected 结果在各模型的 `events_corrected_v1_test/`；临床图集在 `event_atlas/`。
+三个冻结权重位于 `sleep_staging/output/epilepsy_program_20260821/01_annotation_detection/04_model_runs/combined_old_plus_new/<model>/model.pt`。`06_decoder_audit_v2/corrected_combined_old_plus_new/models/<model>/` 保存的是冻结概率经 validation-only decoder 重解码后的参数与事件结果，不是权重目录。窗口级 corrected 表、混淆矩阵、PR/ROC 和训练诊断在 corrected run 的 `figures/model_performance/`；事件级 corrected 结果在各模型的 `events_corrected_v1_test/`；临床图集在 `figures/clinical_event_atlas/`。
 
 测试窗口 179,403 的 corrected 窗口指标：EEGWaveNet-SC AUPRC 0.5158/AUROC 0.8575/F1 0.5051；Physio-Sequence 0.5361/0.8940/0.5503；Physio + statistics 0.5409/0.8927/0.5609。事件级图集分母为 957 个测试通道事件；正式 interval-aware 指标分母为 953 个完全可观测事件，4 个形式审计排除行仍在图集中保留。
 

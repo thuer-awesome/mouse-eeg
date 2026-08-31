@@ -10,3 +10,5 @@
 - Supplement: complete 36x36 confusion matrices for all five models.
 
 The formal denominator is the complete test-window table, not the capped event-balanced training sensitivity sample. PG labels are exploratory morphology categories, not clinical seizure subtypes.
+
+Alignment caveat: PG36 uses its own 6,393/1,375/1,376 event split rather than the Task-1 strict 4,495/960/957 protocol. Only 111/1,376 test keys match exactly; 642 have a split mismatch and 591 are absent. The classifier figures are a morphology-exploration snapshot, not a strict Task-1 cross-domain generalization result.

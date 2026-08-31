@@ -9,4 +9,4 @@
 
 为什么没有“corrected 事件级 2x2 TN 混淆矩阵”：连续事件检测中 TP、FP 和 FN 可由区间匹配定义，但 TN 取决于人为选择的时间离散单位。若改用 4 秒窗口定义 TN，就退化为 `figure_1` 的窗口级混淆矩阵；不能把两种分母混在一起。
 
-所有精确数值和来源哈希位于 `source_data/` 与 `performance_manifest.json`。完整逐事件波形证据仍在相邻目录 `../clinical_event_atlas/`。
+所有精确数值和来源哈希位于 `source_data/` 与 `performance_manifest.json`。完整逐事件波形证据位于同一任务 release 的 `../../event_atlas/`。

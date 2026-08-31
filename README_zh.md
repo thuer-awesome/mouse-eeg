@@ -29,4 +29,4 @@ python -m pip install -e ".[all,dev]"
 
 完整流程说明见 `docs/`，尤其是 `docs/CONFIGURATION_zh.md`。任务一的 corrected decoder 与任务二 PG36 分类严格分开，不能用其中一条线的结果替代另一条线。
 
-正式结果索引在 `RESULTS_INDEX_zh.md`，仓库贡献和复现实验检查见 `CONTRIBUTING.md`、`RELEASE_CHECKLIST_zh.md`。
+当前交接时只看 [`docs/CURRENT_DELIVERY_zh.md`](docs/CURRENT_DELIVERY_zh.md)，其中列出外部审计 run 的唯一目录、分母、指标和任务二对齐门控。仓库内 `results/` 是可提交的冻结快照；仓库贡献和复现实验检查见 `CONTRIBUTING.md`、`RELEASE_CHECKLIST_zh.md`。

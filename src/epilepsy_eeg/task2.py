@@ -194,7 +194,7 @@ def _write_pg36_release_audit(
     write_json(audit_dir / "classifier_environment.json", environment)
     (audit_dir / "REPORT_AUDIT_CHANGELOG_zh.md").write_text(
         "# PG36 发布审计变更\n\n"
-        "本目录的审计摘要均从当前 `taxonomy/` 与 `classification/` 表重新生成；历史 G taxonomy 和旧 21 状态不属于本 release。\n\n"
+        "本目录的审计摘要均从当前 `../taxonomy/` 与 `../classification/` 表重新生成；历史 G taxonomy 和旧 21 状态不属于本 release。\n\n"
         f"- 全局探索性形态类别：PG01–PG{int(taxonomy.get('n_global_categories', 0)):02d}。\n"
         f"- 事件×有效通道观察：{int(taxonomy.get('n_event_channel', len(event_frame))):,}；完整窗口：{int(taxonomy.get('n_windows', len(labels))):,}。\n"
         f"- 全窗口测试分母：{int(comparison['n'].iloc[0]) if not comparison.empty and 'n' in comparison else 0:,}，由当前全窗口评估表读取。\n"
@@ -247,20 +247,36 @@ def _write_pg36_release_reports(*, target: Path, taxonomy: dict[str, Any], compa
                 "Historical 21-state and previous G taxonomy artifacts are intentionally excluded from this PG36 release and remain available only in the source study archive.",
             )
         )
+        # Reports live one directory below the release root. Normalize common
+        # Markdown destinations after the source-layout substitutions so links
+        # remain valid in the compact release tree.
+        text = re.sub(
+            r"\]\((?!(?:\.\./|https?://))((?:taxonomy|classification|figures)(?:/[^)]*)?)\)",
+            r"](../\1)",
+            text,
+        )
+        text = text.replace("`classification/all_window_model_comparison.csv`", "`../classification/all_window_model_comparison.csv`")
         if not text.strip() or name == "CLASSIFIER_TASK2_REPORT_AUTO.md":
             n = int(taxonomy.get("n_global_categories", 0))
             primary = int(comparison["n"].iloc[0]) if not comparison.empty and "n" in comparison else 0
             text = (
                 "# PG36 形态类别分类结果\n\n"
                 f"当前冻结 taxonomy 为 PG01–PG{n:02d}；每个事件×有效通道是独立观察。\n\n"
-                f"全窗口测试主分母为 {primary:,}，指标来自 `classification/all_window_model_comparison.csv`。\n"
-                "PG 标签是探索性形态类别，不是临床发作亚型；旧 lineage 未纳入本 release。\n"
+                f"全窗口测试主分母为 {primary:,}，指标来自 `../classification/all_window_model_comparison.csv`。\n"
+                "PG 标签是探索性形态类别，不是临床发作亚型；旧 lineage 未纳入本 release。\n\n"
+                "重要限制：PG36 分类结果仅代表当前形态探索 split；与任务一严格 protocol 比较前必须通过 `event_id + channel + split` 对齐审计，不能直接宣称跨域泛化，也不能与任务一指标合并。\n"
+            )
+        elif "alignment caveat" not in text.lower() and "对齐限制" not in text:
+            text += (
+                "\n\n### Alignment caveat\n\n"
+                "This PG36 classifier uses its own morphology-exploration split. Compare it with a Task-1 strict protocol only after an explicit `event_id + channel + split` key audit; do not merge the two metric denominators or present them as one cross-domain generalization estimate.\n"
             )
         (reports_dir / name).write_text(text, encoding="utf-8")
     (reports_dir / "README_zh.md").write_text(
         "# PG36 报告入口\n\n"
         "本目录只保留当前 PG36 的 pooled 形态与全窗口分类报告；历史 taxonomy 不作为正式结果复制。"
-        "图形和机器可读审计分别见 `../figures/` 与 `../audit/`。\n",
+        "图形和机器可读审计分别见 `../figures/` 与 `../audit/`。\n\n"
+        "这些报告使用 PG36 自己的事件划分；与任务一严格 protocol 的比较必须先通过 event_id + channel + split 对齐审计，不能直接合并指标。\n",
         encoding="utf-8",
     )
 
@@ -363,6 +379,10 @@ def _normalize_pg36_release_metadata(target: Path, taxonomy: dict[str, Any], com
         primary = int(comparison["n"].iloc[0]) if not comparison.empty and "n" in comparison else 0
         text = re.sub(r"全部 [0-9,]+ 个正式测试窗口", "全部正式测试窗口", text)
         text = re.sub(r"完整测试窗口 [0-9,]+", f"完整测试窗口 {primary:,}", text)
+        if "对齐限制" not in text and "alignment caveat" not in text.lower():
+            text += (
+                "\n重要对齐限制：PG36 分类结果属于形态探索快照；与任务一严格 protocol 比较前必须通过 `event_id + channel + split` 对齐审计，不能直接合并指标。\n"
+            )
         class_readme.write_text(text, encoding="utf-8")
 
 

@@ -79,8 +79,8 @@ def score(y: np.ndarray, p: np.ndarray, classes: int) -> tuple[dict[str, float],
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=OUT)
-    parser.add_argument("--label-path", type=Path, default=None)
-    parser.add_argument("--output-subdir", default="05_classification")
+    parser.add_argument("--label-path", type=Path, required=True, help="必须显式指定 PG36 frozen channel-window label parquet；不要省略以免误用历史标签")
+    parser.add_argument("--output-subdir", default="05_classification_pooled")
     parser.add_argument("--label-prefix", default=None)
     parser.add_argument("--batch-size", type=int, default=128)
     parser.add_argument("--models", nargs="+", choices=MODEL_ORDER, default=None)
@@ -114,7 +114,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.num_workers < 0:
         raise ValueError("--num-workers cannot be negative")
     root = args.out.resolve()
-    label_path = args.label_path.resolve() if args.label_path is not None else root / "04_label_freeze" / "frozen_channel_window_labels.parquet"
+    label_path = args.label_path.resolve()
     result_root = root / args.output_subdir
     if not label_path.is_file():
         raise FileNotFoundError(f"PG36 label table not found: {label_path}")

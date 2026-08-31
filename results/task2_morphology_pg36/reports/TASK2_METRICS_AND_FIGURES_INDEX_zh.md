@@ -2,5 +2,7 @@
 
 当前冻结 taxonomy 为 PG01–PG36；每个事件×有效通道是独立观察。
 
-全窗口测试主分母为 32,583，指标来自 `classification/all_window_model_comparison.csv`。
+全窗口测试主分母为 32,583，指标来自 `../classification/all_window_model_comparison.csv`。
 PG 标签是探索性形态类别，不是临床发作亚型；旧 lineage 未纳入本 release。
+
+重要对齐限制：PG36 使用自身的事件划分（6,393/1,375/1,376），与任务一严格 protocol（4,495/960/957）不同；测试键完全一致的只有 111/1,376，另有 642 条 split 不一致、591 条缺失。因此这里是形态探索快照，不能作为任务一严格跨域泛化结果，也不能与任务一指标合并。

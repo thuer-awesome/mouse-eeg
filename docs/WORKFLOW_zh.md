@@ -22,4 +22,4 @@
 
 ## 5. 结果审计
 
-优先阅读 `results/task1_annotation_detection/metrics/` 和 `results/task1_annotation_detection/figures/model_performance/`，再阅读 `event_atlas/`。任务二先看 `taxonomy/pooled_label_freeze_manifest.json`、`tables/` 和 `figures/`，最后看 `classification/all_window_model_comparison.csv`。任何旧 45 类、历史 21 类或旧 decoder 目录都不属于正式入口。
+优先阅读 `results/task1_annotation_detection/metrics/` 和 `results/task1_annotation_detection/figures/model_performance/`，再阅读 `event_atlas/`。任务二的仓库冻结快照先看 `results/task2_morphology_pg36/taxonomy/pooled_label_freeze_manifest.json`、`tables/`、`figures/` 和 `classification/all_window_model_comparison.csv`。如果检查外部完整 run，则对应阅读 `04_label_freeze_pooled/`、`05_classification_pooled/`、`06_figures/` 和 `07_reports/`；不要把两种目录布局混用。任何旧 45 类、历史 21 类或旧 decoder 目录都不属于正式入口。

@@ -387,13 +387,29 @@ def _unfold_channel_features(feature_rows: pd.DataFrame) -> tuple[pd.DataFrame, 
             raise ValueError(f"特征表缺少 {channel} 列: {missing}")
         base_cols = [f"{prefix}_baseline_z__{suffix}" for suffix in FEATURE_SUFFIXES if f"{prefix}_baseline_z__{suffix}" in selected]
         metadata = [
-            "animal_id", "session_id", "event_id", "split", "event_duration_s",
+            "animal_id", "session_id", "event_id", "channel_name", "split", "event_duration_s",
             "event_start_ms", "event_end_ms", "event_overlap_fraction",
             "filtered_cache_dir", "filtered_local_index", "shard", "start_time_ms",
             "end_time_ms", "sampling_rate_hz", "event_phase", "feature_valid",
             "feature_finite_fraction", "feature_quality_reason",
+            "event_window_index", "event_n_windows", "window_midpoint_ms",
         ]
         selected = selected[[column for column in [*metadata, *cols, *base_cols] if column in selected]].copy()
+        # Preserve the physical support of each clinical event explicitly.
+        # The old event table kept the first row's cache index, which made a
+        # later renderer mistake that row for a representative waveform.  A
+        # stable ordinal lets clinical plots show every 4-s window in time and
+        # makes the selected representative auditable.
+        selected = selected.sort_values(
+            ["animal_id", "session_id", "event_id", "channel_name", "start_time_ms", "filtered_local_index"],
+            kind="stable",
+        ).reset_index(drop=True)
+        selected["event_window_index"] = selected.groupby(KEYS, sort=False).cumcount().astype(np.int32)
+        selected["event_n_windows"] = selected.groupby(KEYS, sort=False)["event_id"].transform("size").astype(np.int32)
+        selected["window_midpoint_ms"] = (
+            pd.to_numeric(selected["start_time_ms"], errors="coerce")
+            + pd.to_numeric(selected["end_time_ms"], errors="coerce")
+        ) / 2.0
         renamed = {f"{prefix}_{suffix}": suffix for suffix in FEATURE_SUFFIXES}
         renamed.update({f"{prefix}_baseline_z__{suffix}": f"baseline_z__{suffix}" for suffix in FEATURE_SUFFIXES})
         selected = selected.rename(columns=renamed)
@@ -403,6 +419,18 @@ def _unfold_channel_features(feature_rows: pd.DataFrame) -> tuple[pd.DataFrame, 
         group_keys = KEYS
         numeric = [suffix for suffix in FEATURE_SUFFIXES if suffix in selected]
         numeric += [f"baseline_z__{suffix}" for suffix in FEATURE_SUFFIXES if f"baseline_z__{suffix}" in selected]
+        distance_matrix = selected[numeric].apply(pd.to_numeric, errors="coerce").to_numpy(float)
+        distance_center = np.nanmedian(distance_matrix, axis=0)
+        distance_scale = np.nanmedian(np.abs(distance_matrix - distance_center), axis=0)
+        distance_scale = np.where(
+            np.isfinite(distance_scale) & (distance_scale > 1e-8), distance_scale, 1.0
+        )
+        selected["window_distance_to_event_median"] = np.sqrt(
+            np.nanmean(((distance_matrix - distance_center) / distance_scale) ** 2, axis=1)
+        )
+        # The list above is also the frame retained for downstream renderers;
+        # append the derived distance before it is copied to ``window_rows``.
+        window_rows[-1] = selected
         aggregates = selected.groupby(group_keys, sort=True)[numeric].median().reset_index()
         first = selected.groupby(group_keys, sort=True).first(numeric_only=False).reset_index()
         keep_meta = [
@@ -412,6 +440,43 @@ def _unfold_channel_features(feature_rows: pd.DataFrame) -> tuple[pd.DataFrame, 
             "feature_valid", "feature_finite_fraction", "feature_quality_reason",
         ]
         result = aggregates.merge(first[group_keys + [column for column in keep_meta if column in first]], on=group_keys, how="left", validate="one_to_one")
+        # Select the actual window closest to the event's feature median.  The
+        # robust per-event scale prevents amplitude-heavy features from
+        # dominating; ties are deterministic by physical window order.
+        representative_rows: list[dict[str, Any]] = []
+        for event_key, event_group in selected.groupby(group_keys, sort=True):
+            feature_matrix = event_group[numeric].apply(pd.to_numeric, errors="coerce").to_numpy(float)
+            center = np.nanmedian(feature_matrix, axis=0)
+            mad = np.nanmedian(np.abs(feature_matrix - center), axis=0)
+            mad = np.where(np.isfinite(mad) & (mad > 1e-8), mad, 1.0)
+            distance = np.sqrt(np.nanmean(((feature_matrix - center) / mad) ** 2, axis=1))
+            distance = np.where(np.isfinite(distance), distance, np.inf)
+            order = np.lexsort(
+                (
+                    event_group["filtered_local_index"].to_numpy(np.int64),
+                    event_group["start_time_ms"].to_numpy(float),
+                    distance,
+                )
+            )
+            representative = event_group.iloc[int(order[0])]
+            key_values = dict(zip(group_keys, event_key if isinstance(event_key, tuple) else (event_key,), strict=False))
+            representative_rows.append(
+                {
+                    **key_values,
+                    "representative_cache_dir": str(representative["filtered_cache_dir"]),
+                    "representative_cache_local_index": int(representative["filtered_local_index"]),
+                    "representative_start_time_ms": float(representative["start_time_ms"]),
+                    "representative_end_time_ms": float(representative["end_time_ms"]),
+                    "representative_window_index": int(representative["event_window_index"]),
+                    "representative_distance_robust": float(distance[int(order[0])]),
+                    "representative_selection_rule": "nearest_event_feature_median_robust_MAD",
+                    "event_n_windows": int(len(event_group)),
+                    "first_window_start_time_ms": float(event_group["start_time_ms"].iloc[0]),
+                    "last_window_start_time_ms": float(event_group["start_time_ms"].iloc[-1]),
+                }
+            )
+        representative_frame = pd.DataFrame(representative_rows)
+        result = result.merge(representative_frame, on=group_keys, how="left", validate="one_to_one")
         result["channel_name"] = channel
         event_rows.append(result)
     if not event_rows:

@@ -1,8 +1,8 @@
-# Strict held-out event atlas
+# Corrected interval-aware held-out event atlas
 
-This folder contains the complete test-set visual audit. Each valid EEG channel is an independent model stream. E77 CH7 is excluded.
-The displayed decoded intervals and probabilities are read from each model's `events_redecoded_v2` output; this is the frozen validation-selected re-decoding used for the audit.
-Scope note: these figures audit the frozen outputs currently on disk. Read `DECODED_V2_AUDIT.md` and `PROTOCOL_AUDIT.json` before treating them as a formal generalization result; the split-boundary purge audit is maintained separately.
+This folder contains the frozen corrected-v1 test-set visual audit. Each valid EEG channel is an independent model stream; E77/CH7 remains excluded by the strict protocol. The displayed intervals and probabilities are rendered from the validation-selected `events_corrected_v1_test` outputs.
+
+The release is self-contained. Read `corrected_atlas_manifest.json` and `DENOMINATOR_NOTE_zh.txt` for the atlas/formal denominators, and read `../metrics/CURRENT_INDEX_zh.md` plus `../metrics/CORRECTED_DECODER_FINAL_REPORT_zh.md` for the split, purge, decoder and alignment audit. No additional external audit file is required.
 
 ## Reading order
 
